@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import todoRouter from "./routes/todo";
 import mongoose from "mongoose";
+import { globalErrorHandlers } from "./utils/error-handler";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.get("/", (req, res) => {
 });
 
 app.use(todoRouter);
+
+app.use(globalErrorHandlers);
 
 const bootstrap = async () => {
   try {
