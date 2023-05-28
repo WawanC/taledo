@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import todoRouter from "./routes/todo";
+import todoRouter from "./routers/todo";
 import mongoose from "mongoose";
 import { globalErrorHandlers } from "./utils/error-handler";
 
