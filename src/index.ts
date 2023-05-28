@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import todoRouter from "./routes/todo";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.get("/", (req, res) => {
     message: "Welcome to Taledo server"
   });
 });
+
+app.use(todoRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
