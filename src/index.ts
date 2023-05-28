@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import todoRouter from "./routes/todo";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -20,6 +21,16 @@ app.get("/", (req, res) => {
 
 app.use(todoRouter);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+const bootstrap = async () => {
+  try {
+    if (!process.env.MONGO_URL) throw new Error("No Mongo URL provided");
+    await mongoose.connect(process.env.MONGO_URL);
+    app.listen(port, async () => {
+      console.log(`Listening on port ${port}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+bootstrap();
