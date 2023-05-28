@@ -29,3 +29,24 @@ export const createTodo: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteTodo: RequestHandler = async (req, res, next) => {
+  try {
+    const todo = await todoModel.findById(req.params.id);
+
+    if (!todo) {
+      return res.status(404).json({
+        type: "NOT_FOUND",
+        message: "Todo not found"
+      });
+    }
+    await todo.deleteOne();
+
+    return res.status(200).json({
+      message: "Delete todo success",
+      todo: todo
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -6,7 +6,7 @@ export const globalErrorHandlers: ErrorRequestHandler = (
   res,
   next
 ) => {
-  console.log(error);
+  console.log(error.message);
   return res.status(500).json({
     type: "SYSTEM_ERROR",
     message: "Internal server error"
