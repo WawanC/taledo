@@ -23,8 +23,11 @@ app.use(todoRouter);
 
 const bootstrap = async () => {
   try {
-    if (!process.env.MONGO_URL) throw new Error("No Mongo URL provided");
-    await mongoose.connect(process.env.MONGO_URL);
+    if (!process.env.MONGO_URL || !process.env.DB_NAME)
+      throw new Error("No Mongo URL or DB Name provided");
+    await mongoose.connect(process.env.MONGO_URL, {
+      dbName: process.env.DB_NAME
+    });
     app.listen(port, async () => {
       console.log(`Listening on port ${port}`);
     });
