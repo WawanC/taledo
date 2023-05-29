@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDeleteTodoMutation, useUpdateTodoMutation } from "../hooks/todo";
 import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
@@ -10,14 +11,14 @@ const TodoItem: React.FC<Props> = (props) => {
   const updateTodo = useUpdateTodoMutation();
   const deleteTodo = useDeleteTodoMutation();
 
-  const toggleTodo = () => {
+  const toggleTodo = useCallback(() => {
     updateTodo.mutate({
       todoId: props.todo.id,
       payload: {
         isCompleted: !props.todo.isCompleted
       }
     });
-  };
+  }, [props.todo.id, props.todo.isCompleted, updateTodo]);
 
   return (
     <li
