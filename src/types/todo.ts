@@ -19,3 +19,8 @@ export type UpdateTodoPayload = {
   title?: string;
   isCompleted?: boolean;
 };
+
+
+export type CreateTodoPayload = {
+  title: string;
+};

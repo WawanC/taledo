@@ -1,7 +1,9 @@
 import { FormEventHandler, useState } from "react";
+import { useCreateTodoMutation } from "../hooks/todo";
 
 const NewTodoInput: React.FC = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
+  const createTodo = useCreateTodoMutation();
 
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
@@ -12,6 +14,8 @@ const NewTodoInput: React.FC = () => {
       setEnteredTitle("");
       return;
     }
+
+    createTodo.mutate({ title: title });
 
     setEnteredTitle("");
   };
