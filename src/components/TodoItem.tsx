@@ -1,11 +1,22 @@
+import { useUpdateTodoMutation } from "../hooks/todo";
 import { Todo } from "../types/todo";
 
 interface Props {
   todo: Todo;
-  toggleTodo: () => void;
 }
 
 const TodoItem: React.FC<Props> = (props) => {
+  const updateTodo = useUpdateTodoMutation();
+
+  const toggleTodo = () => {
+    updateTodo.mutate({
+      todoId: props.todo.id,
+      payload: {
+        isCompleted: !props.todo.isCompleted
+      }
+    });
+  };
+
   return (
     <li
       className="bg-gray-200 p-2 text-xl 
@@ -16,7 +27,7 @@ const TodoItem: React.FC<Props> = (props) => {
         id={props.todo.id}
         className="w-6 h-6 hover:cursor-pointer"
         checked={props.todo.isCompleted}
-        onChange={props.toggleTodo}
+        onChange={toggleTodo}
       />
       <label
         htmlFor={props.todo.id}

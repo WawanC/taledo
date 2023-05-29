@@ -1,6 +1,16 @@
-import { useQuery } from "react-query";
-import { getTodos } from "../api/todo";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getTodos, updateTodo } from "../api/todo";
 
-export const useGetTodos = () => {
+export const useGetTodosQuery = () => {
   return useQuery("todos", getTodos);
+};
+
+export const useUpdateTodoMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    }
+  });
 };

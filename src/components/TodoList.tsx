@@ -1,30 +1,15 @@
 import TodoItem from "./TodoItem";
-import { useGetTodos } from "../hooks/todo.tsx";
+import { useGetTodosQuery } from "../hooks/todo.tsx";
 
 const TodoList: React.FC = () => {
-  const getTodos = useGetTodos();
+  const getTodos = useGetTodosQuery();
 
-  const toggleTodo = (todoId: string) => {
-    console.log(todoId);
-    // const updatedTodos = [...todos];
-    // const todoIdx = updatedTodos.findIndex((todo) => todo.id === todoId);
-    // if (todoIdx < 0) return;
-    // updatedTodos[todoIdx].isCompleted = !updatedTodos[todoIdx].isCompleted;
-    // setTodos(updatedTodos);
-  };
-
-  return getTodos.isFetching ? (
+  return getTodos.isLoading ? (
     <p className="text-center text-xl">Loading...</p>
   ) : (
     <ul className="flex flex-col gap-4">
       {getTodos.data &&
-        getTodos.data.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            toggleTodo={() => toggleTodo(todo.id)}
-          />
-        ))}
+        getTodos.data.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
     </ul>
   );
 };

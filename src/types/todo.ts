@@ -10,7 +10,12 @@ export type TodoResponse = {
   isCompleted: boolean;
 };
 
-export type getTodosResponse = {
+export type GetTodosResponse = {
   message: string;
   todos: TodoResponse[];
+};
+
+export type UpdateTodoPayload = {
+  title?: string;
+  isCompleted?: boolean;
 };
