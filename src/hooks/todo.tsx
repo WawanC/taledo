@@ -1,14 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createTodo, deleteTodo, getTodos, updateTodo } from "../api/todo";
+import {
+  createTodoApi,
+  deleteTodoApi,
+  getTodosApi,
+  updateTodoApi
+} from "../api/todo";
 
 export const useGetTodosQuery = () => {
-  return useQuery("todos", getTodos);
+  return useQuery("todos", getTodosApi);
 };
 
 export const useUpdateTodoMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateTodo, {
+  return useMutation(updateTodoApi, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     }
@@ -18,7 +23,7 @@ export const useUpdateTodoMutation = () => {
 export const useCreateTodoMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(createTodo, {
+  return useMutation(createTodoApi, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     }
@@ -28,7 +33,7 @@ export const useCreateTodoMutation = () => {
 export const useDeleteTodoMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteTodo, {
+  return useMutation(deleteTodoApi, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     }
