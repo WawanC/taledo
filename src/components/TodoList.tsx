@@ -5,6 +5,7 @@ const TodoList: React.FC = () => {
   const getTodos = useGetTodos();
 
   const toggleTodo = (todoId: string) => {
+    console.log(todoId);
     // const updatedTodos = [...todos];
     // const todoIdx = updatedTodos.findIndex((todo) => todo.id === todoId);
     // if (todoIdx < 0) return;
