@@ -1,31 +1,29 @@
-import { useState } from "react";
-import Todo from "../interfaces/Todo";
 import TodoItem from "./TodoItem";
+import { useGetTodos } from "../hooks/todo.tsx";
 
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([
-    { id: "1", title: "Learn React JS", isCompleted: false },
-    { id: "2", title: "Learn Node JS", isCompleted: false },
-    { id: "3", title: "Learn MongoDB", isCompleted: false }
-  ]);
+  const getTodos = useGetTodos();
 
   const toggleTodo = (todoId: string) => {
-    const updatedTodos = [...todos];
-    const todoIdx = updatedTodos.findIndex((todo) => todo.id === todoId);
-    if (todoIdx < 0) return;
-    updatedTodos[todoIdx].isCompleted = !updatedTodos[todoIdx].isCompleted;
-    setTodos(updatedTodos);
+    // const updatedTodos = [...todos];
+    // const todoIdx = updatedTodos.findIndex((todo) => todo.id === todoId);
+    // if (todoIdx < 0) return;
+    // updatedTodos[todoIdx].isCompleted = !updatedTodos[todoIdx].isCompleted;
+    // setTodos(updatedTodos);
   };
 
-  return (
+  return getTodos.isFetching ? (
+    <p className="text-center text-xl">Loading...</p>
+  ) : (
     <ul className="flex flex-col gap-4">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          toggleTodo={() => toggleTodo(todo.id)}
-        />
-      ))}
+      {getTodos.data &&
+        getTodos.data.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            toggleTodo={() => toggleTodo(todo.id)}
+          />
+        ))}
     </ul>
   );
 };
