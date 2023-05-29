@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use(todoRouter);
+app.use("/todos", todoRouter);
 
 app.use(globalErrorHandlers);
 

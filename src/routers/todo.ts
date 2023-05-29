@@ -9,21 +9,16 @@ import isValid from "../middlewares/is-valid";
 
 const todoRouter = Router();
 
-todoRouter.get("/todos", todoController.getTodos);
-todoRouter.post(
-  "/todo",
-  createTodoValidator,
-  isValid,
-  todoController.createTodo
-);
+todoRouter.get("/", todoController.getTodos);
+todoRouter.post("/", createTodoValidator, isValid, todoController.createTodo);
 todoRouter.put(
-  "/todo/:todoId",
+  "/:todoId",
   updateTodoValidator,
   isValid,
   todoController.updateTodo
 );
 todoRouter.delete(
-  "/todo/:todoId",
+  "/:todoId",
   deleteTodoValidator,
   isValid,
   todoController.deleteTodo
