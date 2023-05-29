@@ -15,7 +15,7 @@ const NewTodoInput: React.FC = () => {
       return;
     }
 
-    createTodo.mutate({ title: title });
+    createTodo.mutate({ payload: { title: title } });
 
     setEnteredTitle("");
   };

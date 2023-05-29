@@ -29,6 +29,10 @@ export const updateTodo = async (data: {
   await todoApi.put(`/${data.todoId}`, data.payload);
 };
 
-export const createTodo = async (payload: CreateTodoPayload) => {
-  await todoApi.post("/", payload);
+export const createTodo = async (data: { payload: CreateTodoPayload }) => {
+  await todoApi.post("/", data.payload);
+};
+
+export const deleteTodo = async (data: { todoId: string }) => {
+  await todoApi.delete(`/${data.todoId}`);
 };

@@ -1,4 +1,5 @@
-import { useUpdateTodoMutation } from "../hooks/todo";
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "../hooks/todo";
+import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 
 const TodoItem: React.FC<Props> = (props) => {
   const updateTodo = useUpdateTodoMutation();
+  const deleteTodo = useDeleteTodoMutation();
 
   const toggleTodo = () => {
     updateTodo.mutate({
@@ -37,6 +39,12 @@ const TodoItem: React.FC<Props> = (props) => {
       >
         {props.todo.title}
       </label>
+      <span
+        className="hover:cursor-pointer"
+        onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
+      >
+        <DeleteIcon className="w-8 h-8 " />
+      </span>
     </li>
   );
 };
