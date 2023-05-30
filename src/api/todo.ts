@@ -3,8 +3,20 @@ import {
   Todo,
   GetTodosResponse,
   UpdateTodoPayload,
-  CreateTodoPayload
+  CreateTodoPayload,
+  TodoResponse
 } from "../types/todo";
+
+const mapTodoResponse = (response: TodoResponse): Todo => ({
+  id: response._id,
+  title: response.title,
+  isCompleted: response.isCompleted,
+  parentId: response.parent,
+  subTodos:
+    response.children.length > 0
+      ? response.children.map((res) => mapTodoResponse(res))
+      : []
+});
 
 const todoApi = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_URL}/todos`
@@ -13,11 +25,9 @@ const todoApi = axios.create({
 export const getTodosApi = async () => {
   const response = await todoApi.get<GetTodosResponse>("/");
 
-  const todos: Todo[] = response.data.todos.map((todo) => ({
-    id: todo._id,
-    title: todo.title,
-    isCompleted: todo.isCompleted
-  }));
+  const todos: Todo[] = response.data.todos.map((todo) =>
+    mapTodoResponse(todo)
+  );
 
   return todos;
 };

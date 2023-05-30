@@ -4,6 +4,7 @@ import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
 import NewSubTodoInput from "./NewSubTodoInput";
+import SubTodoItem from "./SubTodoItem";
 
 interface Props {
   todo: Todo;
@@ -54,9 +55,12 @@ const TodoItem: React.FC<Props> = (props) => {
           className="hover:cursor-pointer"
           onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
         >
-          <DeleteIcon className="w-8 h-8 " />
+          <DeleteIcon className="w-8 h-8" />
         </span>
       </li>
+      {props.todo.subTodos.map((subTodo) => (
+        <SubTodoItem key={subTodo.id} todo={subTodo} />
+      ))}
       {isAddNew && (
         <NewSubTodoInput
           parentId={props.todo.id}
