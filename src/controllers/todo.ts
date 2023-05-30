@@ -45,7 +45,7 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
     if (parentTodo.parent) {
       return res.status(409).json({
         type: "CONFLICT",
-        message: "Parent todo cannot be subtodo"
+        message: "Parent todo cannot be a subtodo"
       });
     }
 
@@ -102,6 +102,11 @@ export const deleteTodo: RequestHandler = async (req, res, next) => {
         message: "Todo not found"
       });
     }
+
+    if (todo.children.length > 0) {
+      await todoModel.deleteMany({ _id: { $in: todo.children } });
+    }
+
     await todo.deleteOne();
 
     return res.status(200).json({
