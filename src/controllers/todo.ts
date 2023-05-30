@@ -58,7 +58,7 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
     parentTodo.children.push(newSubTodo._id);
     await parentTodo.save();
 
-    return res.status(500).json({
+    return res.status(200).json({
       message: "Create subtodo success",
       subTodo: newSubTodo
     });
