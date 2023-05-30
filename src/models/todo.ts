@@ -7,6 +7,11 @@ interface ITodo {
   children: Types.ObjectId[];
 }
 
+export interface PopulatedTodo {
+  parent: ITodo | null;
+  children: ITodo[];
+}
+
 const todoSchema = new Schema<ITodo>({
   title: { type: String, required: true },
   isCompleted: { type: Boolean, required: true },

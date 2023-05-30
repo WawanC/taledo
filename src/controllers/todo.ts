@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import todoModel from "../models/todo";
+import todoModel, { PopulatedTodo } from "../models/todo";
 
 export const getTodos: RequestHandler = async (req, res, next) => {
   try {
@@ -77,11 +77,45 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
         message: "Todo not found"
       });
     }
+
+    const isToggleCompletedStatus: boolean =
+      req.body.isCompleted !== undefined &&
+      todo.isCompleted === !req.body.isCompleted;
+
     await todo.updateOne({
       $set: { title: req.body.title, isCompleted: req.body.isCompleted }
     });
 
     const updatedTodo = await todoModel.findById(req.params.todoId);
+
+    if (isToggleCompletedStatus && updatedTodo) {
+      if (!updatedTodo.parent) {
+        await todoModel.updateMany(
+          { parent: updatedTodo._id },
+          {
+            $set: {
+              isCompleted: updatedTodo.isCompleted
+            }
+          }
+        );
+      } else {
+        const parentTodo = await todoModel
+          .findById(updatedTodo.parent)
+          .populate<Pick<PopulatedTodo, "children">>("children");
+        if (!parentTodo) return;
+        const isAllCompleted = parentTodo.children.every(
+          (child) => child.isCompleted
+        );
+        if (!isAllCompleted && parentTodo.isCompleted) {
+          parentTodo.isCompleted = false;
+          await parentTodo.save();
+        }
+        if (isAllCompleted && !parentTodo.isCompleted) {
+          parentTodo.isCompleted = true;
+          await parentTodo.save();
+        }
+      }
+    }
 
     return res.status(200).json({
       message: "Update todo success",
