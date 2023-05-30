@@ -1,9 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDeleteTodoMutation, useUpdateTodoMutation } from "../hooks/todo";
 import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
-import SubTodoItem from "./SubTodoItem";
+import NewSubTodoInput from "./NewSubTodoInput";
 
 interface Props {
   todo: Todo;
@@ -12,6 +12,7 @@ interface Props {
 const TodoItem: React.FC<Props> = (props) => {
   const updateTodo = useUpdateTodoMutation();
   const deleteTodo = useDeleteTodoMutation();
+  const [isAddNew, setIsAddNew] = useState(false);
 
   const toggleTodo = useCallback(() => {
     updateTodo.mutate({
@@ -43,8 +44,11 @@ const TodoItem: React.FC<Props> = (props) => {
         >
           {props.todo.title}
         </label>
-        <span className="hover:cursor-pointer">
-          <AddIcon className="w-8 h-8 " />
+        <span
+          className="hover:cursor-pointer"
+          onClick={() => setIsAddNew(true)}
+        >
+          <AddIcon className="w-8 h-8" />
         </span>
         <span
           className="hover:cursor-pointer"
@@ -53,7 +57,7 @@ const TodoItem: React.FC<Props> = (props) => {
           <DeleteIcon className="w-8 h-8 " />
         </span>
       </li>
-      <SubTodoItem />
+      {isAddNew && <NewSubTodoInput cancel={() => setIsAddNew(false)} />}
     </>
   );
 };
