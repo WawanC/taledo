@@ -18,12 +18,49 @@ export const createTodo: RequestHandler = async (req, res, next) => {
   try {
     const newTodo = await todoModel.create({
       title: req.body.title,
-      isCompleted: false
+      isCompleted: false,
+      parent: null
     });
 
     return res.status(200).json({
       message: "Create todo success",
       todo: newTodo
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createSubTodo: RequestHandler = async (req, res, next) => {
+  try {
+    const parentTodo = await todoModel.findById(req.params.todoId);
+
+    if (!parentTodo) {
+      return res.status(404).json({
+        type: "NOT_FOUND",
+        message: "Todo not found"
+      });
+    }
+
+    if (parentTodo.parent) {
+      return res.status(409).json({
+        type: "CONFLICT",
+        message: "Parent todo cannot be subtodo"
+      });
+    }
+
+    const newSubTodo = await todoModel.create({
+      title: req.body.title,
+      isCompleted: false,
+      parent: parentTodo._id
+    });
+
+    parentTodo.children.push();
+    await parentTodo.save();
+
+    return res.status(500).json({
+      message: "Create subtodo success",
+      subTodo: newSubTodo
     });
   } catch (error) {
     next(error);
