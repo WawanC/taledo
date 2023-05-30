@@ -3,7 +3,7 @@ import todoModel from "../models/todo";
 
 export const getTodos: RequestHandler = async (req, res, next) => {
   try {
-    const todos = await todoModel.find().populate("children");
+    const todos = await todoModel.find({ parent: null }).populate("children");
 
     return res.status(200).json({
       message: "Fetch todos success",
@@ -55,7 +55,7 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
       parent: parentTodo._id
     });
 
-    parentTodo.children.push();
+    parentTodo.children.push(newSubTodo._id);
     await parentTodo.save();
 
     return res.status(500).json({
