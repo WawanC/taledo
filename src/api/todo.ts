@@ -36,3 +36,10 @@ export const createTodoApi = async (data: { payload: CreateTodoPayload }) => {
 export const deleteTodoApi = async (data: { todoId: string }) => {
   await todoApi.delete(`/${data.todoId}`);
 };
+
+export const createSubTodoApi = async (data: {
+  parentTodoId: string;
+  payload: CreateTodoPayload;
+}) => {
+  await todoApi.post(`/${data.parentTodoId}`, data.payload);
+};

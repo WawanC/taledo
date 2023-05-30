@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
+  createSubTodoApi,
   createTodoApi,
   deleteTodoApi,
   getTodosApi,
@@ -34,6 +35,16 @@ export const useDeleteTodoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteTodoApi, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    }
+  });
+};
+
+export const useCreateSubTodoMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(createSubTodoApi, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     }

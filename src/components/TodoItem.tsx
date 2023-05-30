@@ -57,7 +57,12 @@ const TodoItem: React.FC<Props> = (props) => {
           <DeleteIcon className="w-8 h-8 " />
         </span>
       </li>
-      {isAddNew && <NewSubTodoInput cancel={() => setIsAddNew(false)} />}
+      {isAddNew && (
+        <NewSubTodoInput
+          parentId={props.todo.id}
+          cancel={() => setIsAddNew(false)}
+        />
+      )}
     </>
   );
 };
