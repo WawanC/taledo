@@ -30,8 +30,7 @@ export const createTodo: RequestHandler = async (req, res, next) => {
     });
 
     return res.status(200).json({
-      message: "Create todo success",
-      todo: newTodo
+      message: "Create todo success"
     });
   } catch (error) {
     next(error);
