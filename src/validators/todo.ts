@@ -12,11 +12,7 @@ export const createTodoValidator = [
 ];
 
 export const createSubTodoValidator = [
-  param("todoId")
-    .notEmpty()
-    .withMessage("Todo id is required")
-    .isMongoId()
-    .withMessage("Todo id must be a valid id"),
+  param("todoId").notEmpty().withMessage("Todo id is required"),
   body("title")
     .notEmpty()
     .withMessage("Todo title is required")
@@ -28,11 +24,7 @@ export const createSubTodoValidator = [
 ];
 
 export const updateTodoValidator = [
-  param("todoId")
-    .notEmpty()
-    .withMessage("Todo id is required")
-    .isMongoId()
-    .withMessage("Todo id must be a valid id"),
+  param("todoId").notEmpty().withMessage("Todo id is required"),
   body("title")
     .optional()
     .isString()
@@ -47,9 +39,5 @@ export const updateTodoValidator = [
 ];
 
 export const deleteTodoValidator = [
-  param("todoId")
-    .notEmpty()
-    .withMessage("Todo id is required")
-    .isMongoId()
-    .withMessage("Todo id must be a valid id")
+  param("todoId").notEmpty().withMessage("Todo id is required")
 ];

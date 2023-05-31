@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import todoRouter from "./routers/todo";
-import mongoose from "mongoose";
 import { globalErrorHandlers } from "./utils/error-handler";
 
 dotenv.config();
@@ -26,11 +25,6 @@ app.use(globalErrorHandlers);
 
 const bootstrap = async () => {
   try {
-    if (!process.env.MONGO_URL || !process.env.DB_NAME)
-      throw new Error("No Mongo URL or DB Name provided");
-    await mongoose.connect(process.env.MONGO_URL, {
-      dbName: process.env.DB_NAME
-    });
     app.listen(port, async () => {
       console.log(`Listening on port ${port}`);
     });

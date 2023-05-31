@@ -1,9 +1,14 @@
 import { RequestHandler } from "express";
-import todoModel, { PopulatedTodo } from "../models/todo";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export const getTodos: RequestHandler = async (req, res, next) => {
   try {
-    const todos = await todoModel.find({ parent: null }).populate("children");
+    const todos = await prisma.todo.findMany({
+      where: { parentId: null },
+      include: { subTodos: true }
+    });
 
     return res.status(200).json({
       message: "Fetch todos success",
@@ -16,10 +21,12 @@ export const getTodos: RequestHandler = async (req, res, next) => {
 
 export const createTodo: RequestHandler = async (req, res, next) => {
   try {
-    const newTodo = await todoModel.create({
-      title: req.body.title,
-      isCompleted: false,
-      parent: null
+    const newTodo = await prisma.todo.create({
+      data: {
+        title: req.body.title.trim(),
+        isCompleted: false
+      },
+      include: { subTodos: true }
     });
 
     return res.status(200).json({
@@ -33,7 +40,9 @@ export const createTodo: RequestHandler = async (req, res, next) => {
 
 export const createSubTodo: RequestHandler = async (req, res, next) => {
   try {
-    const parentTodo = await todoModel.findById(req.params.todoId);
+    const parentTodo = await prisma.todo.findUnique({
+      where: { id: req.params.todoId }
+    });
 
     if (!parentTodo) {
       return res.status(404).json({
@@ -42,25 +51,23 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
       });
     }
 
-    if (parentTodo.parent) {
+    if (parentTodo.parentId) {
       return res.status(409).json({
         type: "CONFLICT",
-        message: "Parent todo cannot be a subtodo"
+        message: "Subtodo cannot be a parent todo"
       });
     }
 
-    const newSubTodo = await todoModel.create({
-      title: req.body.title,
-      isCompleted: false,
-      parent: parentTodo._id
+    const newSubTodo = await prisma.todo.create({
+      data: {
+        title: req.body.title.trim(),
+        isCompleted: false,
+        parent: { connect: { id: parentTodo.id } }
+      }
     });
 
-    parentTodo.children.push(newSubTodo._id);
-    await parentTodo.save();
-
     return res.status(200).json({
-      message: "Create subtodo success",
-      subTodo: newSubTodo
+      message: "Create subtodo success"
     });
   } catch (error) {
     next(error);
@@ -69,7 +76,9 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
 
 export const updateTodo: RequestHandler = async (req, res, next) => {
   try {
-    const todo = await todoModel.findById(req.params.todoId);
+    const todo = await prisma.todo.findUnique({
+      where: { id: req.params.todoId }
+    });
 
     if (!todo) {
       return res.status(404).json({
@@ -82,44 +91,45 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
       req.body.isCompleted !== undefined &&
       todo.isCompleted === !req.body.isCompleted;
 
-    await todo.updateOne({
-      $set: { title: req.body.title, isCompleted: req.body.isCompleted }
+    const updatedTodo = await prisma.todo.update({
+      data: { title: req.body.title, isCompleted: req.body.isCompleted },
+      where: { id: todo.id },
+      include: {
+        parent: {
+          include: { subTodos: true }
+        }
+      }
     });
 
-    const updatedTodo = await todoModel.findById(req.params.todoId);
-
     if (isToggleCompletedStatus && updatedTodo) {
-      if (!updatedTodo.parent) {
-        await todoModel.updateMany(
-          { parent: updatedTodo._id },
-          {
-            $set: {
-              isCompleted: updatedTodo.isCompleted
-            }
-          }
-        );
+      if (!updatedTodo.parentId) {
+        await prisma.todo.updateMany({
+          data: { isCompleted: updatedTodo.isCompleted },
+          where: { parentId: updatedTodo.id }
+        });
       } else {
-        const parentTodo = await todoModel
-          .findById(updatedTodo.parent)
-          .populate<Pick<PopulatedTodo, "children">>("children");
-        if (!parentTodo) return;
-        const isAllCompleted = parentTodo.children.every(
+        const parentTodo = updatedTodo.parent;
+        if (!parentTodo || parentTodo.subTodos.length < 1) return;
+        const isAllCompleted = parentTodo.subTodos.every(
           (child) => child.isCompleted
         );
         if (!isAllCompleted && parentTodo.isCompleted) {
-          parentTodo.isCompleted = false;
-          await parentTodo.save();
+          await prisma.todo.update({
+            where: { id: parentTodo.id },
+            data: { isCompleted: false }
+          });
         }
         if (isAllCompleted && !parentTodo.isCompleted) {
-          parentTodo.isCompleted = true;
-          await parentTodo.save();
+          await prisma.todo.update({
+            where: { id: parentTodo.id },
+            data: { isCompleted: true }
+          });
         }
       }
     }
 
     return res.status(200).json({
-      message: "Update todo success",
-      todo: updatedTodo
+      message: "Update todo success"
     });
   } catch (error) {
     next(error);
@@ -128,7 +138,9 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
 export const deleteTodo: RequestHandler = async (req, res, next) => {
   try {
-    const todo = await todoModel.findById(req.params.todoId);
+    const todo = await prisma.todo.findUnique({
+      where: { id: req.params.todoId }
+    });
 
     if (!todo) {
       return res.status(404).json({
@@ -137,15 +149,10 @@ export const deleteTodo: RequestHandler = async (req, res, next) => {
       });
     }
 
-    if (todo.children.length > 0) {
-      await todoModel.deleteMany({ _id: { $in: todo.children } });
-    }
-
-    await todo.deleteOne();
+    await prisma.todo.delete({ where: { id: todo.id } });
 
     return res.status(200).json({
-      message: "Delete todo success",
-      todo: todo
+      message: "Delete todo success"
     });
   } catch (error) {
     next(error);

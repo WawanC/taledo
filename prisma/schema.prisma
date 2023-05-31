@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model Todo {
+  @@map("todos")
+  id String @id @default(uuid())
+  title String
+  isCompleted Boolean
+  parentId String?
+  parent Todo? @relation("SubTodos", fields: [parentId], references: [id], onDelete: Cascade)
+  subTodos Todo[] @relation("SubTodos") 
+}
