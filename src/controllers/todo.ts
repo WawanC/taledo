@@ -58,7 +58,7 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
       });
     }
 
-    const newSubTodo = await prisma.todo.create({
+    await prisma.todo.create({
       data: {
         title: req.body.title.trim(),
         isCompleted: false,
