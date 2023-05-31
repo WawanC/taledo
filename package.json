@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "prisma db push && tsnd --clear --respawn src/index",
-    "build": "tsc && prisma db push",
+    "build": "prisma db push && tsc",
     "start": "node dist/index"
   },
   "dependencies": {
