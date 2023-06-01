@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import todoRouter from "./routers/todo";
 import { globalErrorHandlers } from "./utils/error-handler";
 import authRouter from "./routers/auth";
+import session from "express-session";
+import initializePassportLocal from "./passport/local-strategy";
+import passport from "passport";
 
 dotenv.config();
 
@@ -11,6 +14,17 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(
+  session({
+    secret: "rahasia",
+    resave: false,
+    saveUninitialized: true
+  })
+);
+app.use(passport.session());
+
+initializePassportLocal();
 
 const port = process.env.PORT || 8000;
 
