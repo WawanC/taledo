@@ -1,7 +1,11 @@
 import { FormEventHandler, useCallback, useState } from "react";
 import { useCreateTodoMutation } from "../hooks/todo";
 
-const NewTodoInput: React.FC = () => {
+interface Props {
+  className?: string;
+}
+
+const NewTodoInput: React.FC<Props> = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const createTodo = useCreateTodoMutation();
 
@@ -24,7 +28,7 @@ const NewTodoInput: React.FC = () => {
   );
 
   return (
-    <form onSubmit={formSubmitHandler}>
+    <form onSubmit={formSubmitHandler} className={props.className}>
       <input
         type="text"
         placeholder="Enter new todo"
