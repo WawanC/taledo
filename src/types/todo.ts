@@ -7,11 +7,11 @@ export type Todo = {
 };
 
 export type TodoResponse = {
-  _id: string;
+  id: string;
   title: string;
   isCompleted: boolean;
-  parent: string;
-  children: TodoResponse[];
+  parentId: string;
+  subTodos: TodoResponse[];
 };
 
 export type GetTodosResponse = {
