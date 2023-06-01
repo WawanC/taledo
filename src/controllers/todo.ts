@@ -7,7 +7,8 @@ export const getTodos: RequestHandler = async (req, res, next) => {
   try {
     const todos = await prisma.todo.findMany({
       where: { parentId: null },
-      include: { subTodos: true }
+      include: { subTodos: { orderBy: { createdAt: "asc" } } },
+      orderBy: { createdAt: "asc" }
     });
 
     return res.status(200).json({
@@ -21,10 +22,11 @@ export const getTodos: RequestHandler = async (req, res, next) => {
 
 export const createTodo: RequestHandler = async (req, res, next) => {
   try {
-    const newTodo = await prisma.todo.create({
+    await prisma.todo.create({
       data: {
         title: req.body.title.trim(),
-        isCompleted: false
+        isCompleted: false,
+        createdAt: new Date().toISOString()
       },
       include: { subTodos: true }
     });
@@ -61,7 +63,8 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
       data: {
         title: req.body.title.trim(),
         isCompleted: false,
-        parent: { connect: { id: parentTodo.id } }
+        parent: { connect: { id: parentTodo.id } },
+        createdAt: new Date().toISOString()
       }
     });
 

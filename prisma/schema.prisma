@@ -17,5 +17,6 @@ model Todo {
   isCompleted Boolean
   parentId String?
   parent Todo? @relation("SubTodos", fields: [parentId], references: [id], onDelete: Cascade)
-  subTodos Todo[] @relation("SubTodos") 
+  subTodos Todo[] @relation("SubTodos")
+  createdAt String
 }
