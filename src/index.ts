@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import todoRouter from "./routers/todo";
 import { globalErrorHandlers } from "./utils/error-handler";
+import authRouter from "./routers/auth";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/todos", todoRouter);
+app.use("/auth", authRouter);
 
 app.use(globalErrorHandlers);
 
