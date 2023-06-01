@@ -31,6 +31,17 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const loginUser: RequestHandler = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      message: "User login success",
+      user: req.user
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getMe: RequestHandler = async (req, res, next) => {
   try {
     return res.status(200).json({
