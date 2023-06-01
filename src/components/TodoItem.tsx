@@ -4,10 +4,10 @@ import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
 import NewSubTodoInput from "./NewSubTodoInput";
-import SubTodoItem from "./SubTodoItem";
 
 interface Props {
   todo: Todo;
+  subtodo?: boolean;
 }
 
 const TodoItem: React.FC<Props> = (props) => {
@@ -27,8 +27,8 @@ const TodoItem: React.FC<Props> = (props) => {
   return (
     <>
       <li
-        className="bg-gray-200 p-2 text-xl 
-        flex gap-4 items-center border"
+        className={`bg-gray-200 p-2 text-xl 
+        flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
       >
         <input
           type="checkbox"
@@ -45,12 +45,14 @@ const TodoItem: React.FC<Props> = (props) => {
         >
           {props.todo.title}
         </label>
-        <span
-          className="hover:cursor-pointer"
-          onClick={() => setIsAddNew(true)}
-        >
-          <AddIcon className="w-8 h-8" />
-        </span>
+        {!props.subtodo && (
+          <span
+            className="hover:cursor-pointer"
+            onClick={() => setIsAddNew(true)}
+          >
+            <AddIcon className="w-8 h-8" />
+          </span>
+        )}
         <span
           className="hover:cursor-pointer"
           onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
@@ -58,9 +60,11 @@ const TodoItem: React.FC<Props> = (props) => {
           <DeleteIcon className="w-8 h-8" />
         </span>
       </li>
-      {props.todo.subTodos.map((subTodo) => (
-        <SubTodoItem key={subTodo.id} todo={subTodo} />
-      ))}
+
+      {!props.subtodo &&
+        props.todo.subTodos.map((subTodo) => (
+          <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
+        ))}
       {isAddNew && (
         <NewSubTodoInput
           parentId={props.todo.id}
