@@ -20,3 +20,10 @@ model Todo {
   subTodos Todo[] @relation("SubTodos")
   createdAt String
 }
+
+model User {
+  @@map("users")
+  id String @id @default(uuid())
+  username String
+  password String
+}
