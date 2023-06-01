@@ -19,7 +19,7 @@ initializePassportLocal();
 
 app.use(
   session({
-    secret: "rahasia",
+    secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: false
   })
