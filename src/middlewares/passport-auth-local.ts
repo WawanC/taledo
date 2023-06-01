@@ -14,8 +14,9 @@ const passportAuthLocal: RequestHandler = (req, res, next) => {
       });
     }
 
-    req.user = user;
-    next();
+    req.logIn(user, (err) => {
+      next();
+    });
   };
   passport.authenticate("local", authCallback)(req, res, next);
 };

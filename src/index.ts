@@ -15,16 +15,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+initializePassportLocal();
+
 app.use(
   session({
     secret: "rahasia",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   })
 );
 app.use(passport.session());
-
-initializePassportLocal();
 
 const port = process.env.PORT || 8000;
 

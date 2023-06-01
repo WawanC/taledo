@@ -3,6 +3,7 @@ import * as authController from "../controllers/auth";
 import { loginAuthValidator, registerAuthValidator } from "../validators/auth";
 import isValid from "../middlewares/is-valid";
 import passportAuthLocal from "../middlewares/passport-auth-local";
+import isAuth from "../middlewares/is-auth";
 
 const authRouter = Router();
 
@@ -21,6 +22,6 @@ authRouter.post(
   authController.loginUser
 );
 
-authRouter.get("/me", authController.getMe);
+authRouter.get("/me", isAuth, authController.getMe);
 
 export default authRouter;
