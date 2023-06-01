@@ -27,7 +27,7 @@ const TodoItem: React.FC<Props> = (props) => {
   return (
     <>
       <li
-        className={`bg-gray-200 p-2 text-xl 
+        className={`bg-primary p-2 text-xl 
         flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
       >
         <input

@@ -32,7 +32,7 @@ const NewTodoInput: React.FC<Props> = (props) => {
       <input
         type="text"
         placeholder="Enter new todo"
-        className="text-xl w-full border-b-2 outline-none text-center"
+        className="text-xl bg-transparent w-full border-b-2 outline-none text-center"
         value={enteredTitle}
         onChange={(e) => setEnteredTitle(e.target.value)}
       />
