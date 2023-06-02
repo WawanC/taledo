@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRegisterUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface RegisterForm {
   username: string;
@@ -65,7 +66,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <main className="flex flex-col items-center px-4 py-8 gap-8">
-      <h1 className="text-4xl font-bold">Create New Account</h1>
+      <h1 className="text-2xl md:text-4xl font-bold">Create New Account</h1>
       {registerUser.isLoading ? (
         <p className="text-xl">Loading...</p>
       ) : (
@@ -129,6 +130,15 @@ const RegisterPage: React.FC = () => {
           )}
         </Formik>
       )}
+      <div className="text-center">
+        <p>Already have an account ?</p>
+        <p>
+          Login{" "}
+          <Link to={"/login"} className="underline">
+            here
+          </Link>
+        </p>
+      </div>
     </main>
   );
 };
