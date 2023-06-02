@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "prisma db push && tsnd --clear --respawn --files src/index",
-    "build": "prisma db push --force-reset && tsc",
-    "start": "node dist/index"
+    "build": "prisma generate && tsc",
+    "start": "prisma db push --force-reset && node dist/index"
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",
