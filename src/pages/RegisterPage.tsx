@@ -1,4 +1,7 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useRegisterUserMutation } from "../hooks/auth";
+import { getServerErrorMessage } from "../utils/error";
+import { useEffect } from "react";
 
 interface RegisterForm {
   username: string;
@@ -14,6 +17,11 @@ const RegisterPage: React.FC = () => {
     password2: "",
     error: null
   };
+  const registerUser = useRegisterUserMutation();
+
+  useEffect(() => {
+    if (registerUser.isSuccess) alert("Register success !");
+  }, [registerUser.isSuccess]);
 
   const registerFormHandler = (
     values: RegisterForm,
@@ -48,6 +56,10 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
+    registerUser.mutate({
+      payload: { username: values.username.trim(), password: values.password }
+    });
+
     actions.resetForm();
   };
 
@@ -60,9 +72,11 @@ const RegisterPage: React.FC = () => {
       >
         {({ values }) => (
           <Form className="text-xl w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8">
-            {values.error && (
+            {(values.error || registerUser.isError) && (
               <div className="flex justify-center text-lg">
-                <span className="text-red-500 text-center">{values.error}</span>
+                <span className="text-red-500 text-center">
+                  {values.error || getServerErrorMessage(registerUser.error)}
+                </span>
               </div>
             )}
 
