@@ -23,6 +23,9 @@ export const loginAuthValidator = [
     .notEmpty()
     .withMessage("User username is required")
     .isString()
+    .withMessage("User username must be string")
+    .trim()
+    .isLength({ min: 1 })
     .withMessage("User username must be string"),
   body("password")
     .notEmpty()
