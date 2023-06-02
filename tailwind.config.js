@@ -7,7 +7,8 @@ export default {
     extend: {
       colors: {
         primary: colors.gray[200],
-        secondary: colors.white
+        secondary: colors.white,
+        textColor: colors.black
       }
     }
   },
