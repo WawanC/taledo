@@ -28,8 +28,6 @@ const LoginPage: React.FC = () => {
     values: LoginForm,
     actions: FormikHelpers<LoginForm>
   ) => {
-    console.log(values);
-
     if (values.username.trim().length < 1) {
       actions.setFieldValue("error", "Valid username is required");
       actions.setFieldValue("username", "");

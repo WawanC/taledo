@@ -28,8 +28,6 @@ const RegisterPage: React.FC = () => {
     values: RegisterForm,
     actions: FormikHelpers<RegisterForm>
   ) => {
-    console.log(values);
-
     if (values.username.trim().length < 6) {
       actions.setFieldValue("error", "Username must be min 6 characters long");
       actions.setFieldValue("username", "");

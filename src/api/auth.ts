@@ -18,7 +18,8 @@ export const registerUserApi = async (data: {
 export const loginUserApi = async (data: { payload: LoginUserPayload }) => {
   const response = await authApi.post<SuccessLoginPayload>(
     "/login",
-    data.payload
+    data.payload,
+    { withCredentials: true }
   );
   return response.data;
 };
