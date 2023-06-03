@@ -15,3 +15,11 @@ export type SuccessLoginPayload = {
     username: string;
   };
 };
+
+export type GetMePayload = {
+  message: string;
+  user: {
+    id: string;
+    username: string;
+  };
+};

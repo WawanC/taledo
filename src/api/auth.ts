@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  GetMePayload,
   LoginUserPayload,
   RegisterUserPayload,
   SuccessLoginPayload
@@ -21,5 +22,12 @@ export const loginUserApi = async (data: { payload: LoginUserPayload }) => {
     data.payload,
     { withCredentials: true }
   );
+  return response.data;
+};
+
+export const getMeUserApi = async () => {
+  const response = await authApi.get<GetMePayload>("/me", {
+    withCredentials: true
+  });
   return response.data;
 };
