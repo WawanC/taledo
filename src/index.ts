@@ -29,7 +29,8 @@ app.use(
     cookie: {
       sameSite: "none",
       secure: true,
-      httpOnly: false
+      httpOnly: false,
+      maxAge: 5 * 60 * 1000
     }
   })
 );
