@@ -15,8 +15,11 @@ export const useLoginUserMutation = (options?: { onSuccess?: () => void }) => {
   });
 };
 
-export const useGetMeUserQuery = (options?: { enabled?: boolean }) => {
-  return useQuery("me-user", getMeUserApi, {
+export const useGetMeUserQuery = (options?: {
+  key?: string;
+  enabled?: boolean;
+}) => {
+  return useQuery(options?.key || "me-user", getMeUserApi, {
     enabled: options?.enabled,
     retry: false
   });
