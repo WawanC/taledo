@@ -1,7 +1,6 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRegisterUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 interface RegisterForm {
