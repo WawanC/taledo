@@ -1,7 +1,6 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { Link } from "react-router-dom";
-import { useGetMeUserQuery, useLoginUserMutation } from "../hooks/auth";
-import { useCallback, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 
 interface LoginForm {
@@ -16,20 +15,12 @@ const LoginPage: React.FC = () => {
     password: "",
     error: null
   };
-  const getMeUser = useGetMeUserQuery({ enabled: false });
-
-  const successLoginHandler = useCallback(() => {
-    console.log("login success");
-    getMeUser.refetch();
-  }, [getMeUser]);
-
-  const loginUser = useLoginUserMutation({ onSuccess: successLoginHandler });
-
-  useEffect(() => {
-    if (getMeUser.isSuccess) {
-      console.log(getMeUser.data);
+  const navigate = useNavigate();
+  const loginUser = useLoginUserMutation({
+    onSuccess: () => {
+      navigate("/dashboard");
     }
-  }, [getMeUser.isSuccess, getMeUser.data]);
+  });
 
   const loginFormHandler = (
     values: LoginForm,

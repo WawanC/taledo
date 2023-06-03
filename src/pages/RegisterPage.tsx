@@ -2,7 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRegisterUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface RegisterForm {
   username: string;
@@ -18,11 +18,12 @@ const RegisterPage: React.FC = () => {
     password2: "",
     error: null
   };
-  const registerUser = useRegisterUserMutation();
-
-  useEffect(() => {
-    if (registerUser.isSuccess) alert("Register success !");
-  }, [registerUser.isSuccess]);
+  const navigate = useNavigate();
+  const registerUser = useRegisterUserMutation({
+    onSuccess: () => {
+      navigate("/login");
+    }
+  });
 
   const registerFormHandler = (
     values: RegisterForm,
