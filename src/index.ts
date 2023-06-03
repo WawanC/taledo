@@ -20,12 +20,11 @@ app.use(
 );
 app.use(express.json());
 
-initializePassportLocal();
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
+    proxy: true,
     saveUninitialized: false,
     cookie: {
       sameSite: "none",
@@ -33,6 +32,7 @@ app.use(
     }
   })
 );
+initializePassportLocal();
 app.use(passport.session());
 
 const port = process.env.PORT || 8000;
