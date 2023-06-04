@@ -7,6 +7,9 @@ import authRouter from "./routers/auth";
 import session from "express-session";
 import initializePassportLocal from "./passport/local-strategy";
 import passport from "passport";
+import initializePassportGoogle from "./passport/google-strategy";
+import https from "https";
+import fs from "fs";
 
 dotenv.config();
 
@@ -28,13 +31,15 @@ app.use(
     saveUninitialized: false,
     cookie: {
       sameSite: "none",
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: true,
       maxAge: 5 * 60 * 1000
     }
   })
 );
+
 initializePassportLocal();
-app.use(passport.session());
+initializePassportGoogle();
+app.use(passport.session({ pauseStream: true }));
 
 const port = process.env.PORT || 8000;
 
@@ -51,9 +56,23 @@ app.use(globalErrorHandlers);
 
 const bootstrap = async () => {
   try {
-    app.listen(port, async () => {
-      console.log(`Listening on port ${port}`);
-    });
+    if (process.env.NODE_ENV === "production") {
+      app.listen(port, async () => {
+        console.log(`Listening on port ${port}`);
+      });
+    } else {
+      https
+        .createServer(
+          {
+            key: fs.readFileSync("certs/localdev-key.pem"),
+            cert: fs.readFileSync("certs/localdev.pem")
+          },
+          app
+        )
+        .listen(port, () => {
+          console.log(`Listening on port ${port}`);
+        });
+    }
   } catch (error) {
     console.log(error);
   }
