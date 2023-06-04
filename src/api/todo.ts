@@ -7,7 +7,8 @@ import {
 } from "../types/todo";
 
 const todoApi = axios.create({
-  baseURL: `${import.meta.env.VITE_SERVER_URL}/todos`
+  baseURL: `${import.meta.env.VITE_SERVER_URL}/todos`,
+  withCredentials: true
 });
 
 export const getTodosApi = async () => {
