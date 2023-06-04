@@ -6,8 +6,10 @@ const prisma = new PrismaClient();
 
 export const getTodos: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
     const todos = await prisma.todo.findMany({
-      where: { parentId: null },
+      where: { parentId: null, userId: req.user.id },
       include: { subTodos: { orderBy: { createdAt: "asc" } } },
       orderBy: { createdAt: "asc" }
     });

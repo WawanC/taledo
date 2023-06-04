@@ -11,7 +11,7 @@ import isAuth from "../middlewares/is-auth";
 
 const todoRouter = Router();
 
-todoRouter.get("/", todoController.getTodos);
+todoRouter.get("/", isAuth, todoController.getTodos);
 
 todoRouter.post(
   "/",
