@@ -7,14 +7,22 @@ import {
   updateTodoValidator
 } from "../validators/todo";
 import isValid from "../middlewares/is-valid";
+import isAuth from "../middlewares/is-auth";
 
 const todoRouter = Router();
 
 todoRouter.get("/", todoController.getTodos);
 
-todoRouter.post("/", createTodoValidator, isValid, todoController.createTodo);
+todoRouter.post(
+  "/",
+  isAuth,
+  createTodoValidator,
+  isValid,
+  todoController.createTodo
+);
 todoRouter.post(
   "/:todoId",
+  isAuth,
   createSubTodoValidator,
   isValid,
   todoController.createSubTodo
@@ -22,6 +30,7 @@ todoRouter.post(
 
 todoRouter.put(
   "/:todoId",
+  isAuth,
   updateTodoValidator,
   isValid,
   todoController.updateTodo
@@ -29,6 +38,7 @@ todoRouter.put(
 
 todoRouter.delete(
   "/:todoId",
+  isAuth,
   deleteTodoValidator,
   isValid,
   todoController.deleteTodo

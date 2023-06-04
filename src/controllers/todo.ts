@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -22,11 +23,14 @@ export const getTodos: RequestHandler = async (req, res, next) => {
 
 export const createTodo: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
     await prisma.todo.create({
       data: {
         title: req.body.title.trim(),
         isCompleted: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        user: { connect: { id: req.user.id } }
       },
       include: { subTodos: true }
     });
@@ -41,6 +45,8 @@ export const createTodo: RequestHandler = async (req, res, next) => {
 
 export const createSubTodo: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
     const parentTodo = await prisma.todo.findUnique({
       where: { id: req.params.todoId }
     });
@@ -64,7 +70,10 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
         title: req.body.title.trim(),
         isCompleted: false,
         parent: { connect: { id: parentTodo.id } },
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        user: {
+          connect: { id: req.user.id }
+        }
       }
     });
 
@@ -78,6 +87,8 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
 
 export const updateTodo: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
     const todo = await prisma.todo.findUnique({
       where: { id: req.params.todoId }
     });
@@ -86,6 +97,13 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
       return res.status(404).json({
         type: "NOT_FOUND",
         message: "Todo not found"
+      });
+    }
+
+    if (todo.userId !== req.user.id) {
+      return res.status(401).json({
+        type: "UNAUTHORIZED",
+        message: "Unauthorized Access"
       });
     }
 
@@ -140,6 +158,8 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
 
 export const deleteTodo: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
     const todo = await prisma.todo.findUnique({
       where: { id: req.params.todoId }
     });
@@ -148,6 +168,13 @@ export const deleteTodo: RequestHandler = async (req, res, next) => {
       return res.status(404).json({
         type: "NOT_FOUND",
         message: "Todo not found"
+      });
+    }
+
+    if (todo.userId !== req.user.id) {
+      return res.status(401).json({
+        type: "UNAUTHORIZED",
+        message: "Unauthorized Access"
       });
     }
 

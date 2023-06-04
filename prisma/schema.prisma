@@ -18,6 +18,8 @@ model Todo {
   parentId String?
   parent Todo? @relation("SubTodos", fields: [parentId], references: [id], onDelete: Cascade)
   subTodos Todo[] @relation("SubTodos")
+  userId String
+  user User @relation(fields: [userId], references: [id])
   createdAt String
 }
 
@@ -26,4 +28,5 @@ model User {
   id String @id @default(uuid())
   username String
   password String
+  todos Todo[]
 }
