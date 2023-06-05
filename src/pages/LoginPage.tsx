@@ -98,6 +98,13 @@ const LoginPage: React.FC = () => {
           )}
         </Formik>
       )}
+      <div>
+        <button className="p-2 bg-primary">
+          <Link to={`${import.meta.env.VITE_SERVER_URL}/auth/google`}>
+            Login with Google
+          </Link>
+        </button>
+      </div>
       <div className="text-center">
         <p>Don't have an account yet ?</p>
         <p>
