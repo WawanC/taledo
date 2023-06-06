@@ -46,4 +46,6 @@ authRouter.get(
   })
 );
 
+authRouter.post("/logout", isAuth, authController.logoutUser);
+
 export default authRouter;

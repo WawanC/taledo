@@ -52,3 +52,16 @@ export const getMe: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logoutUser: RequestHandler = async (req, res, next) => {
+  try {
+    req.logOut((err) => {
+      if (err) throw Error();
+      return res.status(200).json({
+        message: "User logout success"
+      });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
