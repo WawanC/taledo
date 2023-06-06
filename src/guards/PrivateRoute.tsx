@@ -1,22 +1,16 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useGetMeUserQuery } from "../hooks/auth";
+import useAuthStore from "../stores/auth";
 
 const PrivateRoute = () => {
-  const getMeQuery = useGetMeUserQuery({ key: "private-me" });
+  const isAuth = useAuthStore().isAuth;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (getMeQuery.isError) return navigate("/login");
-  }, [getMeQuery.isError, navigate]);
+    if (!isAuth) return navigate("/login");
+  }, [isAuth, navigate]);
 
-  return getMeQuery.isFetching || getMeQuery.isError ? (
-    <main className="flex justify-center items-center h-screen">
-      <p>Loading...</p>
-    </main>
-  ) : (
-    <Outlet />
-  );
+  return <Outlet />;
 };
 
 export default PrivateRoute;

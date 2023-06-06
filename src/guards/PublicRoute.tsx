@@ -1,22 +1,16 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useGetMeUserQuery } from "../hooks/auth";
+import useAuthStore from "../stores/auth";
 
 const PublicRoute = () => {
-  const getMeQuery = useGetMeUserQuery({ key: "public-me" });
+  const isAuth = useAuthStore().isAuth;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (getMeQuery.isSuccess) return navigate("/dashboard");
-  }, [getMeQuery.isSuccess, navigate]);
+    if (isAuth) return navigate("/dashboard");
+  }, [isAuth, navigate]);
 
-  return getMeQuery.isFetching || getMeQuery.isSuccess ? (
-    <main className="flex justify-center items-center h-screen">
-      <p>Loading...</p>
-    </main>
-  ) : (
-    <Outlet />
-  );
+  return <Outlet />;
 };
 
 export default PublicRoute;

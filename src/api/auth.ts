@@ -31,3 +31,9 @@ export const getMeUserApi = async () => {
   });
   return response.data;
 };
+
+export const logoutUserApi = async () => {
+  await authApi.post("/logout", null, {
+    withCredentials: true
+  });
+};

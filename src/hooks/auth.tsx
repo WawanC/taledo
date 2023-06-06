@@ -1,5 +1,11 @@
-import { useMutation, useQuery } from "react-query";
-import { getMeUserApi, loginUserApi, registerUserApi } from "../api/auth";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  getMeUserApi,
+  loginUserApi,
+  logoutUserApi,
+  registerUserApi
+} from "../api/auth";
+import useAuthStore from "../stores/auth";
 
 export const useRegisterUserMutation = (options?: {
   onSuccess?: () => void;
@@ -9,18 +15,29 @@ export const useRegisterUserMutation = (options?: {
   });
 };
 
-export const useLoginUserMutation = (options?: { onSuccess?: () => void }) => {
+export const useLoginUserMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation(loginUserApi, {
-    onSuccess: options?.onSuccess
+    onSuccess: () => queryClient.invalidateQueries("me")
   });
 };
 
-export const useGetMeUserQuery = (options?: {
-  key?: string;
-  enabled?: boolean;
-}) => {
-  return useQuery(options?.key || "me-user", getMeUserApi, {
-    enabled: options?.enabled,
-    retry: false
+export const useGetMeUserQuery = () => {
+  const setIsAuth = useAuthStore().setIsAuth;
+
+  return useQuery("me", getMeUserApi, {
+    retry: false,
+    onSuccess: () => setIsAuth(true),
+    onError: () => setIsAuth(false)
+  });
+};
+
+export const useLogoutUserMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(logoutUserApi, {
+    onSettled: () => {
+      queryClient.invalidateQueries(["me"]);
+    }
   });
 };
