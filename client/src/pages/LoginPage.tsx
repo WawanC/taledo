@@ -96,9 +96,7 @@ const LoginPage: React.FC = () => {
       )}
       <div>
         <button className="p-2 bg-primary">
-          <Link to={`${import.meta.env.VITE_SERVER_URL}/auth/google`}>
-            Login with Google
-          </Link>
+          <a href={`/api/auth/google`}>Login with Google</a>
         </button>
       </div>
       <div className="text-center">
