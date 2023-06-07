@@ -3,7 +3,8 @@
     "turbo": "^1.10.2"
   },
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "start": "turbo build && turbo start"
   },
   "private": true,
   "workspaces": [
