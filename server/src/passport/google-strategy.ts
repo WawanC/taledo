@@ -42,7 +42,7 @@ const googleStrategy = new Strategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: `${process.env.DOMAIN_URL}/auth/google/callback`,
+    callbackURL: `/api/auth/google/callback`,
     passReqToCallback: true
   },
   verify

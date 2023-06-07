@@ -7,7 +7,7 @@ import {
 } from "../types/auth";
 
 const authApi = axios.create({
-  baseURL: `${import.meta.env.VITE_SERVER_URL}/auth`
+  baseURL: `/api/auth`
 });
 
 export const registerUserApi = async (data: {

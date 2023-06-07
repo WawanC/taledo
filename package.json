@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "turbo": "^1.10.2"
+  },
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "private": true,
+  "workspaces": [
+    "client/",
+    "server/"
+  ]
+}

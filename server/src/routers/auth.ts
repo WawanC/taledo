@@ -6,11 +6,6 @@ import passportAuthLocal from "../middlewares/passport-auth-local";
 import isAuth from "../middlewares/is-auth";
 import passport from "passport";
 
-const clientUrl =
-  process.env.NODE_ENV === "production"
-    ? process.env.CLIENT_URL
-    : process.env.CLIENT_URL_DEV;
-
 const authRouter = Router();
 
 authRouter.post(
@@ -41,8 +36,8 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: clientUrl,
-    failureRedirect: `${clientUrl}/login`
+    successRedirect: "/",
+    failureRedirect: `/login`
   })
 );
 

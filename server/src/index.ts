@@ -10,6 +10,7 @@ import passport from "passport";
 import initializePassportGoogle from "./passport/google-strategy";
 import https from "https";
 import fs from "fs";
+import path from "path";
 
 dotenv.config();
 
@@ -43,14 +44,17 @@ app.use(passport.session({ pauseStream: true }));
 
 const port = process.env.PORT || 8000;
 
-app.get("/", (req, res) => {
-  return res.json({
-    message: "Welcome to Taledo server"
-  });
-});
+app.use("/api/todos", todoRouter);
+app.use("/api/auth", authRouter);
 
-app.use("/todos", todoRouter);
-app.use("/auth", authRouter);
+app.use(
+  "/",
+  express.static(path.join(__dirname, "..", "..", "client", "dist"))
+);
+
+app.use("*", (req, res) => {
+  res.redirect("/");
+});
 
 app.use(globalErrorHandlers);
 
@@ -64,8 +68,12 @@ const bootstrap = async () => {
       https
         .createServer(
           {
-            key: fs.readFileSync("certs/localdev-key.pem"),
-            cert: fs.readFileSync("certs/localdev.pem")
+            key: fs.readFileSync(
+              path.join(__dirname, "..", "certs", "localdev-key.pem")
+            ),
+            cert: fs.readFileSync(
+              path.join(__dirname, "..", "certs", "localdev.pem")
+            )
           },
           app
         )

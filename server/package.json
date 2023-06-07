@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "prisma db push && tsnd --clear --respawn --files src/index",
+    "dev": "prisma db push &&  concurrently \"tsc -w --preserveWatchOutput\" \"nodemon dist/index.js\"",
     "build": "prisma generate && tsc",
     "start": "prisma db push --force-reset && node dist/index"
   },
@@ -29,6 +29,8 @@
     "@types/passport": "^1.0.12",
     "@types/passport-google-oauth20": "^2.0.11",
     "@types/passport-local": "^1.0.35",
+    "concurrently": "^8.1.0",
+    "nodemon": "^2.0.22",
     "prisma": "^4.15.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
