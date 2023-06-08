@@ -1,6 +1,14 @@
 import TodoItem from "./TodoItem";
 import { useGetTodosQuery, useUpdateTodoMutation } from "../hooks/todo.tsx";
-import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  TouchSensor,
+  useDroppable,
+  useSensor,
+  useSensors
+} from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy
@@ -15,6 +23,7 @@ const TodoList: React.FC<Props> = (props) => {
   const getTodos = useGetTodosQuery();
   const { setNodeRef } = useDroppable({ id: "droppable" });
   const updateTodo = useUpdateTodoMutation();
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
   const dragEndHandler = useCallback(
     (e: DragEndEvent) => {
@@ -48,7 +57,7 @@ const TodoList: React.FC<Props> = (props) => {
   return getTodos.isLoading ? (
     <p className="text-center text-xl">Loading...</p>
   ) : (
-    <DndContext onDragEnd={dragEndHandler}>
+    <DndContext sensors={sensors} onDragEnd={dragEndHandler}>
       <ul ref={setNodeRef} className={`flex flex-col gap-4 ${props.className}`}>
         <SortableContext
           items={sortables}
