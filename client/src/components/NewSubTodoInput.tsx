@@ -38,6 +38,11 @@ const NewSubTodoInput: React.FC<Props> = (props) => {
         onSubmit={formSubmitHandler}
       >
         <input
+          type="checkbox"
+          className="w-6 h-6 hover:cursor-pointer"
+          disabled
+        />
+        <input
           type="text"
           className="flex-1 bg-primary outline-none border-b-2"
           placeholder="Enter new subtodo"

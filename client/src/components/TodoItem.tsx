@@ -4,6 +4,7 @@ import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
 import NewSubTodoInput from "./NewSubTodoInput";
+import DownIcon from "../icons/DownIcon";
 
 interface Props {
   todo: Todo;
@@ -14,6 +15,7 @@ const TodoItem: React.FC<Props> = (props) => {
   const updateTodo = useUpdateTodoMutation();
   const deleteTodo = useDeleteTodoMutation();
   const [isAddNew, setIsAddNew] = useState(false);
+  const [isExpand, setIsExpand] = useState(false);
 
   const toggleTodo = useCallback(() => {
     updateTodo.mutate({
@@ -35,7 +37,10 @@ const TodoItem: React.FC<Props> = (props) => {
           id={props.todo.id}
           className="w-6 h-6 hover:cursor-pointer"
           checked={props.todo.isCompleted}
-          onChange={toggleTodo}
+          onChange={() => {
+            setIsExpand(true);
+            toggleTodo();
+          }}
         />
         <label
           htmlFor={props.todo.id}
@@ -43,12 +48,19 @@ const TodoItem: React.FC<Props> = (props) => {
             props.todo.isCompleted && "line-through"
           } hover:cursor-pointer`}
         >
-          {props.todo.title}
+          {props.todo.title}{" "}
+          {!props.subtodo &&
+            props.todo.subTodos.length > 0 &&
+            `(${props.todo.subTodos.length})`}
         </label>
-        {!props.subtodo && (
+
+        {!props.subtodo && !isAddNew && (
           <span
             className="hover:cursor-pointer"
-            onClick={() => setIsAddNew(true)}
+            onClick={() => {
+              setIsExpand(true);
+              setIsAddNew(true);
+            }}
           >
             <AddIcon className="w-8 h-8" />
           </span>
@@ -59,16 +71,28 @@ const TodoItem: React.FC<Props> = (props) => {
         >
           <DeleteIcon className="w-8 h-8" />
         </span>
+        {!props.subtodo && props.todo.subTodos.length > 0 && (
+          <span
+            className="hover:cursor-pointer"
+            onClick={() => setIsExpand((v) => !v)}
+          >
+            <DownIcon className={`w-8 h-8 ${isExpand && "rotate-180"}`} />
+          </span>
+        )}
       </li>
 
       {!props.subtodo &&
+        isExpand &&
         props.todo.subTodos.map((subTodo) => (
           <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
         ))}
       {isAddNew && (
         <NewSubTodoInput
           parentId={props.todo.id}
-          cancel={() => setIsAddNew(false)}
+          cancel={() => {
+            setIsExpand(true);
+            setIsAddNew(false);
+          }}
         />
       )}
     </>
