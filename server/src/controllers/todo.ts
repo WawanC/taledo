@@ -26,12 +26,17 @@ export const createTodo: RequestHandler = async (req, res, next) => {
   try {
     if (!req.user) throw new Error("UNAUTHORIZED");
 
+    const userTodosCount = await prisma.todo.count({
+      where: { userId: req.user.id, parent: null }
+    });
+
     await prisma.todo.create({
       data: {
         title: req.body.title.trim(),
         isCompleted: false,
         createdAt: new Date().toISOString(),
-        user: { connect: { id: req.user.id } }
+        user: { connect: { id: req.user.id } },
+        order: userTodosCount + 1
       },
       include: { subTodos: true }
     });
@@ -66,6 +71,10 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
       });
     }
 
+    const subTodosCount = await prisma.todo.count({
+      where: { parentId: parentTodo.id }
+    });
+
     await prisma.todo.create({
       data: {
         title: req.body.title.trim(),
@@ -74,7 +83,8 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
         createdAt: new Date().toISOString(),
         user: {
           connect: { id: req.user.id }
-        }
+        },
+        order: subTodosCount + 1
       }
     });
 
@@ -112,8 +122,43 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
       req.body.isCompleted !== undefined &&
       todo.isCompleted === !req.body.isCompleted;
 
+    const todosMaxOrder = await prisma.todo.count({
+      where: { userId: req.user.id, parentId: todo.parentId }
+    });
+
+    if (req.body.order < 1 || req.body.order > todosMaxOrder) {
+      return res.status(400).json({
+        type: "VALIDATION_FAILED",
+        message: "Invalid order number"
+      });
+    }
+
+    if (req.body.order) {
+      if (todo.order > req.body.order) {
+        await prisma.todo.updateMany({
+          data: { order: { increment: 1 } },
+          where: {
+            order: { lt: todo.order, gte: req.body.order },
+            parentId: todo.parentId
+          }
+        });
+      } else if (todo.order < req.body.order) {
+        await prisma.todo.updateMany({
+          data: { order: { decrement: 1 } },
+          where: {
+            order: { lte: req.body.order, gt: todo.order },
+            parentId: todo.parentId
+          }
+        });
+      }
+    }
+
     const updatedTodo = await prisma.todo.update({
-      data: { title: req.body.title, isCompleted: req.body.isCompleted },
+      data: {
+        title: req.body.title,
+        isCompleted: req.body.isCompleted,
+        order: req.body.order
+      },
       where: { id: todo.id },
       include: {
         parent: {
@@ -180,6 +225,14 @@ export const deleteTodo: RequestHandler = async (req, res, next) => {
     }
 
     await prisma.todo.delete({ where: { id: todo.id } });
+
+    await prisma.todo.updateMany({
+      data: { order: { decrement: 1 } },
+      where: {
+        order: { gt: todo.order },
+        parentId: todo.parentId
+      }
+    });
 
     return res.status(200).json({
       message: "Delete todo success"

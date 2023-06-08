@@ -5,6 +5,7 @@ import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
 import NewSubTodoInput from "./NewSubTodoInput";
 import DownIcon from "../icons/DownIcon";
+import BarsIcon from "../icons/BarsIcon";
 
 interface Props {
   todo: Todo;
@@ -32,7 +33,7 @@ const TodoItem: React.FC<Props> = (props) => {
         className={`bg-primary p-2 text-xl 
         flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
       >
-        <input
+        {/* <input
           type="checkbox"
           id={props.todo.id}
           className="w-6 h-6 hover:cursor-pointer"
@@ -41,7 +42,10 @@ const TodoItem: React.FC<Props> = (props) => {
             setIsExpand(true);
             toggleTodo();
           }}
-        />
+        /> */}
+        <span className="hover:cursor-grab" onClick={toggleTodo}>
+          <BarsIcon className="w-6 h-6" />
+        </span>
         <label
           htmlFor={props.todo.id}
           className={`flex-1 ${
