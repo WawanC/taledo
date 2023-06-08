@@ -1,10 +1,11 @@
 import TodoItem from "./TodoItem";
-import { useGetTodosQuery } from "../hooks/todo.tsx";
+import { useGetTodosQuery, useUpdateTodoMutation } from "../hooks/todo.tsx";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy
 } from "@dnd-kit/sortable";
+import { useCallback, useMemo } from "react";
 
 interface Props {
   className?: string;
@@ -13,16 +14,36 @@ interface Props {
 const TodoList: React.FC<Props> = (props) => {
   const getTodos = useGetTodosQuery();
   const { setNodeRef } = useDroppable({ id: "droppable" });
+  const updateTodo = useUpdateTodoMutation();
 
-  const dragEndHandler = (e: DragEndEvent) => {
-    console.log(`Active: ${e.active.id}`);
-    console.log(`Over: ${e.over?.id}`);
+  const dragEndHandler = useCallback(
+    (e: DragEndEvent) => {
+      if (!getTodos.data || !e.over) return;
 
-    // const activeTodo = getTodos.data?.find((todo) => todo.id === e.active.id);
-    // const overTodo = getTodos.data?.find((todo) => todo.id === e.over?.id);
-  };
+      const activeTodo = getTodos.data.find((todo) => todo.id === e.active.id);
+      const overTodo = getTodos.data.find((todo) => todo.id === e.over?.id);
 
-  const sortables = getTodos.data ? getTodos.data.map((todo) => todo.id) : [];
+      if (!activeTodo || !overTodo) return;
+
+      updateTodo.mutate({
+        todoId: activeTodo.id,
+        payload: {
+          order: overTodo.order
+        }
+      });
+    },
+    [getTodos.data, updateTodo]
+  );
+
+  const todos = useMemo(
+    () => getTodos.data?.sort((a, b) => a.order - b.order),
+    [getTodos.data]
+  );
+
+  const sortables = useMemo(
+    () => (todos ? todos.map((todo) => todo.id) : []),
+    [todos]
+  );
 
   return getTodos.isLoading ? (
     <p className="text-center text-xl">Loading...</p>
@@ -33,8 +54,7 @@ const TodoList: React.FC<Props> = (props) => {
           items={sortables}
           strategy={verticalListSortingStrategy}
         >
-          {getTodos.data &&
-            getTodos.data.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
+          {todos && todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
         </SortableContext>
       </ul>
     </DndContext>

@@ -43,8 +43,6 @@ const TodoItem: React.FC<Props> = (props) => {
   return (
     <li
       ref={setNodeRef}
-      {...listeners}
-      {...attributes}
       className={`bg-primary p-2 text-xl 
         flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
       style={sortableStyles}
@@ -59,14 +57,19 @@ const TodoItem: React.FC<Props> = (props) => {
             toggleTodo();
           }}
         /> */}
-      <span className="hover:cursor-grab" onClick={toggleTodo}>
+      <span
+        className="hover:cursor-grab"
+        onClick={toggleTodo}
+        {...listeners}
+        {...attributes}
+      >
         <BarsIcon className="w-6 h-6" />
       </span>
       <label
-        htmlFor={props.todo.id}
         className={`flex-1 ${
           props.todo.isCompleted && "line-through"
         } hover:cursor-pointer`}
+        onClick={toggleTodo}
       >
         {props.todo.title}{" "}
         {!props.subtodo &&
