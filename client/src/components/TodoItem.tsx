@@ -1,11 +1,12 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useDeleteTodoMutation, useUpdateTodoMutation } from "../hooks/todo";
 import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import AddIcon from "../icons/AddIcon";
-import NewSubTodoInput from "./NewSubTodoInput";
 import DownIcon from "../icons/DownIcon";
 import BarsIcon from "../icons/BarsIcon";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   todo: Todo;
@@ -17,6 +18,18 @@ const TodoItem: React.FC<Props> = (props) => {
   const deleteTodo = useDeleteTodoMutation();
   const [isAddNew, setIsAddNew] = useState(false);
   const [isExpand, setIsExpand] = useState(false);
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: props.todo.id
+    });
+
+  const sortableStyles = useMemo(
+    () => ({
+      transform: CSS.Transform.toString(transform),
+      transition
+    }),
+    [transform, transition]
+  );
 
   const toggleTodo = useCallback(() => {
     updateTodo.mutate({
@@ -28,12 +41,15 @@ const TodoItem: React.FC<Props> = (props) => {
   }, [props.todo.id, props.todo.isCompleted, updateTodo]);
 
   return (
-    <>
-      <li
-        className={`bg-primary p-2 text-xl 
+    <li
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className={`bg-primary p-2 text-xl 
         flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
-      >
-        {/* <input
+      style={sortableStyles}
+    >
+      {/* <input
           type="checkbox"
           id={props.todo.id}
           className="w-6 h-6 hover:cursor-pointer"
@@ -43,63 +59,62 @@ const TodoItem: React.FC<Props> = (props) => {
             toggleTodo();
           }}
         /> */}
-        <span className="hover:cursor-grab" onClick={toggleTodo}>
-          <BarsIcon className="w-6 h-6" />
-        </span>
-        <label
-          htmlFor={props.todo.id}
-          className={`flex-1 ${
-            props.todo.isCompleted && "line-through"
-          } hover:cursor-pointer`}
-        >
-          {props.todo.title}{" "}
-          {!props.subtodo &&
-            props.todo.subTodos.length > 0 &&
-            `(${props.todo.subTodos.length})`}
-        </label>
+      <span className="hover:cursor-grab" onClick={toggleTodo}>
+        <BarsIcon className="w-6 h-6" />
+      </span>
+      <label
+        htmlFor={props.todo.id}
+        className={`flex-1 ${
+          props.todo.isCompleted && "line-through"
+        } hover:cursor-pointer`}
+      >
+        {props.todo.title}{" "}
+        {!props.subtodo &&
+          props.todo.subTodos.length > 0 &&
+          `(${props.todo.subTodos.length})`}
+      </label>
 
-        {!props.subtodo && !isAddNew && (
-          <span
-            className="hover:cursor-pointer"
-            onClick={() => {
-              setIsExpand(true);
-              setIsAddNew(true);
-            }}
-          >
-            <AddIcon className="w-8 h-8" />
-          </span>
-        )}
+      {!props.subtodo && !isAddNew && (
         <span
           className="hover:cursor-pointer"
-          onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
-        >
-          <DeleteIcon className="w-8 h-8" />
-        </span>
-        {!props.subtodo && props.todo.subTodos.length > 0 && (
-          <span
-            className="hover:cursor-pointer"
-            onClick={() => setIsExpand((v) => !v)}
-          >
-            <DownIcon className={`w-8 h-8 ${isExpand && "rotate-180"}`} />
-          </span>
-        )}
-      </li>
-
-      {!props.subtodo &&
-        isExpand &&
-        props.todo.subTodos.map((subTodo) => (
-          <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
-        ))}
-      {isAddNew && (
-        <NewSubTodoInput
-          parentId={props.todo.id}
-          cancel={() => {
+          onClick={() => {
             setIsExpand(true);
-            setIsAddNew(false);
+            setIsAddNew(true);
           }}
-        />
+        >
+          <AddIcon className="w-8 h-8" />
+        </span>
       )}
-    </>
+      <span
+        className="hover:cursor-pointer"
+        onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
+      >
+        <DeleteIcon className="w-8 h-8" />
+      </span>
+      {!props.subtodo && props.todo.subTodos.length > 0 && (
+        <span
+          className="hover:cursor-pointer"
+          onClick={() => setIsExpand((v) => !v)}
+        >
+          <DownIcon className={`w-8 h-8 ${isExpand && "rotate-180"}`} />
+        </span>
+      )}
+    </li>
+
+    // {/* {!props.subtodo &&
+    //   isExpand &&
+    //   props.todo.subTodos.map((subTodo) => (
+    //     <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
+    //   ))}
+    // {isAddNew && (
+    //   <NewSubTodoInput
+    //     parentId={props.todo.id}
+    //     cancel={() => {
+    //       setIsExpand(true);
+    //       setIsAddNew(false);
+    //     }}
+    //   />
+    // )} */}
   );
 };
 
