@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRegisterUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleIcon from "../icons/GoogleIcon";
 
 interface RegisterForm {
   username: string;
@@ -63,8 +64,11 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <main className="flex flex-col items-center px-4 py-8 gap-8">
-      <h1 className="text-2xl md:text-4xl font-bold">Create New Account</h1>
+    <main
+      className="flex flex-col items-center px-4 py-8 gap-8 
+      bg-bold min-h-screen text-light"
+    >
+      <h1 className="text-3xl md:text-4xl font-bold">Create New Account</h1>
       {registerUser.isLoading ? (
         <p className="text-xl">Loading...</p>
       ) : (
@@ -83,33 +87,39 @@ const RegisterPage: React.FC = () => {
               )}
 
               <div className="flex flex-col">
-                <label htmlFor="username">Username :</label>
+                <label htmlFor="username" className="font-bold">
+                  Username :
+                </label>
                 <Field
                   id="username"
                   type="text"
-                  className="border-b border-black outline-none py-2"
+                  className="border-b border-light outline-none py-2 bg-transparent"
                   placeholder="Enter your username"
                   required
                   name="username"
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="password">Password :</label>
+                <label htmlFor="password" className="font-bold">
+                  Password :
+                </label>
                 <Field
                   id="password"
                   type="password"
-                  className="border-b border-black outline-none py-2"
+                  className="border-b border-light outline-none py-2 bg-transparent"
                   placeholder="Enter your password"
                   required
                   name="password"
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="password2">Repeat Password :</label>
+                <label htmlFor="password2" className="font-bold">
+                  Repeat Password :
+                </label>
                 <Field
                   id="password2"
                   type="password"
-                  className="border-b border-black outline-none py-2"
+                  className="border-b border-light outline-none py-2 bg-transparent"
                   placeholder="Repeat your password"
                   required
                   name="password2"
@@ -118,7 +128,7 @@ const RegisterPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-primary p-2"
+                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold"
                   disabled={isSubmitting}
                 >
                   Register
@@ -129,13 +139,20 @@ const RegisterPage: React.FC = () => {
         </Formik>
       )}
       <div className="text-center">
-        <p>Already have an account ?</p>
         <p>
-          Login{" "}
+          Already have an account ? Login{" "}
           <Link to={"/login"} className="underline">
             here
           </Link>
         </p>
+      </div>
+      <div>
+        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4">
+          <GoogleIcon className="w-6 h-6" />
+          <a href={`/api/auth/google`} className="font-bold">
+            Sign In with Google
+          </a>
+        </button>
       </div>
     </main>
   );

@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
 import { useLoginUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
+import GoogleIcon from "../icons/GoogleIcon";
 
 interface LoginForm {
   username: string;
@@ -40,7 +41,10 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <main className="flex flex-col items-center px-4 py-8 gap-8">
+    <main
+      className="flex flex-col items-center px-4 py-8 gap-8 
+    bg-bold min-h-screen text-light"
+    >
       <h1 className="text-4xl font-bold">Sign-In</h1>
       {loginUser.isLoading ? (
         <p className="text-xl">Loading...</p>
@@ -60,22 +64,26 @@ const LoginPage: React.FC = () => {
               )}
 
               <div className="flex flex-col">
-                <label htmlFor="username">Username :</label>
+                <label htmlFor="username" className="font-bold">
+                  Username :
+                </label>
                 <Field
                   id="username"
                   type="text"
-                  className="border-b border-black outline-none py-2"
+                  className="border-b border-light outline-none py-2 bg-transparent"
                   placeholder="Enter your username"
                   required
                   name="username"
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="password">Password :</label>
+                <label htmlFor="password" className="font-bold">
+                  Password :
+                </label>
                 <Field
                   id="password"
                   type="password"
-                  className="border-b border-black outline-none py-2"
+                  className="border-b border-light outline-none py-2 bg-transparent"
                   placeholder="Enter your password"
                   required
                   name="password"
@@ -84,7 +92,7 @@ const LoginPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-primary p-2"
+                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold"
                   disabled={isSubmitting}
                 >
                   Login
@@ -94,19 +102,21 @@ const LoginPage: React.FC = () => {
           )}
         </Formik>
       )}
-      <div>
-        <button className="p-2 bg-primary">
-          <a href={`/api/auth/google`}>Login with Google</a>
-        </button>
-      </div>
       <div className="text-center">
-        <p>Don't have an account yet ?</p>
         <p>
-          Register{" "}
+          Don't have an account yet ? Register{" "}
           <Link to={"/register"} className="underline">
             here
           </Link>
         </p>
+      </div>
+      <div>
+        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4">
+          <GoogleIcon className="w-6 h-6" />
+          <a href={`/api/auth/google`} className="font-bold">
+            Sign In with Google
+          </a>
+        </button>
       </div>
     </main>
   );

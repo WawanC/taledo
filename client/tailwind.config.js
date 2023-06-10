@@ -1,14 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-import colors from "tailwindcss/colors";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ["Poppins"]
+      },
       colors: {
-        primary: colors.gray[200],
-        secondary: colors.white,
-        textColor: colors.black
+        light: "#DDE6ED",
+        semi_light: "#9DB2BF",
+        semi_bold: "#526D82",
+        bold: "#27374D"
       }
     }
   },

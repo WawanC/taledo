@@ -42,19 +42,20 @@ initializePassportLocal();
 initializePassportGoogle();
 app.use(passport.session({ pauseStream: true }));
 
+app.use(express.static(path.join(__dirname, "..", "..", "client", "dist")));
+
 const port = process.env.PORT || 8000;
 
 app.use("/api/todos", todoRouter);
 app.use("/api/auth", authRouter);
 
-app.use(
-  "/",
-  express.static(path.join(__dirname, "..", "..", "client", "dist"))
+app.use("*", (req, res) =>
+  res.sendFile(path.join(__dirname, "..", "..", "client", "dist", "index.html"))
 );
 
-app.use("*", (req, res) => {
-  res.redirect("/");
-});
+// app.use("*", (req, res) => {
+//   res.redirect("/");
+// });
 
 app.use(globalErrorHandlers);
 

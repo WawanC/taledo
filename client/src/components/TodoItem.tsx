@@ -7,6 +7,7 @@ import DownIcon from "../icons/DownIcon";
 import BarsIcon from "../icons/BarsIcon";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import NewSubTodoInput from "./NewSubTodoInput";
 
 interface Props {
   todo: Todo;
@@ -43,81 +44,75 @@ const TodoItem: React.FC<Props> = (props) => {
   return (
     <li
       ref={setNodeRef}
-      className={`bg-primary p-2 text-xl 
-        flex gap-4 items-center border ${props.subtodo && "ml-8"}`}
+      className={`bg-primary p-2 text-xl border
+      flex flex-col gap-4 ${props.subtodo && "ml-8 p-0"}`}
       style={sortableStyles}
     >
-      {/* <input
-          type="checkbox"
-          id={props.todo.id}
-          className="w-6 h-6 hover:cursor-pointer"
-          checked={props.todo.isCompleted}
-          onChange={() => {
-            setIsExpand(true);
-            toggleTodo();
-          }}
-        /> */}
-      <span
-        className="hover:cursor-grab"
-        onClick={toggleTodo}
-        {...listeners}
-        {...attributes}
-      >
-        <BarsIcon className="w-6 h-6" />
-      </span>
-      <label
-        className={`flex-1 ${
-          props.todo.isCompleted && "line-through"
-        } hover:cursor-pointer`}
-        onClick={toggleTodo}
-      >
-        {props.todo.title}{" "}
-        {!props.subtodo &&
-          props.todo.subTodos.length > 0 &&
-          `(${props.todo.subTodos.length})`}
-      </label>
+      <div className="flex gap-4 items-center">
+        <span
+          className="hover:cursor-grab"
+          onClick={toggleTodo}
+          {...listeners}
+          {...attributes}
+        >
+          <BarsIcon className="w-6 h-6" />
+        </span>
+        <label
+          className={`flex-1 ${
+            props.todo.isCompleted && "line-through"
+          } hover:cursor-pointer`}
+          onClick={toggleTodo}
+        >
+          {props.todo.title}{" "}
+          {!props.subtodo &&
+            props.todo.subTodos.length > 0 &&
+            `(${props.todo.subTodos.length})`}
+        </label>
 
-      {!props.subtodo && !isAddNew && (
+        {!props.subtodo && !isAddNew && (
+          <span
+            className="hover:cursor-pointer"
+            onClick={() => {
+              setIsExpand(true);
+              setIsAddNew(true);
+            }}
+          >
+            <AddIcon className="w-8 h-8" />
+          </span>
+        )}
         <span
           className="hover:cursor-pointer"
-          onClick={() => {
-            setIsExpand(true);
-            setIsAddNew(true);
-          }}
+          onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
         >
-          <AddIcon className="w-8 h-8" />
+          <DeleteIcon className="w-8 h-8" />
         </span>
-      )}
-      <span
-        className="hover:cursor-pointer"
-        onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
-      >
-        <DeleteIcon className="w-8 h-8" />
-      </span>
-      {!props.subtodo && props.todo.subTodos.length > 0 && (
-        <span
-          className="hover:cursor-pointer"
-          onClick={() => setIsExpand((v) => !v)}
-        >
-          <DownIcon className={`w-8 h-8 ${isExpand && "rotate-180"}`} />
-        </span>
+        {!props.subtodo && props.todo.subTodos.length > 0 && (
+          <span
+            className="hover:cursor-pointer"
+            onClick={() => setIsExpand((v) => !v)}
+          >
+            <DownIcon className={`w-8 h-8 ${isExpand && "rotate-180"}`} />
+          </span>
+        )}
+      </div>
+      {isExpand && (
+        <div className="flex flex-col">
+          {!props.subtodo &&
+            props.todo.subTodos.map((subTodo) => (
+              <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
+            ))}
+          {isAddNew && (
+            <NewSubTodoInput
+              parentId={props.todo.id}
+              cancel={() => {
+                setIsExpand(false);
+                setIsAddNew(false);
+              }}
+            />
+          )}
+        </div>
       )}
     </li>
-
-    // {/* {!props.subtodo &&
-    //   isExpand &&
-    //   props.todo.subTodos.map((subTodo) => (
-    //     <TodoItem key={subTodo.id} todo={subTodo} subtodo={true} />
-    //   ))}
-    // {isAddNew && (
-    //   <NewSubTodoInput
-    //     parentId={props.todo.id}
-    //     cancel={() => {
-    //       setIsExpand(true);
-    //       setIsAddNew(false);
-    //     }}
-    //   />
-    // )} */}
   );
 };
 

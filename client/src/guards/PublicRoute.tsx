@@ -7,7 +7,9 @@ const PublicRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuth) return navigate("/dashboard");
+    if (isAuth) {
+      return navigate("/dashboard");
+    }
   }, [isAuth, navigate]);
 
   return <Outlet />;

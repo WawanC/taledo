@@ -7,6 +7,7 @@ const PrivateRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("private");
     if (!isAuth) return navigate("/login");
   }, [isAuth, navigate]);
 
