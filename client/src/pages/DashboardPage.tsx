@@ -6,12 +6,15 @@ const DashboardPage: React.FC = () => {
   const getMeQuery = useGetMeUserQuery();
 
   return (
-    <main className="flex flex-col gap-4 items-center p-4">
+    <main
+      className="flex flex-col gap-12 items-center py-8 px-4
+    text-light bg-semi_bold min-h-screen"
+    >
       {getMeQuery.isFetching ? (
         <p>Loading...</p>
       ) : (
         <>
-          <h1 className="text-4xl mb-4 text-center">
+          <h1 className="text-4xl text-center">
             Hello, {getMeQuery.data?.user.username || "Anonymous"}
           </h1>
           <NewTodoInput className="w-full md:w-1/2" />

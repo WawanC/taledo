@@ -31,8 +31,9 @@ const NewTodoInput: React.FC<Props> = (props) => {
     <form onSubmit={formSubmitHandler} className={props.className}>
       <input
         type="text"
-        placeholder="Enter new todo"
-        className="text-xl bg-transparent w-full border-b-2 outline-none text-center"
+        placeholder="Enter New Todo"
+        className="text-xl bg-transparent w-full border-b 
+        outline-none text-center py-1"
         value={enteredTitle}
         onChange={(e) => setEnteredTitle(e.target.value)}
       />

@@ -10,8 +10,8 @@ const PageLayout: React.FC = () => {
     <p>Loading...</p>
   ) : (
     <>
-      {location.pathname.includes("/login") &&
-        location.pathname.includes("/register") && <NavBar />}
+      {!location.pathname.includes("/login") &&
+        !location.pathname.includes("/register") && <NavBar />}
       <Outlet />
     </>
   );

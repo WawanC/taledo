@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import DashboardPage from "../pages/DashboardPage";
 import PageLayout from "../components/layouts/PageLayout";
 import RegisterPage from "../pages/RegisterPage";
@@ -17,6 +17,7 @@ const AppRouter = createBrowserRouter([
       {
         element: <PublicRoute />,
         children: [
+          { path: "/", element: <Navigate to={"/dashboard"} /> },
           { path: "/register", element: <RegisterPage /> },
           { path: "/login", element: <LoginPage /> }
         ]
