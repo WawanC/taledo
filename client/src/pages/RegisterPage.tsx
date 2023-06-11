@@ -76,7 +76,7 @@ const RegisterPage: React.FC = () => {
           initialValues={initialRegisterFormValues}
           onSubmit={registerFormHandler}
         >
-          {({ values, isSubmitting }) => (
+          {({ values }) => (
             <Form className="text-xl w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8">
               {(values.error || registerUser.isError) && (
                 <div className="flex justify-center text-lg">
@@ -129,7 +129,6 @@ const RegisterPage: React.FC = () => {
                 <button
                   type="submit"
                   className="bg-semi_bold rounded-xl px-4 py-2 font-bold shadow"
-                  disabled={isSubmitting}
                 >
                   Register
                 </button>
