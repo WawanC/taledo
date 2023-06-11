@@ -8,7 +8,7 @@ interface Props {
 }
 
 const SideNav: React.FC<Props> = (props) => {
-  const getMeUser = useGetMeUserQuery();
+  const getMeUser = useGetMeUserQuery({ enabled: false });
   const logoutUser = useLogoutUserMutation();
 
   const todayDate = useMemo(

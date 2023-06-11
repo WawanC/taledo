@@ -22,11 +22,12 @@ export const useLoginUserMutation = () => {
   });
 };
 
-export const useGetMeUserQuery = () => {
+export const useGetMeUserQuery = (props?: { enabled?: boolean }) => {
   const setIsAuth = useAuthStore().setIsAuth;
 
   return useQuery("me", getMeUserApi, {
     retry: false,
+    enabled: props?.enabled,
     onSuccess: () => setIsAuth(true),
     onError: () => setIsAuth(false)
   });
