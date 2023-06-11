@@ -1,4 +1,4 @@
-import { FormEventHandler, useCallback, useState } from "react";
+import { FormEventHandler, useCallback, useRef, useState } from "react";
 import { useCreateTodoMutation } from "../hooks/todo";
 import { motion } from "framer-motion";
 
@@ -9,6 +9,7 @@ interface Props {
 const NewTodoInput: React.FC<Props> = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const createTodo = useCreateTodoMutation();
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
   const formSubmitHandler: FormEventHandler = useCallback(
     (e) => {
@@ -24,6 +25,7 @@ const NewTodoInput: React.FC<Props> = (props) => {
       createTodo.mutate({ payload: { title: title } });
 
       setEnteredTitle("");
+      titleInputRef.current?.blur();
     },
     [enteredTitle, createTodo]
   );
@@ -37,6 +39,7 @@ const NewTodoInput: React.FC<Props> = (props) => {
       transition={{ duration: 0.25 }}
     >
       <input
+        ref={titleInputRef}
         type="text"
         placeholder="Enter New Todo"
         className="text-xl bg-transparent w-full border-b 

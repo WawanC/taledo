@@ -68,14 +68,14 @@ const TodoItem: React.FC<Props> = (props) => {
         >
           <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-light"></div>
         </span>
-        <label
+        <span
           className={`flex-1 ${
             props.todo.isCompleted && "line-through"
-          } hover:cursor-pointer`}
+          } hover:cursor-pointer select-none`}
           onClick={toggleTodo}
         >
           {props.todo.title}
-        </label>
+        </span>
 
         <span className="hover:cursor-pointer" onClick={deleteTodoHandler}>
           <DeleteIcon className="w-6 h-6 md:w-8 md:h-8" />
