@@ -1,5 +1,6 @@
 import { FormEventHandler, useCallback, useState } from "react";
 import { useCreateTodoMutation } from "../hooks/todo";
+import { motion } from "framer-motion";
 
 interface Props {
   className?: string;
@@ -28,7 +29,13 @@ const NewTodoInput: React.FC<Props> = (props) => {
   );
 
   return (
-    <form onSubmit={formSubmitHandler} className={props.className}>
+    <motion.form
+      onSubmit={formSubmitHandler}
+      className={props.className}
+      initial={{ y: "-50%", opacity: 0 }}
+      animate={{ y: "0", opacity: 1 }}
+      transition={{ duration: 0.25 }}
+    >
       <input
         type="text"
         placeholder="Enter New Todo"
@@ -37,7 +44,7 @@ const NewTodoInput: React.FC<Props> = (props) => {
         value={enteredTitle}
         onChange={(e) => setEnteredTitle(e.target.value)}
       />
-    </form>
+    </motion.form>
   );
 };
 

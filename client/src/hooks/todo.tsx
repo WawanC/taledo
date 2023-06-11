@@ -15,7 +15,7 @@ export const useUpdateTodoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(updateTodoApi, {
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.invalidateQueries("todos");
     }
   });

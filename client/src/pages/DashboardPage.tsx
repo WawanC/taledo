@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import NewTodoInput from "../components/NewTodoInput";
 import TodoList from "../components/TodoList";
 import { useGetMeUserQuery } from "../hooks/auth";
@@ -14,9 +15,14 @@ const DashboardPage: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h1 className="text-4xl text-center">
+          <motion.h1
+            className="text-4xl text-center break-words w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
             Hello, {getMeQuery.data?.user.username || "Anonymous"}
-          </h1>
+          </motion.h1>
           <NewTodoInput className="w-full md:w-1/2" />
           <TodoList className="w-full md:w-1/2" />
         </>

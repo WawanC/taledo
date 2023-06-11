@@ -1,9 +1,9 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { useDeleteTodoMutation, useUpdateTodoMutation } from "../hooks/todo";
 import DeleteIcon from "../icons/DeleteIcon";
 import { Todo } from "../types/todo";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { motion, useAnimationControls } from "framer-motion";
 
 interface Props {
   todo: Todo;
@@ -12,19 +12,11 @@ interface Props {
 const TodoItem: React.FC<Props> = (props) => {
   const updateTodo = useUpdateTodoMutation();
   const deleteTodo = useDeleteTodoMutation();
+  const animationControls = useAnimationControls();
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: props.todo.id
-    });
-
-  const sortableStyles = useMemo(
-    () => ({
-      transform: CSS.Transform.toString(transform),
-      transition
-    }),
-    [transform, transition]
-  );
+  const { attributes, listeners, setNodeRef, transform } = useSortable({
+    id: props.todo.id
+  });
 
   const toggleTodo = useCallback(() => {
     updateTodo.mutate({
@@ -35,14 +27,39 @@ const TodoItem: React.FC<Props> = (props) => {
     });
   }, [props.todo.id, props.todo.isCompleted, updateTodo]);
 
+  const deleteTodoHandler = useCallback(async () => {
+    await animationControls.start({ y: "-50%", opacity: 0 });
+    deleteTodo.mutate({ todoId: props.todo.id });
+  }, [animationControls, deleteTodo, props.todo.id]);
+
+  useEffect(() => {
+    animationControls.start({ y: "0", opacity: 1 });
+  }, [animationControls]);
+
   return (
-    <li
+    <motion.li
+      layout
+      animate={{
+        x: transform?.x,
+        y: transform?.y,
+        scaleX: transform?.scaleX,
+        scaleY: transform?.scaleY,
+        transition: { bounce: false, duration: 0.05, ease: "linear" }
+      }}
+      transition={{ duration: 0.2 }}
       ref={setNodeRef}
-      className={`bg-bold py-4 px-4 text-xl
-      flex flex-col gap-4 rounded-xl shadow`}
-      style={sortableStyles}
     >
-      <div className="flex gap-4 items-center">
+      <motion.div
+        className={`bg-bold py-4 px-4 text-xl
+      flex items-center gap-4 rounded-xl shadow`}
+        variants={{
+          slideOut: { y: "-50%", opacity: 1 },
+          slideIn: { y: "0", opacity: 1 }
+        }}
+        initial={"slideOut"}
+        animate={animationControls}
+        transition={{ duration: 0.2 }}
+      >
         <span
           className="hover:cursor-grab"
           onClick={toggleTodo}
@@ -60,14 +77,11 @@ const TodoItem: React.FC<Props> = (props) => {
           {props.todo.title}
         </label>
 
-        <span
-          className="hover:cursor-pointer"
-          onClick={() => deleteTodo.mutate({ todoId: props.todo.id })}
-        >
+        <span className="hover:cursor-pointer" onClick={deleteTodoHandler}>
           <DeleteIcon className="w-6 h-6 md:w-8 md:h-8" />
         </span>
-      </div>
-    </li>
+      </motion.div>
+    </motion.li>
   );
 };
 

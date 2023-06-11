@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
+import { useMemo } from "react";
 
 interface Props {
   onClose: () => void;
@@ -8,6 +9,14 @@ interface Props {
 
 const SideNav: React.FC<Props> = (props) => {
   const logoutUser = useLogoutUserMutation();
+
+  const todayDate = useMemo(
+    () =>
+      new Date().toLocaleDateString("us", {
+        dateStyle: "long"
+      }),
+    []
+  );
 
   return (
     <nav className="fixed inset-0 z-10 text-light">
@@ -24,7 +33,7 @@ const SideNav: React.FC<Props> = (props) => {
         transition={{ bounce: false, duration: 0.25 }}
       >
         <h1 className="text-2xl font-bold">Username</h1>
-        <h2 className="text-xl">22 June 2023</h2>
+        <h2 className="text-xl">{todayDate}</h2>
         <ul className="flex flex-col">
           <button
             className="flex text-xl gap-2"
