@@ -128,7 +128,7 @@ const RegisterPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold"
+                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold shadow"
                   disabled={isSubmitting}
                 >
                   Register
@@ -147,7 +147,7 @@ const RegisterPage: React.FC = () => {
         </p>
       </div>
       <div>
-        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4">
+        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4 shadow">
           <GoogleIcon className="w-6 h-6" />
           <a href={`/api/auth/google`} className="font-bold">
             Sign In with Google

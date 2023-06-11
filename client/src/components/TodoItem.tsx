@@ -51,7 +51,7 @@ const TodoItem: React.FC<Props> = (props) => {
     >
       <motion.div
         className={`bg-bold py-4 px-4 text-xl
-      flex items-center gap-4 rounded-xl shadow`}
+        flex items-center gap-4 rounded-xl shadow`}
         variants={{
           slideOut: { y: "-50%", opacity: 1 },
           slideIn: { y: "0", opacity: 1 }
@@ -61,7 +61,7 @@ const TodoItem: React.FC<Props> = (props) => {
         transition={{ duration: 0.2 }}
       >
         <span
-          className="hover:cursor-grab"
+          className="hover:cursor-grab touch-none"
           onClick={toggleTodo}
           {...listeners}
           {...attributes}
