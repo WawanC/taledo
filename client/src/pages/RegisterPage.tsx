@@ -68,7 +68,18 @@ const RegisterPage: React.FC = () => {
       className="flex flex-col items-center px-4 py-8 gap-8 
       bg-bold min-h-screen text-light"
     >
-      <h1 className="text-3xl md:text-4xl font-bold">Create New Account</h1>
+      <div className="flex flex-col items-center">
+        <div className="w-28 h-28">
+          <img
+            src="/applogo.svg"
+            alt="applogo"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold text-center">
+          Create New Account
+        </h1>
+      </div>
       {registerUser.isLoading ? (
         <p className="text-xl">Loading...</p>
       ) : (

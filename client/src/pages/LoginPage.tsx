@@ -45,7 +45,16 @@ const LoginPage: React.FC = () => {
       className="flex flex-col items-center px-4 py-8 gap-8 
     bg-bold min-h-screen text-light"
     >
-      <h1 className="text-4xl font-bold">Sign-In</h1>
+      <div className="flex flex-col items-center">
+        <div className="w-28 h-28">
+          <img
+            src="/applogo.svg"
+            alt="applogo"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <h1 className="text-4xl font-bold">Sign-In</h1>
+      </div>
       {loginUser.isLoading ? (
         <p className="text-xl">Loading...</p>
       ) : (

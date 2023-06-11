@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useLogoutUserMutation } from "../../hooks/auth";
+import { useGetMeUserQuery, useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
 import { useMemo } from "react";
 
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const SideNav: React.FC<Props> = (props) => {
+  const getMeUser = useGetMeUserQuery();
   const logoutUser = useLogoutUserMutation();
 
   const todayDate = useMemo(
@@ -32,7 +33,18 @@ const SideNav: React.FC<Props> = (props) => {
         exit={{ x: "-100%" }}
         transition={{ bounce: false, duration: 0.25 }}
       >
-        <h1 className="text-2xl font-bold">Username</h1>
+        <div className="flex flex-col gap-4 items-center">
+          <div className="w-28 h-28">
+            <img
+              src="/applogo.svg"
+              alt="applogo"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <h1 className="text-2xl font-bold">
+            {getMeUser.data?.user.username || "Username"}
+          </h1>
+        </div>
         <h2 className="text-xl">{todayDate}</h2>
         <ul className="flex flex-col">
           <button

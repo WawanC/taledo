@@ -38,8 +38,17 @@ const NavBar: React.FC = () => {
         >
           <BarsIcon className="w-8 h-8" />
         </div>
-        <Link to={"/"} className="text-2xl font-bold text-center">
-          Taledo
+        <Link to={"/"} className="text-2xl font-bold text-center flex gap-2">
+          {
+            <div className="hidden md:block w-8 h-8">
+              <img
+                src="/applogo.svg"
+                alt="applogo"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          }
+          <span>Taledo</span>
         </Link>
         <span className="hidden md:block text-xl">{todayDate}</span>
         {isAuth && (
