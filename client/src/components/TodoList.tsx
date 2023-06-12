@@ -30,28 +30,25 @@ const TodoList: React.FC<Props> = (props) => {
       if (!getTodos.data || !e.over) return;
 
       const activeTodo = getTodos.data.find((todo) => todo.id === e.active.id);
-      const overTodo = getTodos.data.find((todo) => todo.id === e.over?.id);
+      const overOrder =
+        getTodos.data.findIndex((todo) => todo.id === e.over?.id) + 1;
 
-      if (!activeTodo || !overTodo) return;
+      if (!activeTodo || overOrder < 0) return;
+      console.log(overOrder);
 
       updateTodo.mutate({
         todoId: activeTodo.id,
         payload: {
-          order: overTodo.order
+          order: overOrder
         }
       });
     },
     [getTodos.data, updateTodo]
   );
 
-  const todos = useMemo(
-    () => getTodos.data?.sort((a, b) => a.order - b.order),
-    [getTodos.data]
-  );
-
   const sortables = useMemo(
-    () => (todos ? todos.map((todo) => todo.id) : []),
-    [todos]
+    () => (getTodos.data ? getTodos.data.map((todo) => todo.id) : []),
+    [getTodos.data]
   );
 
   return getTodos.isLoading ? (
@@ -63,7 +60,8 @@ const TodoList: React.FC<Props> = (props) => {
           items={sortables}
           strategy={verticalListSortingStrategy}
         >
-          {todos && todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
+          {getTodos.data &&
+            getTodos.data.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
         </SortableContext>
       </ul>
     </DndContext>

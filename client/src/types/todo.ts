@@ -4,7 +4,7 @@ export type Todo = {
   isCompleted: boolean;
   parentId: string;
   subTodos: Todo[];
-  order: number;
+  rank: string;
 };
 
 export type TodoResponse = {
@@ -13,7 +13,7 @@ export type TodoResponse = {
   isCompleted: boolean;
   parentId: string;
   subTodos: TodoResponse[];
-  order: number;
+  rank: string;
 };
 
 export type GetTodosResponse = {

@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
 import { LexoRank } from "lexorank";
 import LexoRankBucket from "lexorank/lib/lexoRank/lexoRankBucket";
+import { generateLexorank } from "../utils/lexorank";
 
 const prisma = new PrismaClient();
 
@@ -139,7 +140,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
         orderBy: { rank: "asc" }
       });
       if (todos.length > 1) {
-        rank = LexoRank.parse(todos[req.body.order - 1].rank).genPrev();
+        rank = generateLexorank(todos, todo.rank, req.body.order);
       }
     }
 
