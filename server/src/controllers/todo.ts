@@ -1,5 +1,7 @@
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
+import { LexoRank } from "lexorank";
+import LexoRankBucket from "lexorank/lib/lexoRank/lexoRankBucket";
 
 const prisma = new PrismaClient();
 
@@ -9,8 +11,8 @@ export const getTodos: RequestHandler = async (req, res, next) => {
 
     const todos = await prisma.todo.findMany({
       where: { parentId: null, userId: req.user.id },
-      include: { subTodos: { orderBy: { createdAt: "asc" } } },
-      orderBy: { createdAt: "asc" }
+      include: { subTodos: { orderBy: { rank: "asc" } } },
+      orderBy: { rank: "asc" }
     });
 
     return res.status(200).json({
@@ -26,9 +28,20 @@ export const createTodo: RequestHandler = async (req, res, next) => {
   try {
     if (!req.user) throw new Error("UNAUTHORIZED");
 
-    const userTodosCount = await prisma.todo.count({
-      where: { userId: req.user.id, parent: null }
+    const maxTodoRankAggregation = await prisma.todo.aggregate({
+      _max: {
+        rank: true
+      },
+      where: {
+        userId: req.user.id
+      }
     });
+    const maxTodoRank = maxTodoRankAggregation._max.rank;
+    let todoRank = LexoRank.min().genNext();
+
+    if (maxTodoRank) {
+      todoRank = LexoRank.parse(maxTodoRank).genNext();
+    }
 
     await prisma.todo.create({
       data: {
@@ -36,7 +49,7 @@ export const createTodo: RequestHandler = async (req, res, next) => {
         isCompleted: false,
         createdAt: new Date().toISOString(),
         user: { connect: { id: req.user.id } },
-        order: userTodosCount + 1
+        rank: todoRank.toString()
       },
       include: { subTodos: true }
     });
@@ -84,7 +97,7 @@ export const createSubTodo: RequestHandler = async (req, res, next) => {
         user: {
           connect: { id: req.user.id }
         },
-        order: subTodosCount + 1
+        rank: "test"
       }
     });
 
@@ -118,46 +131,23 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
       });
     }
 
-    const isToggleCompletedStatus: boolean =
-      req.body.isCompleted !== undefined &&
-      todo.isCompleted === !req.body.isCompleted;
-
-    const todosMaxOrder = await prisma.todo.count({
-      where: { userId: req.user.id, parentId: todo.parentId }
-    });
-
-    if (req.body.order < 1 || req.body.order > todosMaxOrder) {
-      return res.status(400).json({
-        type: "VALIDATION_FAILED",
-        message: "Invalid order number"
-      });
-    }
+    let rank = undefined;
 
     if (req.body.order) {
-      if (todo.order > req.body.order) {
-        await prisma.todo.updateMany({
-          data: { order: { increment: 1 } },
-          where: {
-            order: { lt: todo.order, gte: req.body.order },
-            parentId: todo.parentId
-          }
-        });
-      } else if (todo.order < req.body.order) {
-        await prisma.todo.updateMany({
-          data: { order: { decrement: 1 } },
-          where: {
-            order: { lte: req.body.order, gt: todo.order },
-            parentId: todo.parentId
-          }
-        });
+      const todos = await prisma.todo.findMany({
+        where: { userId: req.user.id },
+        orderBy: { rank: "asc" }
+      });
+      if (todos.length > 1) {
+        rank = LexoRank.parse(todos[req.body.order - 1].rank).genPrev();
       }
     }
 
-    const updatedTodo = await prisma.todo.update({
+    await prisma.todo.update({
       data: {
         title: req.body.title,
         isCompleted: req.body.isCompleted,
-        order: req.body.order
+        rank: rank?.toString() || undefined
       },
       where: { id: todo.id },
       include: {
@@ -166,33 +156,6 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
         }
       }
     });
-
-    if (isToggleCompletedStatus && updatedTodo) {
-      if (!updatedTodo.parentId) {
-        await prisma.todo.updateMany({
-          data: { isCompleted: updatedTodo.isCompleted },
-          where: { parentId: updatedTodo.id }
-        });
-      } else {
-        const parentTodo = updatedTodo.parent;
-        if (!parentTodo || parentTodo.subTodos.length < 1) return;
-        const isAllCompleted = parentTodo.subTodos.every(
-          (child) => child.isCompleted
-        );
-        if (!isAllCompleted && parentTodo.isCompleted) {
-          await prisma.todo.update({
-            where: { id: parentTodo.id },
-            data: { isCompleted: false }
-          });
-        }
-        if (isAllCompleted && !parentTodo.isCompleted) {
-          await prisma.todo.update({
-            where: { id: parentTodo.id },
-            data: { isCompleted: true }
-          });
-        }
-      }
-    }
 
     return res.status(200).json({
       message: "Update todo success"
@@ -225,14 +188,6 @@ export const deleteTodo: RequestHandler = async (req, res, next) => {
     }
 
     await prisma.todo.delete({ where: { id: todo.id } });
-
-    await prisma.todo.updateMany({
-      data: { order: { decrement: 1 } },
-      where: {
-        order: { gt: todo.order },
-        parentId: todo.parentId
-      }
-    });
 
     return res.status(200).json({
       message: "Delete todo success"

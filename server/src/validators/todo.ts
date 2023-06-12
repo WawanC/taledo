@@ -35,7 +35,11 @@ export const updateTodoValidator = [
   body("isCompleted")
     .optional()
     .isBoolean({ strict: true })
-    .withMessage("Todo completed status must be a boolean")
+    .withMessage("Todo completed status must be a boolean"),
+  body("order")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Todo order minimum value is 1")
 ];
 
 export const deleteTodoValidator = [

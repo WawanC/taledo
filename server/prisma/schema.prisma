@@ -21,7 +21,7 @@ model Todo {
   userId String
   user User @relation(fields: [userId], references: [id])
   createdAt String
-  order Int
+  rank String
 }
 
 model User {
