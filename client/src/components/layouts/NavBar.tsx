@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
             onClick={() => logoutUser.mutate()}
           >
             <LogoutIcon className="w-8 h-8" />
-            <span>Logout</span>
+            {/* <span>Logout</span> */}
           </button>
         )}
       </nav>
