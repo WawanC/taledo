@@ -59,8 +59,11 @@ const TodoList: React.FC<Props> = (props) => {
           items={sortables}
           strategy={verticalListSortingStrategy}
         >
-          {getTodos.data &&
-            getTodos.data.map((todo) => <TodoItem key={todo.id} todo={todo} />)}
+          {getTodos.data && getTodos.data.length > 0 ? (
+            getTodos.data.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+          ) : (
+            <p className="text-center italic text-xl">No todos yet.</p>
+          )}
         </SortableContext>
       </ul>
     </DndContext>
