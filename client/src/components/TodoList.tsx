@@ -13,7 +13,7 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from "@dnd-kit/sortable";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 interface Props {
   className?: string;
@@ -34,7 +34,6 @@ const TodoList: React.FC<Props> = (props) => {
         getTodos.data.findIndex((todo) => todo.id === e.over?.id) + 1;
 
       if (!activeTodo || overOrder < 0) return;
-      console.log(overOrder);
 
       updateTodo.mutate({
         todoId: activeTodo.id,
