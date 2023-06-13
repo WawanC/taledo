@@ -13,7 +13,7 @@ import {
   SortableContext,
   verticalListSortingStrategy
 } from "@dnd-kit/sortable";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 interface Props {
   className?: string;
