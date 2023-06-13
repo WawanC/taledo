@@ -20,8 +20,8 @@ export const useUpdateTodoMutation = () => {
     onSettled: () => {
       queryClient.invalidateQueries("todos");
     },
-    onMutate: async (variables) => {
-      await queryClient.cancelQueries({ queryKey: ["todos"] });
+    onMutate: (variables) => {
+      if (!variables.payload.order) return;
 
       queryClient.setQueryData<Todo[]>(["todos"], (prev) => {
         if (!variables.payload.order) return [];
