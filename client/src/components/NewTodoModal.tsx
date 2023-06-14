@@ -38,28 +38,31 @@ const NewTodoModal: React.FC<Props> = (props) => {
   );
 
   return (
-    <section className="absolute flex justify-center items-center inset-0 text-xl">
+    <section
+      className="absolute flex justify-center items-end md:items-center 
+      inset-0 text-lg md:text-xl"
+    >
       <div
         className="absolute bg-black opacity-50 inset-0"
         onClick={closeModal}
       ></div>
       <article
-        className="w-1/2 z-10 bg-bold shadow-lg rounded
-      flex flex-col gap-16 py-8 px-20 items-center"
+        className="w-full md:w-1/2 z-10 bg-bold shadow-lg rounded
+      flex flex-col gap-16 py-8 px-8 md:px-20 items-center"
       >
         <h1 className="font-bold text-4xl text-center">Create New Todo</h1>
         <form
           className="w-full flex flex-col gap-8"
           onSubmit={submitFormHandler}
         >
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center">
             <label htmlFor="title" className="font-bold">
               Title :
             </label>
             <input
               type="text"
               id="title"
-              className="w-3/5 bg-transparent p-2 border-b"
+              className="w-full md:w-3/5 bg-transparent p-2 border-b"
               placeholder="Enter title here"
               value={enteredTitle}
               onChange={(e) => setEnteredTitle(e.target.value)}
@@ -72,13 +75,14 @@ const NewTodoModal: React.FC<Props> = (props) => {
 
             <Flatpickr
               data-enable-time
-              defaultValue={new Date().toISOString()}
               ref={datePickerRef}
               className="bg-semi_bold text-center p-2 rounded"
               options={{
-                dateFormat: "d M Y"
+                dateFormat: "d M Y",
+                disableMobile: true,
+                position: "above"
               }}
-              value={selectedDate}
+              value={new Date(selectedDate)}
               onChange={(dates) => {
                 setSelectedDate(dates[0].toISOString());
               }}
