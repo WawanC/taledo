@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
 import { LexoRank } from "lexorank";
-import LexoRankBucket from "lexorank/lib/lexoRank/lexoRankBucket";
 import { generateLexorank } from "../utils/lexorank";
 
 const prisma = new PrismaClient();
@@ -11,8 +10,7 @@ export const getTodos: RequestHandler = async (req, res, next) => {
     if (!req.user) throw new Error("UNAUTHORIZED");
 
     const todos = await prisma.todo.findMany({
-      where: { parentId: null, userId: req.user.id },
-      include: { subTodos: { orderBy: { rank: "asc" } } },
+      where: { userId: req.user.id },
       orderBy: { rank: "asc" }
     });
 
@@ -51,59 +49,11 @@ export const createTodo: RequestHandler = async (req, res, next) => {
         createdAt: new Date().toISOString(),
         user: { connect: { id: req.user.id } },
         rank: todoRank.toString()
-      },
-      include: { subTodos: true }
-    });
-
-    return res.status(200).json({
-      message: "Create todo success"
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const createSubTodo: RequestHandler = async (req, res, next) => {
-  try {
-    if (!req.user) throw new Error("UNAUTHORIZED");
-
-    const parentTodo = await prisma.todo.findUnique({
-      where: { id: req.params.todoId }
-    });
-
-    if (!parentTodo) {
-      return res.status(404).json({
-        type: "NOT_FOUND",
-        message: "Todo not found"
-      });
-    }
-
-    if (parentTodo.parentId) {
-      return res.status(409).json({
-        type: "CONFLICT",
-        message: "Subtodo cannot be a parent todo"
-      });
-    }
-
-    const subTodosCount = await prisma.todo.count({
-      where: { parentId: parentTodo.id }
-    });
-
-    await prisma.todo.create({
-      data: {
-        title: req.body.title.trim(),
-        isCompleted: false,
-        parent: { connect: { id: parentTodo.id } },
-        createdAt: new Date().toISOString(),
-        user: {
-          connect: { id: req.user.id }
-        },
-        rank: "test"
       }
     });
 
     return res.status(200).json({
-      message: "Create subtodo success"
+      message: "Create todo success"
     });
   } catch (error) {
     next(error);
@@ -150,12 +100,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
         isCompleted: req.body.isCompleted,
         rank: rank?.toString() || undefined
       },
-      where: { id: todo.id },
-      include: {
-        parent: {
-          include: { subTodos: true }
-        }
-      }
+      where: { id: todo.id }
     });
 
     return res.status(200).json({

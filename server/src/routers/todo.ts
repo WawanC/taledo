@@ -1,7 +1,6 @@
 import { Router } from "express";
 import * as todoController from "../controllers/todo";
 import {
-  createSubTodoValidator,
   createTodoValidator,
   deleteTodoValidator,
   updateTodoValidator
@@ -19,13 +18,6 @@ todoRouter.post(
   createTodoValidator,
   isValid,
   todoController.createTodo
-);
-todoRouter.post(
-  "/:todoId",
-  isAuth,
-  createSubTodoValidator,
-  isValid,
-  todoController.createSubTodo
 );
 
 todoRouter.put(

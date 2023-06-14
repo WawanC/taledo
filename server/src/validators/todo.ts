@@ -11,18 +11,6 @@ export const createTodoValidator = [
     .withMessage("Todo title min length is 1")
 ];
 
-export const createSubTodoValidator = [
-  param("todoId").notEmpty().withMessage("Todo id is required"),
-  body("title")
-    .notEmpty()
-    .withMessage("Todo title is required")
-    .isString()
-    .withMessage("Todo title must be a string")
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage("Todo title min length is 1")
-];
-
 export const updateTodoValidator = [
   param("todoId").notEmpty().withMessage("Todo id is required"),
   body("title")

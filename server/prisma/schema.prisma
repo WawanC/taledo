@@ -15,13 +15,11 @@ model Todo {
   id String @id @default(uuid())
   title String
   isCompleted Boolean
-  parentId String?
-  parent Todo? @relation("SubTodos", fields: [parentId], references: [id], onDelete: Cascade)
-  subTodos Todo[] @relation("SubTodos")
   userId String
   user User @relation(fields: [userId], references: [id])
   createdAt String
   rank String
+
 }
 
 model User {

@@ -53,10 +53,6 @@ app.use("*", (req, res) =>
   res.sendFile(path.join(__dirname, "..", "..", "client", "dist", "index.html"))
 );
 
-// app.use("*", (req, res) => {
-//   res.redirect("/");
-// });
-
 app.use(globalErrorHandlers);
 
 const bootstrap = async () => {
