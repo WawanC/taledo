@@ -38,7 +38,10 @@ const NavBar: React.FC = () => {
         >
           <BarsIcon className="w-8 h-8" />
         </div>
-        <Link to={"/"} className="text-2xl font-bold text-center flex gap-2">
+        <Link
+          to={"/"}
+          className="text-2xl font-bold text-center flex gap-2 md:w-1/6"
+        >
           {
             <div className="hidden md:block w-8 h-8">
               <img
@@ -50,14 +53,15 @@ const NavBar: React.FC = () => {
           }
           <span>Taledo</span>
         </Link>
-        <span className="hidden md:block text-xl">{todayDate}</span>
+        <span className="hidden md:block text-xl text-center md:w-1/4">
+          {todayDate}
+        </span>
         {isAuth && (
           <button
-            className="hidden md:flex text-xl gap-2"
+            className="hidden md:flex text-xl gap-2 md:w-1/6 md:justify-end"
             onClick={() => logoutUser.mutate()}
           >
             <LogoutIcon className="w-8 h-8" />
-            {/* <span>Logout</span> */}
           </button>
         )}
       </nav>

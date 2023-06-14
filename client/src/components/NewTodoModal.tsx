@@ -1,17 +1,40 @@
-import { useCallback } from "react";
-import CalendarIcon from "../icons/CalendarIcon";
+import { FormEventHandler, useCallback, useRef, useState } from "react";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/dark.css";
+import DatePicker from "react-flatpickr";
 
 interface Props {
   onClose: () => void;
 }
 
 const NewTodoModal: React.FC<Props> = (props) => {
+  const [enteredTitle, setEnteredTitle] = useState("");
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString()
+  );
+  const datePickerRef = useRef<DatePicker>(null);
+
   const closeModal = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
       props.onClose();
     },
     [props]
+  );
+
+  const submitFormHandler: FormEventHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      console.log(enteredTitle);
+      console.log(selectedDate);
+
+      setEnteredTitle("");
+      setSelectedDate(new Date().toISOString());
+
+      props.onClose();
+    },
+    [enteredTitle, selectedDate, props]
   );
 
   return (
@@ -25,7 +48,10 @@ const NewTodoModal: React.FC<Props> = (props) => {
       flex flex-col gap-16 py-8 px-20 items-center"
       >
         <h1 className="font-bold text-4xl text-center">Create New Todo</h1>
-        <form className="w-full flex flex-col gap-8">
+        <form
+          className="w-full flex flex-col gap-8"
+          onSubmit={submitFormHandler}
+        >
           <div className="flex justify-between items-center">
             <label htmlFor="title" className="font-bold">
               Title :
@@ -33,25 +59,36 @@ const NewTodoModal: React.FC<Props> = (props) => {
             <input
               type="text"
               id="title"
-              className="w-3/4 bg-transparent p-2 border-b"
+              className="w-3/5 bg-transparent p-2 border-b"
               placeholder="Enter title here"
+              value={enteredTitle}
+              onChange={(e) => setEnteredTitle(e.target.value)}
             />
           </div>
           <div className="flex justify-between items-center">
             <label htmlFor="title" className="font-bold">
               Deadline :
             </label>
-            <button
-              className="bg-semi_bold py-2 px-4 shadow rounded
-            flex items-center gap-2"
-            >
-              <span>Select DateTime</span>
-              <span>
-                <CalendarIcon className="w-8 h-8" />
-              </span>
-            </button>
+
+            <Flatpickr
+              data-enable-time
+              defaultValue={new Date().toISOString()}
+              ref={datePickerRef}
+              className="bg-semi_bold text-center p-2 rounded"
+              options={{
+                dateFormat: "d M Y"
+              }}
+              value={selectedDate}
+              onChange={(dates) => {
+                setSelectedDate(dates[0].toISOString());
+              }}
+              size={12}
+            />
           </div>
-          <button className="self-center bg-semi_bold rounded shadow p-2 font-bold">
+          <button
+            type="submit"
+            className="self-center bg-semi_bold rounded shadow px-4 py-2 font-bold"
+          >
             Create
           </button>
         </form>
