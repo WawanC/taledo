@@ -5,6 +5,7 @@ export type Todo = {
   parentId: string;
   subTodos: Todo[];
   rank: string;
+  deadline: string | null;
 };
 
 export type TodoResponse = {
@@ -14,6 +15,7 @@ export type TodoResponse = {
   parentId: string;
   subTodos: TodoResponse[];
   rank: string;
+  deadline: string | null;
 };
 
 export type GetTodosResponse = {
@@ -25,8 +27,10 @@ export type UpdateTodoPayload = {
   title?: string;
   isCompleted?: boolean;
   order?: number;
+  deadline?: string;
 };
 
 export type CreateTodoPayload = {
   title: string;
+  deadline?: string;
 };

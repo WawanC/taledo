@@ -2,6 +2,7 @@ import { FormEventHandler, useCallback, useRef, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import DatePicker from "react-flatpickr";
+import { useCreateTodoMutation } from "../hooks/todo";
 
 interface Props {
   onClose: () => void;
@@ -9,10 +10,11 @@ interface Props {
 
 const NewTodoModal: React.FC<Props> = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
-  const [selectedDate, setSelectedDate] = useState<string>(
+  const [enteredDeadline, setEnteredDeadline] = useState<string>(
     new Date().toISOString()
   );
   const datePickerRef = useRef<DatePicker>(null);
+  const createTodo = useCreateTodoMutation();
 
   const closeModal = useCallback(
     (e: React.MouseEvent) => {
@@ -27,14 +29,18 @@ const NewTodoModal: React.FC<Props> = (props) => {
       e.preventDefault();
 
       console.log(enteredTitle);
-      console.log(selectedDate);
+      console.log(enteredDeadline);
+
+      createTodo.mutate({
+        payload: { title: enteredTitle.trim(), deadline: enteredDeadline }
+      });
 
       setEnteredTitle("");
-      setSelectedDate(new Date().toISOString());
+      setEnteredDeadline(new Date().toISOString());
 
       props.onClose();
     },
-    [enteredTitle, selectedDate, props]
+    [enteredTitle, enteredDeadline, props, createTodo]
   );
 
   return (
@@ -82,9 +88,9 @@ const NewTodoModal: React.FC<Props> = (props) => {
                 disableMobile: true,
                 position: "above"
               }}
-              value={new Date(selectedDate)}
+              value={new Date(enteredDeadline)}
               onChange={(dates) => {
-                setSelectedDate(dates[0].toISOString());
+                setEnteredDeadline(dates[0].toISOString());
               }}
               size={12}
             />
