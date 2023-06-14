@@ -15,6 +15,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
   );
   const datePickerRef = useRef<DatePicker>(null);
   const createTodo = useCreateTodoMutation();
+  const [error, setError] = useState<string | null>(null);
 
   const closeModal = useCallback(
     (e: React.MouseEvent) => {
@@ -27,9 +28,16 @@ const NewTodoModal: React.FC<Props> = (props) => {
   const submitFormHandler: FormEventHandler = useCallback(
     (e) => {
       e.preventDefault();
+      setError(null);
 
       console.log(enteredTitle);
       console.log(enteredDeadline);
+
+      if (enteredTitle.trim().length <= 0) {
+        setError("Valid todo title is required");
+        setEnteredTitle("");
+        return;
+      }
 
       createTodo.mutate({
         payload: { title: enteredTitle.trim(), deadline: enteredDeadline }
@@ -54,9 +62,16 @@ const NewTodoModal: React.FC<Props> = (props) => {
       ></div>
       <article
         className="w-full md:w-1/2 z-10 bg-bold shadow-lg rounded
-      flex flex-col gap-16 py-8 px-8 md:px-20 items-center"
+      flex flex-col gap-12 py-8 px-8 md:px-20 items-center"
       >
-        <h1 className="font-bold text-4xl text-center">Create New Todo</h1>
+        <div className="flex flex-col items-center gap-4">
+          <h1 className="font-bold text-4xl text-center">Create New Todo</h1>
+          {error && (
+            <span className="text-base text-red-500 text-center">
+              Error Text
+            </span>
+          )}
+        </div>
         <form
           className="w-full flex flex-col gap-8"
           onSubmit={submitFormHandler}
@@ -72,6 +87,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
               placeholder="Enter title here"
               value={enteredTitle}
               onChange={(e) => setEnteredTitle(e.target.value)}
+              required
             />
           </div>
           <div className="flex justify-between items-center">
