@@ -19,7 +19,7 @@ model Todo {
   user User @relation(fields: [userId], references: [id])
   createdAt String
   rank String
-
+  deadline String?
 }
 
 model User {

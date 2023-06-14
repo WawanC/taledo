@@ -8,7 +8,11 @@ export const createTodoValidator = [
     .withMessage("Todo title must be a string")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Todo title min length is 1")
+    .withMessage("Todo title min length is 1"),
+  body("deadline")
+    .optional()
+    .isISO8601({ strict: true })
+    .withMessage("Valid todo deadline is required (ISO format)")
 ];
 
 export const updateTodoValidator = [
@@ -27,7 +31,11 @@ export const updateTodoValidator = [
   body("order")
     .optional()
     .isInt({ min: 1 })
-    .withMessage("Todo order minimum value is 1")
+    .withMessage("Todo order minimum value is 1"),
+  body("deadline")
+    .optional()
+    .isISO8601({ strict: true })
+    .withMessage("Valid todo deadline is required (ISO format)")
 ];
 
 export const deleteTodoValidator = [

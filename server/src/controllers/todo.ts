@@ -48,7 +48,8 @@ export const createTodo: RequestHandler = async (req, res, next) => {
         isCompleted: false,
         createdAt: new Date().toISOString(),
         user: { connect: { id: req.user.id } },
-        rank: todoRank.toString()
+        rank: todoRank.toString(),
+        deadline: req.body.deadline || null
       }
     });
 
@@ -98,7 +99,8 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
       data: {
         title: req.body.title,
         isCompleted: req.body.isCompleted,
-        rank: rank?.toString() || undefined
+        rank: rank?.toString() || undefined,
+        deadline: req.body.deadline
       },
       where: { id: todo.id }
     });
