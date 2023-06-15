@@ -57,7 +57,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
 
   return (
     <section
-      className="absolute flex justify-center items-end md:items-center 
+      className="fixed flex justify-center items-end md:items-center 
       inset-0 text-lg md:text-xl z-10"
     >
       <div
@@ -102,11 +102,12 @@ const NewTodoModal: React.FC<Props> = (props) => {
               <Flatpickr
                 data-enable-time
                 onOpen={() => {
-                  setEnteredDeadline(new Date().toISOString());
+                  if (!enteredDeadline)
+                    setEnteredDeadline(new Date().toISOString());
                   setIsDatePickerOpen(true);
                 }}
                 ref={datePickerRef}
-                className="bg-semi_bold text-center rounded py-2 flex-1"
+                className="bg-semi_bold text-center rounded py-2 w-full"
                 options={{
                   dateFormat: "H:i - d M Y",
                   disableMobile: true,
