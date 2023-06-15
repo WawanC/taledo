@@ -34,9 +34,6 @@ const NewTodoModal: React.FC<Props> = (props) => {
       e.preventDefault();
       setError(null);
 
-      console.log(enteredTitle);
-      console.log(enteredDeadline);
-
       if (enteredTitle.trim().length <= 0) {
         setError("Valid todo title is required");
         setEnteredTitle("");
@@ -61,7 +58,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
   return (
     <section
       className="absolute flex justify-center items-end md:items-center 
-      inset-0 text-lg md:text-xl"
+      inset-0 text-lg md:text-xl z-10"
     >
       <div
         className="absolute bg-black opacity-50 inset-0"
@@ -104,13 +101,21 @@ const NewTodoModal: React.FC<Props> = (props) => {
             <div className="flex justify-center gap-2 h-10 md:px-16">
               <Flatpickr
                 data-enable-time
-                onOpen={() => setIsDatePickerOpen(true)}
+                onOpen={() => {
+                  setEnteredDeadline(new Date().toISOString());
+                  setIsDatePickerOpen(true);
+                }}
                 ref={datePickerRef}
                 className="bg-semi_bold text-center rounded py-2 flex-1"
                 options={{
-                  dateFormat: "G:i K - d M Y",
+                  dateFormat: "H:i - d M Y",
                   disableMobile: true,
-                  position: "above"
+                  position: "above",
+                  minDate: "today",
+                  minTime: new Date(),
+                  time_24hr: true,
+                  defaultHour: new Date().getHours(),
+                  defaultMinute: new Date().getMinutes()
                 }}
                 value={enteredDeadline}
                 onChange={(dates) => {
