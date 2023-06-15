@@ -4,6 +4,7 @@ import { getServerErrorMessage } from "../utils/error";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../icons/GoogleIcon";
 import Loader from "../components/Loader";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 interface RegisterForm {
   username: string;
@@ -67,8 +68,9 @@ const RegisterPage: React.FC = () => {
   return (
     <main
       className="flex flex-col items-center px-4 py-8 gap-8 
-      bg-bold min-h-screen text-light"
+      bg-light dark:bg-bold min-h-screen "
     >
+      <DarkModeToggle className="absolute top-4 right-4" />
       <div className="flex flex-col items-center">
         <div className="w-28 h-28">
           <img
@@ -105,7 +107,7 @@ const RegisterPage: React.FC = () => {
                 <Field
                   id="username"
                   type="text"
-                  className="border-b border-light outline-none py-2 bg-transparent"
+                  className="input-underline outline-none py-2 bg-transparent"
                   placeholder="Enter your username"
                   required
                   name="username"
@@ -118,7 +120,7 @@ const RegisterPage: React.FC = () => {
                 <Field
                   id="password"
                   type="password"
-                  className="border-b border-light outline-none py-2 bg-transparent"
+                  className="input-underline outline-none py-2 bg-transparent"
                   placeholder="Enter your password"
                   required
                   name="password"
@@ -131,7 +133,7 @@ const RegisterPage: React.FC = () => {
                 <Field
                   id="password2"
                   type="password"
-                  className="border-b border-light outline-none py-2 bg-transparent"
+                  className="input-underline outline-none py-2 bg-transparent"
                   placeholder="Repeat your password"
                   required
                   name="password2"
@@ -140,7 +142,7 @@ const RegisterPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold shadow"
+                  className="btn rounded-xl px-4 py-2 font-bold shadow"
                 >
                   Register
                 </button>
@@ -158,7 +160,7 @@ const RegisterPage: React.FC = () => {
         </p>
       </div>
       <div>
-        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4 shadow">
+        <button className="btn px-4 py-2 rounded-xl flex gap-4 shadow">
           <GoogleIcon className="w-6 h-6" />
           <a href={`/api/auth/google`} className="font-bold">
             Sign In with Google

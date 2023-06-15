@@ -73,7 +73,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
         exit="fadeOut"
       ></motion.div>
       <motion.article
-        className="w-full md:w-1/2 z-10 bg-bold shadow-lg rounded
+        className="w-full md:w-1/2 z-10 bg-light dark:bg-bold shadow-lg rounded
       flex flex-col gap-12 py-8 px-8 md:px-20 items-center"
         variants={{
           slideOut: { y: 200, opacity: 0 },
@@ -103,18 +103,19 @@ const NewTodoModal: React.FC<Props> = (props) => {
             <input
               type="text"
               id="title"
-              className="w-full md:w-3/5 bg-transparent p-2 border-b"
+              autoFocus
+              className="w-full md:w-3/5 bg-transparent p-2 input-underline"
               placeholder="Enter title here"
               value={enteredTitle}
               onChange={(e) => setEnteredTitle(e.target.value)}
               required
             />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col md:flex-row md:justify-between gap-2">
             <label htmlFor="title" className="font-bold">
               Deadline :
             </label>
-            <div className="flex justify-center gap-2 h-10 md:px-16">
+            <div className="flex justify-center self-center gap-2 h-10">
               <Flatpickr
                 data-enable-time
                 onOpen={() => {
@@ -123,7 +124,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
                   setIsDatePickerOpen(true);
                 }}
                 ref={datePickerRef}
-                className="bg-semi_bold text-center rounded py-2 w-full"
+                className="btn text-center rounded py-2 w-full"
                 options={{
                   dateFormat: "H:i - d M Y",
                   disableMobile: true,
@@ -141,7 +142,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
                 placeholder="None"
               />
               <span
-                className="bg-semi_bold shadow rounded h-full aspect-square
+                className="btn shadow rounded h-full aspect-square
               flex justify-center items-center hover:cursor-pointer"
                 onClick={() => setEnteredDeadline(undefined)}
               >
@@ -151,7 +152,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
           </div>
           <button
             type="submit"
-            className="self-center bg-semi_bold rounded shadow px-4 py-2 font-bold"
+            className="btn self-center rounded shadow px-4 py-2 font-bold"
           >
             Create
           </button>

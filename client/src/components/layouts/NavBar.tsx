@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import BarsIcon from "../../icons/BarsIcon";
 import SideNav from "./SideNav";
 import { AnimatePresence } from "framer-motion";
+import DarkModeToggle from "../DarkModeToggle";
 
 const NavBar: React.FC = () => {
   const logoutUser = useLogoutUserMutation();
@@ -26,8 +27,7 @@ const NavBar: React.FC = () => {
         {isSideNavOpen && <SideNav onClose={() => setIsSideNavOpen(false)} />}
       </AnimatePresence>
       <nav
-        className="bg-primary p-2 w-full
-       bg-bold text-light 
+        className="bg-semi_light dark:bg-bold p-2 w-full
         flex justify-center md:justify-between items-center 
         px-8 relative"
       >
@@ -56,14 +56,14 @@ const NavBar: React.FC = () => {
         <span className="hidden md:block text-xl text-center md:w-1/4">
           {todayDate}
         </span>
-        {isAuth && (
-          <button
-            className="hidden md:flex text-xl gap-2 md:w-1/6 md:justify-end"
-            onClick={() => logoutUser.mutate()}
-          >
-            <LogoutIcon className="w-8 h-8" />
-          </button>
-        )}
+        <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end">
+          <DarkModeToggle />
+          {isAuth && (
+            <button className=" text-xl" onClick={() => logoutUser.mutate()}>
+              <LogoutIcon className="w-8 h-8" />
+            </button>
+          )}
+        </ul>
       </nav>
     </>
   );

@@ -77,7 +77,7 @@ const TodoItem: React.FC<Props> = (props) => {
       ref={setNodeRef}
     >
       <motion.div
-        className={`bg-bold py-4 px-4 md:px-6 text-xl
+        className={`bg-semi_light dark:bg-bold py-4 px-4 md:px-6 text-xl
         flex items-center gap-4 md:gap-6 rounded-xl shadow`}
         variants={{
           slideOut: { y: "-50%", opacity: 1 },
@@ -93,7 +93,7 @@ const TodoItem: React.FC<Props> = (props) => {
           {...listeners}
           {...attributes}
         >
-          <div className="w-4 h-4 rounded-full bg-light"></div>
+          <div className="w-4 h-4 rounded-full bg-bold dark:bg-light"></div>
         </span>
         <div
           className="flex flex-col gap-2 flex-1 hover:cursor-pointer select-none"

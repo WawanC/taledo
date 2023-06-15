@@ -13,7 +13,7 @@ const DashboardPage: React.FC = () => {
   return (
     <main
       className="flex flex-col gap-12 items-center py-8 px-4
-    text-light bg-semi_bold flex-1"
+     bg-light dark:bg-semi_bold flex-1"
     >
       {getMeQuery.isFetching ? (
         <section className="flex-1 flex justify-center items-center">
@@ -31,7 +31,7 @@ const DashboardPage: React.FC = () => {
           </motion.h1>
           {/* <NewTodoInput className="w-full md:w-1/2" /> */}
           <button
-            className="bg-bold py-2 px-4 text-xl font-bold rounded shadow"
+            className="btn py-2 px-4 text-xl font-bold rounded shadow"
             onClick={() => setIsShowModal(true)}
           >
             Create Todo

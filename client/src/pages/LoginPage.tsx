@@ -4,6 +4,7 @@ import { useLoginUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import GoogleIcon from "../icons/GoogleIcon";
 import Loader from "../components/Loader";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 interface LoginForm {
   username: string;
@@ -44,8 +45,9 @@ const LoginPage: React.FC = () => {
   return (
     <main
       className="flex flex-col items-center px-4 py-8 gap-8 
-    bg-bold min-h-screen text-light"
+    bg-light dark:bg-bold min-h-screen"
     >
+      <DarkModeToggle className="absolute top-4 right-4" />
       <div className="flex flex-col items-center">
         <div className="w-28 h-28">
           <img
@@ -80,7 +82,8 @@ const LoginPage: React.FC = () => {
                 <Field
                   id="username"
                   type="text"
-                  className="border-b border-light outline-none py-2 bg-transparent"
+                  className="input-underline 
+                  outline-none py-2 bg-transparent"
                   placeholder="Enter your username"
                   required
                   name="username"
@@ -93,7 +96,8 @@ const LoginPage: React.FC = () => {
                 <Field
                   id="password"
                   type="password"
-                  className="border-b border-light outline-none py-2 bg-transparent"
+                  className="input-underline 
+                  outline-none py-2 bg-transparent"
                   placeholder="Enter your password"
                   required
                   name="password"
@@ -102,7 +106,7 @@ const LoginPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-semi_bold rounded-xl px-4 py-2 font-bold shadow"
+                  className="btn rounded-xl px-4 py-2 font-bold shadow"
                 >
                   Login
                 </button>
@@ -120,7 +124,7 @@ const LoginPage: React.FC = () => {
         </p>
       </div>
       <div>
-        <button className="px-4 py-2 bg-semi_bold rounded-xl flex gap-4 shadow">
+        <button className="btn px-4 py-2 rounded-xl flex gap-4 shadow">
           <GoogleIcon className="w-6 h-6" />
           <a href={`/api/auth/google`} className="font-bold">
             Sign In with Google

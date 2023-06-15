@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply bg-semi_light dark:bg-semi_bold;
+  }
+  .input-underline {
+    @apply border-b border-b-bold dark:border-b-light;
+  }
+}
+
 #root {
   display: flex;
   flex-direction: column;

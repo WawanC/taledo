@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useGetMeUserQuery, useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
 import { useMemo } from "react";
+import DarkModeToggle from "../DarkModeToggle";
 
 interface Props {
   onClose: () => void;
@@ -20,13 +21,13 @@ const SideNav: React.FC<Props> = (props) => {
   );
 
   return (
-    <nav className="fixed inset-0 z-10 text-light">
+    <nav className="fixed inset-0 z-10">
       <div
         className="bg-black opacity-50 w-full h-full"
         onClick={props.onClose}
       />
       <motion.div
-        className="absolute top-0 bottom-0 w-[60%] bg-bold
+        className="absolute top-0 bottom-0 w-[60%] bg-semi_light dark:bg-bold
       flex flex-col items-center py-20 gap-12"
         initial={{ x: "-100%" }}
         animate={{ x: "0" }}
@@ -46,7 +47,7 @@ const SideNav: React.FC<Props> = (props) => {
           </h1>
         </div>
         <h2 className="text-xl">{todayDate}</h2>
-        <ul className="flex flex-col">
+        <ul className="flex flex-col items-center gap-4">
           <button
             className="flex text-xl gap-2"
             onClick={() => logoutUser.mutate()}
@@ -54,6 +55,7 @@ const SideNav: React.FC<Props> = (props) => {
             <LogoutIcon className="w-8 h-8" />
             <span>Logout</span>
           </button>
+          <DarkModeToggle />
         </ul>
       </motion.div>
     </nav>
