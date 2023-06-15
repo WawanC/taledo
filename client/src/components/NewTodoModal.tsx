@@ -122,7 +122,6 @@ const NewTodoModal: React.FC<Props> = (props) => {
                   setEnteredDeadline(dates[0].toISOString());
                 }}
                 placeholder="None"
-                size={24}
               />
               <span
                 className="bg-semi_bold shadow rounded h-full aspect-square
