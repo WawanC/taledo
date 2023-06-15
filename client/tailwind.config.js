@@ -4,14 +4,6 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      animation: {
-        sidenav_slide: "slide 1s forward"
-      },
-      keyframes: {
-        slide: {
-          "100%": { transform: "translate-x-full" }
-        }
-      },
       fontFamily: {
         poppins: ["Poppins"]
       },

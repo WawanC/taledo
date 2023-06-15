@@ -3,6 +3,7 @@ import { useRegisterUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../icons/GoogleIcon";
+import Loader from "../components/Loader";
 
 interface RegisterForm {
   username: string;
@@ -21,7 +22,7 @@ const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const registerUser = useRegisterUserMutation({
     onSuccess: () => {
-      navigate("/login");
+      navigate("/dashboard");
     }
   });
 
@@ -81,7 +82,7 @@ const RegisterPage: React.FC = () => {
         </h1>
       </div>
       {registerUser.isLoading ? (
-        <p className="text-xl">Loading...</p>
+        <Loader />
       ) : (
         <Formik
           initialValues={initialRegisterFormValues}

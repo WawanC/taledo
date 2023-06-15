@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useLoginUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
 import GoogleIcon from "../icons/GoogleIcon";
+import Loader from "../components/Loader";
 
 interface LoginForm {
   username: string;
@@ -56,7 +57,7 @@ const LoginPage: React.FC = () => {
         <h1 className="text-4xl font-bold">Sign-In</h1>
       </div>
       {loginUser.isLoading ? (
-        <p className="text-xl">Loading...</p>
+        <Loader />
       ) : (
         <Formik
           initialValues={initialLoginFormValues}
