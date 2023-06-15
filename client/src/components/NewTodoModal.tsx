@@ -3,6 +3,7 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import DatePicker from "react-flatpickr";
 import { useCreateTodoMutation } from "../hooks/todo";
+import DeleteIcon from "../icons/DeleteIcon";
 
 interface Props {
   onClose: () => void;
@@ -10,19 +11,22 @@ interface Props {
 
 const NewTodoModal: React.FC<Props> = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
-  const [enteredDeadline, setEnteredDeadline] = useState<string>(
-    new Date().toISOString()
-  );
+  const [enteredDeadline, setEnteredDeadline] = useState<string | undefined>();
   const datePickerRef = useRef<DatePicker>(null);
   const createTodo = useCreateTodoMutation();
   const [error, setError] = useState<string | null>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const closeModal = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
+      if (isDatePickerOpen) {
+        datePickerRef.current?.flatpickr.close();
+        return setIsDatePickerOpen(false);
+      }
       props.onClose();
     },
-    [props]
+    [props, isDatePickerOpen]
   );
 
   const submitFormHandler: FormEventHandler = useCallback(
@@ -40,7 +44,10 @@ const NewTodoModal: React.FC<Props> = (props) => {
       }
 
       createTodo.mutate({
-        payload: { title: enteredTitle.trim(), deadline: enteredDeadline }
+        payload: {
+          title: enteredTitle.trim(),
+          deadline: enteredDeadline
+        }
       });
 
       setEnteredTitle("");
@@ -90,26 +97,36 @@ const NewTodoModal: React.FC<Props> = (props) => {
               required
             />
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-2">
             <label htmlFor="title" className="font-bold">
               Deadline :
             </label>
-
-            <Flatpickr
-              data-enable-time
-              ref={datePickerRef}
-              className="bg-semi_bold text-center rounded py-2"
-              options={{
-                dateFormat: "G:i K - d M Y",
-                disableMobile: true,
-                position: "above"
-              }}
-              value={new Date(enteredDeadline)}
-              onChange={(dates) => {
-                setEnteredDeadline(dates[0].toISOString());
-              }}
-              size={24}
-            />
+            <div className="flex justify-center gap-2 h-10 md:px-16">
+              <Flatpickr
+                data-enable-time
+                onOpen={() => setIsDatePickerOpen(true)}
+                ref={datePickerRef}
+                className="bg-semi_bold text-center rounded py-2 flex-1"
+                options={{
+                  dateFormat: "G:i K - d M Y",
+                  disableMobile: true,
+                  position: "above"
+                }}
+                value={enteredDeadline}
+                onChange={(dates) => {
+                  setEnteredDeadline(dates[0].toISOString());
+                }}
+                placeholder="None"
+                size={24}
+              />
+              <span
+                className="bg-semi_bold shadow rounded h-full aspect-square
+              flex justify-center items-center hover:cursor-pointer"
+                onClick={() => setEnteredDeadline(undefined)}
+              >
+                <DeleteIcon className="w-10 h-10" />
+              </span>
+            </div>
           </div>
           <button
             type="submit"
