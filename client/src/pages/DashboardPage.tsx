@@ -4,6 +4,7 @@ import TodoList from "../components/TodoList";
 import { useGetMeUserQuery } from "../hooks/auth";
 import NewTodoModal from "../components/NewTodoModal";
 import { useState } from "react";
+import Loader from "../components/Loader";
 
 const DashboardPage: React.FC = () => {
   const getMeQuery = useGetMeUserQuery();
@@ -15,7 +16,9 @@ const DashboardPage: React.FC = () => {
     text-light bg-semi_bold flex-1"
     >
       {getMeQuery.isFetching ? (
-        <p>Loading...</p>
+        <section className="flex-1 flex justify-center items-center">
+          <Loader />
+        </section>
       ) : (
         <>
           <motion.h1
