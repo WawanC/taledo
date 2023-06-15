@@ -98,9 +98,9 @@ const NewTodoModal: React.FC<Props> = (props) => {
             <Flatpickr
               data-enable-time
               ref={datePickerRef}
-              className="bg-semi_bold text-center p-2 rounded"
+              className="bg-semi_bold text-center rounded py-2"
               options={{
-                dateFormat: "d M Y",
+                dateFormat: "G:i K - d M Y",
                 disableMobile: true,
                 position: "above"
               }}
@@ -108,7 +108,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
               onChange={(dates) => {
                 setEnteredDeadline(dates[0].toISOString());
               }}
-              size={12}
+              size={24}
             />
           </div>
           <button
