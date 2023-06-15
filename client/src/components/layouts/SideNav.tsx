@@ -47,7 +47,7 @@ const SideNav: React.FC<Props> = (props) => {
           </h1>
         </div>
         <h2 className="text-xl">{todayDate}</h2>
-        <ul className="flex flex-col items-center gap-4">
+        <ul className="flex flex-col items-center">
           <button
             className="flex text-xl gap-2"
             onClick={() => logoutUser.mutate()}
@@ -55,8 +55,8 @@ const SideNav: React.FC<Props> = (props) => {
             <LogoutIcon className="w-8 h-8" />
             <span>Logout</span>
           </button>
-          <DarkModeToggle />
         </ul>
+        <DarkModeToggle />
       </motion.div>
     </nav>
   );

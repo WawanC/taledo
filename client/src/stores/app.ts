@@ -6,7 +6,7 @@ interface AppState {
 }
 
 const useAppState = create<AppState>((set) => ({
-  darkMode: false,
+  darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
   setDarkMode: (val) => set({ darkMode: val })
 }));
 

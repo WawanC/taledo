@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from "framer-motion";
-// import NewTodoInput from "../components/NewTodoInput";
 import TodoList from "../components/TodoList";
 import { useGetMeUserQuery } from "../hooks/auth";
 import NewTodoModal from "../components/NewTodoModal";
@@ -29,9 +28,8 @@ const DashboardPage: React.FC = () => {
           >
             Hello, {getMeQuery.data?.user.username || "Anonymous"}
           </motion.h1>
-          {/* <NewTodoInput className="w-full md:w-1/2" /> */}
           <button
-            className="btn py-2 px-4 text-xl font-bold rounded shadow"
+            className="bg-semi_light dark:bg-bold py-2 px-4 text-xl font-bold rounded shadow"
             onClick={() => setIsShowModal(true)}
           >
             Create Todo
