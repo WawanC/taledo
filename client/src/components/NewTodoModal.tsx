@@ -4,6 +4,7 @@ import "flatpickr/dist/themes/dark.css";
 import DatePicker from "react-flatpickr";
 import { useCreateTodoMutation } from "../hooks/todo";
 import DeleteIcon from "../icons/DeleteIcon";
+import { motion } from "framer-motion";
 
 interface Props {
   onClose: () => void;
@@ -60,13 +61,28 @@ const NewTodoModal: React.FC<Props> = (props) => {
       className="fixed flex justify-center items-end md:items-center 
       inset-0 text-lg md:text-xl z-10"
     >
-      <div
+      <motion.div
         className="absolute bg-black opacity-50 inset-0"
         onClick={closeModal}
-      ></div>
-      <article
+        variants={{
+          fadeOut: { opacity: 0 },
+          fadeIn: { opacity: 0.5 }
+        }}
+        initial="fadeOut"
+        animate="fadeIn"
+        exit="fadeOut"
+      ></motion.div>
+      <motion.article
         className="w-full md:w-1/2 z-10 bg-bold shadow-lg rounded
       flex flex-col gap-12 py-8 px-8 md:px-20 items-center"
+        variants={{
+          slideOut: { y: 200, opacity: 0 },
+          slideIn: { y: 0, opacity: 1 }
+        }}
+        initial="slideOut"
+        animate="slideIn"
+        exit="slideOut"
+        transition={{ duration: 0.1 }}
       >
         <div className="flex flex-col items-center gap-4">
           <h1 className="font-bold text-4xl text-center">Create New Todo</h1>
@@ -140,7 +156,7 @@ const NewTodoModal: React.FC<Props> = (props) => {
             Create
           </button>
         </form>
-      </article>
+      </motion.article>
     </section>
   );
 };

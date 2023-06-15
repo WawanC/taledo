@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 // import NewTodoInput from "../components/NewTodoInput";
 import TodoList from "../components/TodoList";
 import { useGetMeUserQuery } from "../hooks/auth";
@@ -33,9 +33,11 @@ const DashboardPage: React.FC = () => {
           >
             Create Todo
           </button>
-          {isShowModal && (
-            <NewTodoModal onClose={() => setIsShowModal(false)} />
-          )}
+          <AnimatePresence>
+            {isShowModal && (
+              <NewTodoModal onClose={() => setIsShowModal(false)} />
+            )}
+          </AnimatePresence>
           <TodoList className="w-full md:w-1/2" />
         </>
       )}
