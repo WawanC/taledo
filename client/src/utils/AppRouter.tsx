@@ -5,6 +5,7 @@ import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import PrivateRoute from "../guards/PrivateRoute";
 import PublicRoute from "../guards/PublicRoute";
+import AccountPage from "../pages/AccountPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -12,7 +13,10 @@ const AppRouter = createBrowserRouter([
     children: [
       {
         element: <PrivateRoute />,
-        children: [{ path: "/dashboard", element: <DashboardPage /> }]
+        children: [
+          { path: "/dashboard", element: <DashboardPage /> },
+          { path: "/account", element: <AccountPage /> }
+        ]
       },
       {
         element: <PublicRoute />,

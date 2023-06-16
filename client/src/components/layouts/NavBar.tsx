@@ -49,14 +49,15 @@ const NavBar: React.FC = () => {
         <span className="hidden md:block text-xl text-center md:w-1/4">
           {todayDate}
         </span>
-        <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end">
-          <DarkModeToggle />
-          {isAuth && (
+        {isAuth && (
+          <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end md:items-center">
+            <Link to={"/account"}>Account</Link>
+            <DarkModeToggle />
             <button className=" text-xl" onClick={() => logoutUser.mutate()}>
               <LogoutIcon className="w-8 h-8" />
             </button>
-          )}
-        </ul>
+          </ul>
+        )}
       </nav>
     </>
   );
