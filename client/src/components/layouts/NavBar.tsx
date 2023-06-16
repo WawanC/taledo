@@ -8,6 +8,7 @@ import SideNav from "./SideNav";
 import { AnimatePresence } from "framer-motion";
 import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
+import AccountIcon from "../../icons/AccountIcon";
 
 const NavBar: React.FC = () => {
   const logoutUser = useLogoutUserMutation();
@@ -40,7 +41,7 @@ const NavBar: React.FC = () => {
           <BarsIcon className="w-8 h-8" />
         </div>
         <Link
-          to={"/"}
+          to={"/dashboard"}
           className="text-2xl font-bold text-center flex gap-2 md:w-1/6"
         >
           <AppLogo className="w-8 h-8 hidden md:flex" />
@@ -51,7 +52,9 @@ const NavBar: React.FC = () => {
         </span>
         {isAuth && (
           <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end md:items-center">
-            <Link to={"/account"}>Account</Link>
+            <Link to={"/account"}>
+              <AccountIcon className="w-8 h-8" />
+            </Link>
             <DarkModeToggle />
             <button className=" text-xl" onClick={() => logoutUser.mutate()}>
               <LogoutIcon className="w-8 h-8" />

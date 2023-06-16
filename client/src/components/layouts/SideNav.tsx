@@ -4,6 +4,8 @@ import LogoutIcon from "../../icons/LogoutIcon";
 import { useMemo } from "react";
 import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
+import { Link } from "react-router-dom";
+import AccountIcon from "../../icons/AccountIcon";
 
 interface Props {
   onClose: () => void;
@@ -29,7 +31,7 @@ const SideNav: React.FC<Props> = (props) => {
       />
       <motion.div
         className="absolute top-0 bottom-0 w-[60%] bg-light dark:bg-bold
-      flex flex-col items-center py-20 gap-12"
+      flex flex-col items-center py-16 gap-12"
         initial={{ x: "-100%" }}
         animate={{ x: "0" }}
         exit={{ x: "-100%" }}
@@ -42,9 +44,17 @@ const SideNav: React.FC<Props> = (props) => {
           </h1>
         </div>
         <h2 className="text-xl">{todayDate}</h2>
-        <ul className="flex flex-col items-center">
+        <ul className="flex flex-col items-center gap-4">
+          <Link
+            to={"/account"}
+            className="flex text-xl gap-2 items-center"
+            onClick={() => props.onClose()}
+          >
+            <AccountIcon className="w-8 h-8" />
+            <span>Account</span>
+          </Link>
           <button
-            className="flex text-xl gap-2"
+            className="flex text-xl gap-2 items-center"
             onClick={() => logoutUser.mutate()}
           >
             <LogoutIcon className="w-8 h-8" />
