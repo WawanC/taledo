@@ -21,5 +21,6 @@ export type GetMePayload = {
   user: {
     id: string;
     username: string;
+    google: string;
   };
 };

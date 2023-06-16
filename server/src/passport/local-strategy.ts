@@ -24,21 +24,6 @@ const verify: VerifyFunction = async (username, password, done) => {
 const localStrategy = new LocalStrategy(verify);
 
 const initializePassportLocal = () => {
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-
-  passport.deserializeUser(async (id: string, done) => {
-    const user = await prisma.user.findUnique({
-      where: { id: id },
-      select: { id: true, username: true }
-    });
-    if (!user) {
-      return done(null, null);
-    }
-    done(null, user);
-  });
-
   passport.use(localStrategy);
 };
 

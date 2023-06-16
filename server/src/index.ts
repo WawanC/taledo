@@ -11,6 +11,7 @@ import initializePassportGoogle from "./passport/google-strategy";
 import https from "https";
 import fs from "fs";
 import path from "path";
+import initializePassport from "./passport/serializer";
 
 dotenv.config();
 
@@ -38,8 +39,10 @@ app.use(
   })
 );
 
+initializePassport();
 initializePassportLocal();
 initializePassportGoogle();
+
 app.use(passport.session({ pauseStream: true }));
 
 app.use(express.static(path.join(__dirname, "..", "..", "client", "dist")));

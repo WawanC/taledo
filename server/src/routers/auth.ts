@@ -28,7 +28,7 @@ authRouter.get("/me", isAuth, authController.getMe);
 authRouter.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["profile"],
+    scope: ["profile", "email"],
     prompt: "select_account"
   })
 );
@@ -38,6 +38,14 @@ authRouter.get(
   passport.authenticate("google", {
     successRedirect: "/dashboard",
     failureRedirect: `/login`
+  })
+);
+
+authRouter.get(
+  "/link/google",
+  passport.authorize("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account"
   })
 );
 

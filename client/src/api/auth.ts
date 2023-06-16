@@ -29,6 +29,7 @@ export const getMeUserApi = async () => {
   const response = await authApi.get<GetMePayload>("/me", {
     withCredentials: true
   });
+  console.log(response.data);
   return response.data;
 };
 
