@@ -2,10 +2,10 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
 import { useLoginUserMutation } from "../hooks/auth";
 import { getServerErrorMessage } from "../utils/error";
-import GoogleIcon from "../icons/GoogleIcon";
 import Loader from "../components/Loader";
 import DarkModeToggle from "../components/DarkModeToggle";
 import AppLogo from "../components/AppLogo";
+import GoogleSignInBtn from "../components/GoogleSignInBtn";
 
 interface LoginForm {
   username: string;
@@ -119,12 +119,7 @@ const LoginPage: React.FC = () => {
         </p>
       </div>
       <div>
-        <button className="btn px-4 py-2 rounded-xl flex gap-4 shadow">
-          <GoogleIcon className="w-6 h-6" />
-          <a href={`/api/auth/google`} className="font-bold">
-            Sign In with Google
-          </a>
-        </button>
+        <GoogleSignInBtn />
       </div>
     </main>
   );
