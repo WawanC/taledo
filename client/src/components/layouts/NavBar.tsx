@@ -7,6 +7,7 @@ import BarsIcon from "../../icons/BarsIcon";
 import SideNav from "./SideNav";
 import { AnimatePresence } from "framer-motion";
 import DarkModeToggle from "../DarkModeToggle";
+import AppLogo from "../AppLogo";
 
 const NavBar: React.FC = () => {
   const logoutUser = useLogoutUserMutation();
@@ -42,15 +43,7 @@ const NavBar: React.FC = () => {
           to={"/"}
           className="text-2xl font-bold text-center flex gap-2 md:w-1/6"
         >
-          {
-            <div className="hidden md:block w-8 h-8">
-              <img
-                src="/applogo.svg"
-                alt="applogo"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          }
+          <AppLogo className="w-8 h-8 hidden md:flex" />
           <span>Taledo</span>
         </Link>
         <span className="hidden md:block text-xl text-center md:w-1/4">

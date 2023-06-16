@@ -3,6 +3,7 @@ import { useGetMeUserQuery, useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
 import { useMemo } from "react";
 import DarkModeToggle from "../DarkModeToggle";
+import AppLogo from "../AppLogo";
 
 interface Props {
   onClose: () => void;
@@ -27,7 +28,7 @@ const SideNav: React.FC<Props> = (props) => {
         onClick={props.onClose}
       />
       <motion.div
-        className="absolute top-0 bottom-0 w-[60%] bg-semi_light dark:bg-bold
+        className="absolute top-0 bottom-0 w-[60%] bg-light dark:bg-bold
       flex flex-col items-center py-20 gap-12"
         initial={{ x: "-100%" }}
         animate={{ x: "0" }}
@@ -35,13 +36,7 @@ const SideNav: React.FC<Props> = (props) => {
         transition={{ bounce: false, duration: 0.25 }}
       >
         <div className="flex flex-col gap-4 items-center">
-          <div className="w-28 h-28">
-            <img
-              src="/applogo.svg"
-              alt="applogo"
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <AppLogo className="w-28 h-28" />
           <h1 className="text-2xl font-bold">
             {getMeUser.data?.user.username || "Username"}
           </h1>

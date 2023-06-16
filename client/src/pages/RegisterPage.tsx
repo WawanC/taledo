@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "../icons/GoogleIcon";
 import Loader from "../components/Loader";
 import DarkModeToggle from "../components/DarkModeToggle";
+import AppLogo from "../components/AppLogo";
 
 interface RegisterForm {
   username: string;
@@ -72,13 +73,7 @@ const RegisterPage: React.FC = () => {
     >
       <DarkModeToggle className="absolute top-4 right-4" />
       <div className="flex flex-col items-center">
-        <div className="w-28 h-28">
-          <img
-            src="/applogo.svg"
-            alt="applogo"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <AppLogo className="w-28 h-28" />
         <h1 className="text-3xl md:text-4xl font-bold text-center">
           Create New Account
         </h1>
