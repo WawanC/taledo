@@ -6,11 +6,11 @@ interface Props {
 }
 
 const AppLogo: React.FC<Props> = (props) => {
-  const darkMode = useAppState((state) => state.darkMode);
+  const isDarkMode = useAppState((state) => state.isDarkMode);
 
   const appLogoSrc = useMemo(
-    () => (darkMode ? "AppLogo - DarkMode.svg" : "AppLogo - LightMode.svg"),
-    [darkMode]
+    () => (isDarkMode ? "AppLogo - DarkMode.svg" : "AppLogo - LightMode.svg"),
+    [isDarkMode]
   );
 
   return (

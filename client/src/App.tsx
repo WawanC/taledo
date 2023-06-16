@@ -7,15 +7,15 @@ import { useEffect } from "react";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const darkMode = useAppState((state) => state.darkMode);
+  const isDarkMode = useAppState((state) => state.isDarkMode);
 
   useEffect(() => {
-    if (darkMode) {
+    if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [darkMode]);
+  }, [isDarkMode]);
 
   return (
     <QueryClientProvider client={queryClient}>

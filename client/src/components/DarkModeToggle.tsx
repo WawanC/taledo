@@ -44,13 +44,13 @@ interface Props {
 }
 
 const DarkModeToggle: React.FC<Props> = (props) => {
-  const darkMode = useAppState((state) => state.darkMode);
+  const isDarkMode = useAppState((state) => state.isDarkMode);
   const setDarkMode = useAppState((state) => state.setDarkMode);
 
   return (
     <div className={props.className}>
       <ReactSwitch
-        checked={darkMode}
+        checked={isDarkMode}
         onChange={(val) => setDarkMode(val)}
         onColor="#526D82"
         offColor="#9DB2BF"
