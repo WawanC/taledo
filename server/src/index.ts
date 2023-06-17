@@ -12,7 +12,6 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import initializePassport from "./passport/serializer";
-import flash from "connect-flash";
 
 dotenv.config();
 
@@ -39,7 +38,6 @@ app.use(
     }
   })
 );
-app.use(flash());
 
 initializePassport();
 initializePassportLocal();
