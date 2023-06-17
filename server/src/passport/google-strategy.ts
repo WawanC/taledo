@@ -15,6 +15,14 @@ const verify = async (
 ) => {
   // Authorize and linking user account
   if (req.user) {
+    const isAlready = await prisma.user.findFirst({
+      where: { google: profile._json.email }
+    });
+
+    if (isAlready) {
+      return done(new Error("conflict-oauth"), undefined, null);
+    }
+
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
 
     if (!user) {
