@@ -9,6 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
 import AccountIcon from "../../icons/AccountIcon";
+import NoteIcon from "../../icons/NoteIcon";
 
 const NavBar: React.FC = () => {
   const logoutUser = useLogoutUserMutation();
@@ -52,6 +53,9 @@ const NavBar: React.FC = () => {
         </span>
         {isAuth && (
           <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end md:items-center">
+            <Link to={"/notes"}>
+              <NoteIcon className="w-8 h-8" />
+            </Link>
             <Link to={"/account"}>
               <AccountIcon className="w-8 h-8" />
             </Link>

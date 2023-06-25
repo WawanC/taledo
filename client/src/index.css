@@ -18,3 +18,36 @@
   flex-direction: column;
   min-height: 100vh;
 }
+
+.ql-toolbar {
+  @apply !border-none !bg-semi_light dark:!bg-bold  rounded
+  flex gap-2 flex-wrap justify-center items-center 
+  shadow !w-fit mx-auto;
+}
+
+.ql-picker-label {
+  @apply !text-semi_bold;
+}
+.ql-picker-label.ql-active {
+  @apply !text-bold dark:!text-light;
+}
+
+.ql-stroke {
+  @apply !stroke-semi_bold;
+}
+
+.ql-active .ql-stroke {
+  @apply !stroke-bold dark:!stroke-light;
+}
+
+.ql-blank::before {
+  @apply !text-semi_bold dark:!text-semi_light;
+}
+
+.ql-editor {
+  @apply relative;
+}
+
+.ql-formats {
+  @apply !flex !justify-center !items-center !mr-0;
+}

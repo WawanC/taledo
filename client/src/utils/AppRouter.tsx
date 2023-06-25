@@ -6,6 +6,7 @@ import LoginPage from "../pages/LoginPage";
 import PrivateRoute from "../guards/PrivateRoute";
 import PublicRoute from "../guards/PublicRoute";
 import AccountPage from "../pages/AccountPage";
+import NotesPage from "../pages/NotesPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -15,7 +16,8 @@ const AppRouter = createBrowserRouter([
         element: <PrivateRoute />,
         children: [
           { path: "/dashboard", element: <DashboardPage /> },
-          { path: "/account", element: <AccountPage /> }
+          { path: "/account", element: <AccountPage /> },
+          { path: "/notes", element: <NotesPage /> }
         ]
       },
       {

@@ -6,6 +6,7 @@ import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
 import { Link } from "react-router-dom";
 import AccountIcon from "../../icons/AccountIcon";
+import NoteIcon from "../../icons/NoteIcon";
 
 interface Props {
   onClose: () => void;
@@ -45,6 +46,14 @@ const SideNav: React.FC<Props> = (props) => {
         </div>
         <h2 className="text-xl">{todayDate}</h2>
         <ul className="flex flex-col items-center gap-4">
+          <Link
+            to={"/notes"}
+            className="flex text-xl gap-2 items-center"
+            onClick={() => props.onClose()}
+          >
+            <NoteIcon className="w-8 h-8" />
+            <span>My Notes</span>
+          </Link>
           <Link
             to={"/account"}
             className="flex text-xl gap-2 items-center"
