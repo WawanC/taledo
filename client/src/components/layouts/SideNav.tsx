@@ -47,7 +47,7 @@ const SideNav: React.FC<Props> = (props) => {
         <h2 className="text-xl">{todayDate}</h2>
         <ul className="flex flex-col items-center gap-4">
           <Link
-            to={"/notes"}
+            to={"/my-notes"}
             className="flex text-xl gap-2 items-center"
             onClick={() => props.onClose()}
           >

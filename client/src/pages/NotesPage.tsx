@@ -16,7 +16,7 @@ const NotesPage = () => {
     <form
       onSubmit={formSubmitHandler}
       className="flex flex-col items-center min-h-screen 
-      bg-light dark:bg-semi_bold md:px-16 py-4 px-2"
+      bg-light dark:bg-semi_bold py-4 px-2"
     >
       <ReactQuill
         theme="snow"
@@ -40,9 +40,10 @@ const NotesPage = () => {
         }}
         children={
           <div
-            className="bg-semi_light dark:bg-bold flex-1 h-full !border-none p-2 md:p-4
-          text-xl md:text-2xl text-bold dark:text-light font-poppins rounded
-          shadow"
+            className="md:w-1/2 md:mx-auto bg-semi_light dark:bg-bold 
+            flex-1 h-full !border-none p-2 md:p-4
+            text-xl md:text-2xl text-bold dark:text-light font-poppins rounded
+            shadow [&>*]:leading-loose"
           />
         }
         onChange={(val) => setNotes(val)}

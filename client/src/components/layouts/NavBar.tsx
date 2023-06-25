@@ -53,7 +53,7 @@ const NavBar: React.FC = () => {
         </span>
         {isAuth && (
           <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end md:items-center">
-            <Link to={"/notes"}>
+            <Link to={"/my-notes"}>
               <NoteIcon className="w-8 h-8" />
             </Link>
             <Link to={"/account"}>
