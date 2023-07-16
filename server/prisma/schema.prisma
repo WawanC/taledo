@@ -29,10 +29,13 @@ model User {
   password String
   google String?
   todos Todo[]
+  notes Note[]
 }
 
 model Note {
   @@map("notes")
   id String @id @default(uuid())
   content String
+  userId String
+  user User @relation(fields: [userId], references: [id])
 }
