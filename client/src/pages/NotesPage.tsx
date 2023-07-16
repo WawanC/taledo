@@ -1,15 +1,25 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useCreateNoteMutation } from "../hooks/note";
+import { useNavigate } from "react-router-dom";
 
 const NotesPage = () => {
   const [notes, setNotes] = useState("");
+  const createNote = useCreateNoteMutation();
+  const navigate = useNavigate();
 
   const formSubmitHandler: React.FormEventHandler = (e) => {
     e.preventDefault();
-    console.log(notes);
+
+    if (notes.trim().length < 1) {
+      return;
+    }
+
+    createNote.mutate({ payload: { content: notes.trim() } });
 
     setNotes("");
+    navigate("/my-notes");
   };
 
   return (
