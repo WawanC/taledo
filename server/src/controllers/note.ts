@@ -1,8 +1,24 @@
 import { PrismaClient } from "@prisma/client";
 import { RequestHandler } from "express";
-import { connect } from "http2";
 
 const prisma = new PrismaClient();
+
+export const getNotes: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
+    const notes = await prisma.note.findMany({
+      where: { userId: req.user.id }
+    });
+
+    return res.status(200).json({
+      message: "Fetch notes success",
+      notes: notes
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const createNote: RequestHandler = async (req, res, next) => {
   try {

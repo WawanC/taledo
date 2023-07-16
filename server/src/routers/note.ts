@@ -6,6 +6,8 @@ import isAuth from "../middlewares/is-auth";
 
 const noteRouter = Router();
 
+noteRouter.get("/", isAuth, noteController.getNotes);
+
 noteRouter.post(
   "/",
   isAuth,
