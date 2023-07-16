@@ -26,10 +26,7 @@ const NotesPage = () => {
           toolbar: [
             ["bold", "italic", "underline"],
             [{ list: "ordered" }, { list: "bullet" }],
-            [
-              // { size: ["small", false, "large", "huge"] },
-              { header: [1, 2, 3, 4, 5, 6, false] }
-            ],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
             [
               { align: "" },
               { align: "center" },

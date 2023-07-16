@@ -12,6 +12,7 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import initializePassport from "./passport/serializer";
+import noteRouter from "./routers/note";
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ const port = process.env.PORT || 8000;
 
 app.use("/api/todos", todoRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/notes", noteRouter);
 
 app.use("*", (req, res) =>
   res.sendFile(path.join(__dirname, "..", "..", "client", "dist", "index.html"))
