@@ -27,7 +27,7 @@ const NoteItem: React.FC<Props> = (props) => {
       onClick={() => navigate(`/note/${props.id}`)}
     >
       <h1 className="font-bold text-xl">{noteInfo.title}</h1>
-      <p>{noteInfo.content}</p>
+      <p className="flex-1 line-clamp-3 overflow-hidden">{noteInfo.content}</p>
       <div className="flex justify-end gap-4">
         <span className="hover:cursor-pointer">
           <NoteIcon className="w-6 h-6 md:w-8 md:h-8" />
