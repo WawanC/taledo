@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 export const createNoteValidator = [
   body("content")
@@ -9,4 +9,8 @@ export const createNoteValidator = [
     .trim()
     .isLength({ min: 1 })
     .withMessage("Valid note content is required")
+];
+
+export const getNoteValidator = [
+  param("noteId").notEmpty().withMessage("Valid note id is required")
 ];
