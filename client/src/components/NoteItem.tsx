@@ -1,17 +1,29 @@
+import { useMemo } from "react";
 import NoteIcon from "../icons/NoteIcon";
 import TrashIcon from "../icons/TrashIcon";
 
-const NoteItem: React.FC = () => {
+type Props = {
+  title: string;
+  content: string;
+};
+
+const NoteItem: React.FC<Props> = (props) => {
+  const noteInfo = useMemo(() => {
+    const temporaryElement = document.createElement("div");
+    temporaryElement.innerHTML = props.content;
+    return {
+      title: temporaryElement.firstChild?.textContent || "",
+      content: temporaryElement.textContent || temporaryElement.innerText || ""
+    };
+  }, [props.content]);
+
   return (
     <article
       className="flex flex-col gap-4 bg-semi_light dark:bg-bold
-       p-4 rounded w-full md:w-1/4 shadow"
+       p-4 rounded w-full md:w-1/4 shadow hover:cursor-pointer"
     >
-      <h1 className="font-bold text-xl">Learn React</h1>
-      <p>
-        This is tutorial about how to learn react and it's ability to rendering
-        single page application with ease.
-      </p>
+      <h1 className="font-bold text-xl">{noteInfo.title}</h1>
+      <p>{noteInfo.content}</p>
       <div className="flex justify-end gap-4">
         <span className="hover:cursor-pointer">
           <NoteIcon className="w-6 h-6 md:w-8 md:h-8" />

@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import NoteItem from "../components/NoteItem";
+import { useGetNotesQuery } from "../hooks/note";
 
 const MyNotesPage = () => {
+  const getNotes = useGetNotesQuery();
+
   return (
     <main
       className="min-h-screen bg-light dark:bg-semi_bold
@@ -14,13 +17,13 @@ const MyNotesPage = () => {
       >
         Create Note
       </Link>
-      <ul className="w-3/4 flex flex-wrap justify-center gap-4 ">
-        <NoteItem />
-        <NoteItem />
-        <NoteItem />
-        <NoteItem />
-        <NoteItem />
-      </ul>
+      {getNotes.data && (
+        <ul className="w-3/4 flex flex-wrap justify-center gap-4 ">
+          {getNotes.data.map((note) => (
+            <NoteItem key={note.id} title="Test Note" content={note.content} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 };
