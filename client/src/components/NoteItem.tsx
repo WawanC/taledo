@@ -14,9 +14,27 @@ const NoteItem: React.FC<Props> = (props) => {
   const noteInfo = useMemo(() => {
     const temporaryElement = document.createElement("div");
     temporaryElement.innerHTML = props.content;
+
+    const firstChild = temporaryElement.firstChild;
+    let remainingText = "";
+
+    if (firstChild) {
+      const textContentArray = [];
+
+      let currentNode = firstChild.nextSibling;
+      while (currentNode) {
+        if (currentNode.textContent) {
+          textContentArray.push(currentNode.textContent.trim());
+        }
+        currentNode = currentNode.nextSibling;
+      }
+
+      remainingText = textContentArray.join(" ");
+    }
+
     return {
       title: temporaryElement.firstChild?.textContent || "",
-      content: temporaryElement.textContent || temporaryElement.innerText || ""
+      content: remainingText
     };
   }, [props.content]);
 
