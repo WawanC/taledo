@@ -20,7 +20,12 @@ const MyNotesPage = () => {
       {getNotes.data && (
         <ul className="w-3/4 flex flex-wrap justify-center gap-4 ">
           {getNotes.data.map((note) => (
-            <NoteItem key={note.id} title="Test Note" content={note.content} />
+            <NoteItem
+              key={note.id}
+              id={note.id}
+              title="Test Note"
+              content={note.content}
+            />
           ))}
         </ul>
       )}

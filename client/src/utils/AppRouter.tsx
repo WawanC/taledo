@@ -8,6 +8,7 @@ import PublicRoute from "../guards/PublicRoute";
 import AccountPage from "../pages/AccountPage";
 import NotesPage from "../pages/NotesPage";
 import MyNotesPage from "../pages/MyNotesPage";
+import NoteDetailPage from "../pages/NoteDetailPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -19,7 +20,8 @@ const AppRouter = createBrowserRouter([
           { path: "/dashboard", element: <DashboardPage /> },
           { path: "/account", element: <AccountPage /> },
           { path: "/my-notes", element: <MyNotesPage /> },
-          { path: "/new-note", element: <NotesPage /> }
+          { path: "/new-note", element: <NotesPage /> },
+          { path: "/note/:noteId", element: <NoteDetailPage /> }
         ]
       },
       {

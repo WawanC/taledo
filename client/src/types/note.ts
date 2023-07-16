@@ -8,6 +8,11 @@ export type GetNotesResponse = {
   notes: Note[];
 };
 
+export type GetNoteResponse = {
+  message: string;
+  note: Note;
+};
+
 export type CreateNotePayload = {
   content: string;
 };
