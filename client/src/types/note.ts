@@ -16,3 +16,7 @@ export type GetNoteResponse = {
 export type CreateNotePayload = {
   content: string;
 };
+
+export type UpdateNotePayload = {
+  content: string;
+};

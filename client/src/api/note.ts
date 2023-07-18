@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   CreateNotePayload,
   GetNoteResponse,
-  GetNotesResponse
+  GetNotesResponse,
+  UpdateNotePayload
 } from "../types/note";
 
 const noteApi = axios.create({
@@ -26,4 +27,11 @@ export const createNoteApi = async (data: { payload: CreateNotePayload }) => {
 
 export const deleteNoteApi = async (noteId: string) => {
   await noteApi.delete<GetNoteResponse>(`/${noteId}`);
+};
+
+export const updateNoteApi = async (data: {
+  noteId: string;
+  payload: UpdateNotePayload;
+}) => {
+  await noteApi.put<GetNoteResponse>(`/${data.noteId}`, data.payload);
 };
