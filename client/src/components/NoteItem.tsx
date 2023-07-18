@@ -1,5 +1,4 @@
 import { MouseEventHandler, useCallback, useMemo } from "react";
-import NoteIcon from "../icons/NoteIcon";
 import TrashIcon from "../icons/TrashIcon";
 import { useNavigate } from "react-router-dom";
 import { useDeleteNoteMutation } from "../hooks/note";
