@@ -23,3 +23,7 @@ export const getNoteApi = async (noteId: string) => {
 export const createNoteApi = async (data: { payload: CreateNotePayload }) => {
   await noteApi.post("/", data.payload);
 };
+
+export const deleteNoteApi = async (noteId: string) => {
+  await noteApi.delete<GetNoteResponse>(`/${noteId}`);
+};
