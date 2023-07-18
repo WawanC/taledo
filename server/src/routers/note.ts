@@ -1,6 +1,10 @@
 import { Router } from "express";
 import * as noteController from "../controllers/note";
-import { createNoteValidator, getNoteValidator } from "../validators/note";
+import {
+  createNoteValidator,
+  deleteNoteValidator,
+  getNoteValidator
+} from "../validators/note";
 import isValid from "../middlewares/is-valid";
 import isAuth from "../middlewares/is-auth";
 
@@ -21,6 +25,14 @@ noteRouter.post(
   createNoteValidator,
   isValid,
   noteController.createNote
+);
+
+noteRouter.delete(
+  "/:noteId",
+  isAuth,
+  deleteNoteValidator,
+  isValid,
+  noteController.deleteNote
 );
 
 export default noteRouter;

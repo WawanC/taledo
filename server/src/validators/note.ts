@@ -14,3 +14,7 @@ export const createNoteValidator = [
 export const getNoteValidator = [
   param("noteId").notEmpty().withMessage("Valid note id is required")
 ];
+
+export const deleteNoteValidator = [
+  param("noteId").notEmpty().withMessage("Valid note id is required")
+];
