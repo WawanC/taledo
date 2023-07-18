@@ -97,3 +97,34 @@ export const deleteNote: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateNote: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
+    const note = await prisma.note.findFirst({
+      where: {
+        id: req.params.noteId,
+        userId: req.user.id
+      }
+    });
+
+    if (!note) {
+      return res.status(404).json({
+        type: "NOT_FOUND",
+        message: "Note not found"
+      });
+    }
+
+    await prisma.note.update({
+      where: { id: note.id },
+      data: { content: req.body.content.trim() }
+    });
+
+    return res.status(200).json({
+      message: "Update note success"
+    });
+  } catch (error) {
+    next(error);
+  }
+};

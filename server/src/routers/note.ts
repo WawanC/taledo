@@ -3,7 +3,8 @@ import * as noteController from "../controllers/note";
 import {
   createNoteValidator,
   deleteNoteValidator,
-  getNoteValidator
+  getNoteValidator,
+  updateNoteValidator
 } from "../validators/note";
 import isValid from "../middlewares/is-valid";
 import isAuth from "../middlewares/is-auth";
@@ -33,6 +34,14 @@ noteRouter.delete(
   deleteNoteValidator,
   isValid,
   noteController.deleteNote
+);
+
+noteRouter.put(
+  "/:noteId",
+  isAuth,
+  updateNoteValidator,
+  isValid,
+  noteController.updateNote
 );
 
 export default noteRouter;
