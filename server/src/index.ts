@@ -13,6 +13,8 @@ import fs from "fs";
 import path from "path";
 import initializePassport from "./passport/serializer";
 import noteRouter from "./routers/note";
+import RedisStore from "connect-redis";
+import { createClient } from "redis";
 
 dotenv.config();
 
@@ -26,8 +28,16 @@ app.use(
 );
 app.use(express.json());
 
+const redisClient = createClient({
+  url: process.env.REDIS_URL
+});
+redisClient.connect();
+
+const redisStore = new RedisStore({ client: redisClient });
+
 app.use(
   session({
+    store: redisStore,
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     proxy: true,
