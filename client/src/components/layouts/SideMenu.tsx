@@ -19,7 +19,7 @@ const SideMenu: React.FC = () => {
         <AppLogo className="w-8 h-8" />
         <span>Taledo</span>
       </Link>
-      <ul className="flex flex-col gap-8 w-full text-lg">
+      <ul className="flex flex-col gap-8 w-full text-lg px-4">
         <Link
           to={"/dashboard"}
           className="flex gap-2 items-center justify-center 

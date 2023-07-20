@@ -24,9 +24,6 @@ export const getNote: RequestHandler = async (req, res, next) => {
   try {
     if (!req.user) throw new Error("UNAUTHORIZED");
 
-    console.log(req.user.id);
-    console.log(req.params.noteId);
-
     const note = await prisma.note.findFirst({
       where: { id: req.params.noteId.trim(), userId: req.user.id }
     });
