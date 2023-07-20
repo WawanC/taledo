@@ -7,7 +7,7 @@ const MyNotesPage = () => {
 
   return (
     <main
-      className="min-h-screen bg-light dark:bg-semi_bold
+      className="flex-1 bg-light dark:bg-semi_bold
     flex flex-col items-center gap-8 p-4"
     >
       <Link

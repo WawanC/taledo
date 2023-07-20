@@ -8,8 +8,6 @@ import SideNav from "./SideNav";
 import { AnimatePresence } from "framer-motion";
 import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
-import AccountIcon from "../../icons/AccountIcon";
-import NoteIcon from "../../icons/NoteIcon";
 
 const NavBar: React.FC = () => {
   const logoutUser = useLogoutUserMutation();
@@ -30,9 +28,9 @@ const NavBar: React.FC = () => {
         {isSideNavOpen && <SideNav onClose={() => setIsSideNavOpen(false)} />}
       </AnimatePresence>
       <nav
-        className="bg-semi_light dark:bg-bold p-2 w-full
+        className="bg-semi_light dark:bg-bold w-full
         flex justify-center md:justify-between items-center 
-        px-8 relative"
+        px-8 py-2 relative"
       >
         <div
           className="absolute left-4 top-0 bottom-0 
@@ -43,22 +41,25 @@ const NavBar: React.FC = () => {
         </div>
         <Link
           to={"/dashboard"}
-          className="text-2xl font-bold text-center flex gap-2 md:w-1/6"
+          className="text-2xl font-bold text-center flex gap-2 md:hidden"
         >
           <AppLogo className="w-8 h-8 hidden md:flex" />
           <span>Taledo</span>
         </Link>
-        <span className="hidden md:block text-xl text-center md:w-1/4">
+        <span className="hidden md:block flex-1 text-xl text-center">
           {todayDate}
         </span>
         {isAuth && (
-          <ul className="hidden md:flex gap-4 md:w-1/6 md:justify-end md:items-center">
-            <Link to={"/my-notes"}>
+          <ul
+            className="hidden md:flex absolute right-4
+            gap-4 md:w-1/6 md:justify-end md:items-center"
+          >
+            {/* <Link to={"/my-notes"}>
               <NoteIcon className="w-8 h-8" />
             </Link>
             <Link to={"/account"}>
               <AccountIcon className="w-8 h-8" />
-            </Link>
+            </Link> */}
             <DarkModeToggle />
             <button className=" text-xl" onClick={() => logoutUser.mutate()}>
               <LogoutIcon className="w-8 h-8" />
