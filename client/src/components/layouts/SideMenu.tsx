@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import AccountIcon from "../../icons/AccountIcon";
 import NoteIcon from "../../icons/NoteIcon";
 import AppLogo from "../AppLogo";
+import TodoIcon from "../../icons/TodoIcon";
 
 const SideMenu: React.FC = () => {
   return (
     <nav
       className="bg-semi_light dark:bg-bold 
-      w-1/6 shadow md:flex hidden 
+      min-w-[15%] shadow md:flex hidden 
       flex-col gap-16 py-4 items-center"
     >
       <Link
@@ -20,9 +21,17 @@ const SideMenu: React.FC = () => {
       </Link>
       <ul className="flex flex-col gap-8 w-full text-lg">
         <Link
+          to={"/dashboard"}
+          className="flex gap-2 items-center justify-center 
+          p-2 hover:cursor-pointer hover:opacity-50"
+        >
+          <TodoIcon className="w-8 h-8" />
+          <span>My Todos</span>
+        </Link>
+        <Link
           to={"/my-notes"}
           className="flex gap-2 items-center justify-center 
-      p-4 hover:cursor-pointer hover:opacity-50"
+          p-2 hover:cursor-pointer hover:opacity-50"
         >
           <NoteIcon className="w-8 h-8" />
           <span>My Notes</span>
@@ -30,7 +39,7 @@ const SideMenu: React.FC = () => {
         <Link
           to={"/account"}
           className="flex gap-2 items-center justify-center 
-      p-4 hover:cursor-pointer hover:opacity-50"
+          p-2 hover:cursor-pointer hover:opacity-50"
         >
           <AccountIcon className="w-8 h-8" />
           <span>My Account</span>

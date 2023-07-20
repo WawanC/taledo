@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useGetMeUserQuery, useLogoutUserMutation } from "../../hooks/auth";
+import { useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
 import { useMemo } from "react";
 import DarkModeToggle from "../DarkModeToggle";
@@ -7,13 +7,13 @@ import AppLogo from "../AppLogo";
 import { Link } from "react-router-dom";
 import AccountIcon from "../../icons/AccountIcon";
 import NoteIcon from "../../icons/NoteIcon";
+import TodoIcon from "../../icons/TodoIcon";
 
 interface Props {
   onClose: () => void;
 }
 
 const SideNav: React.FC<Props> = (props) => {
-  const getMeUser = useGetMeUserQuery({ enabled: false });
   const logoutUser = useLogoutUserMutation();
 
   const todayDate = useMemo(
@@ -32,20 +32,28 @@ const SideNav: React.FC<Props> = (props) => {
       />
       <motion.div
         className="absolute top-0 bottom-0 w-[60%] bg-light dark:bg-bold
-      flex flex-col items-center py-16 gap-12"
+      flex flex-col items-center py-12 gap-12"
         initial={{ x: "-100%" }}
         animate={{ x: "0" }}
         exit={{ x: "-100%" }}
         transition={{ bounce: false, duration: 0.25 }}
       >
-        <div className="flex flex-col gap-4 items-center">
-          <AppLogo className="w-28 h-28" />
-          <h1 className="text-2xl font-bold">
+        {/* <div className="flex flex-col gap-4 items-center"> */}
+        <AppLogo className="w-24 h-24" />
+        {/* <h1 className="text-2xl font-bold">
             {getMeUser.data?.user.username || "Username"}
-          </h1>
-        </div>
+          </h1> */}
+        {/* </div> */}
         <h2 className="text-xl">{todayDate}</h2>
-        <ul className="flex flex-col items-center gap-4">
+        <ul className="flex flex-col items-center gap-8">
+          <Link
+            to={"/dashboard"}
+            className="flex text-xl gap-2 items-center"
+            onClick={() => props.onClose()}
+          >
+            <TodoIcon className="w-8 h-8" />
+            <span>My Todos</span>
+          </Link>
           <Link
             to={"/my-notes"}
             className="flex text-xl gap-2 items-center"
@@ -60,7 +68,7 @@ const SideNav: React.FC<Props> = (props) => {
             onClick={() => props.onClose()}
           >
             <AccountIcon className="w-8 h-8" />
-            <span>Account</span>
+            <span>My Account</span>
           </Link>
           <button
             className="flex text-xl gap-2 items-center"
