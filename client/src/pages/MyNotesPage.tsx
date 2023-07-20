@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NoteItem from "../components/NoteItem";
 import { useGetNotesQuery } from "../hooks/note";
+import Loader from "../components/Loader";
 
 const MyNotesPage = () => {
   const getNotes = useGetNotesQuery();
@@ -17,17 +18,23 @@ const MyNotesPage = () => {
       >
         Create Note
       </Link>
-      {getNotes.data && (
-        <ul className="w-3/4 flex flex-wrap justify-center gap-4 ">
-          {getNotes.data.map((note) => (
-            <NoteItem
-              key={note.id}
-              id={note.id}
-              title="Test Note"
-              content={note.content}
-            />
-          ))}
-        </ul>
+      {getNotes.isFetching ? (
+        <section className="flex-1 flex justify-center items-center">
+          <Loader />
+        </section>
+      ) : (
+        getNotes.data && (
+          <ul className="w-3/4 flex flex-wrap justify-center gap-4 ">
+            {getNotes.data.map((note) => (
+              <NoteItem
+                key={note.id}
+                id={note.id}
+                title="Test Note"
+                content={note.content}
+              />
+            ))}
+          </ul>
+        )
       )}
     </main>
   );
