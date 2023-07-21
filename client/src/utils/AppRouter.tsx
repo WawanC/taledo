@@ -9,6 +9,7 @@ import AccountPage from "../pages/AccountPage";
 import NotesPage from "../pages/NotesPage";
 import MyNotesPage from "../pages/MyNotesPage";
 import NoteDetailPage from "../pages/NoteDetailPage";
+import BoardPage from "../pages/BoardPage";
 
 const AppRouter = createBrowserRouter([
   {
@@ -21,7 +22,8 @@ const AppRouter = createBrowserRouter([
           { path: "/account", element: <AccountPage /> },
           { path: "/my-notes", element: <MyNotesPage /> },
           { path: "/new-note", element: <NotesPage /> },
-          { path: "/note/:noteId", element: <NoteDetailPage /> }
+          { path: "/note/:noteId", element: <NoteDetailPage /> },
+          { path: "/board", element: <BoardPage /> }
         ]
       },
       {
