@@ -5,8 +5,9 @@ import {
   DragStartEvent,
   useDroppable
 } from "@dnd-kit/core";
-import { SortableContext, arrayMove, useSortable } from "@dnd-kit/sortable";
-import { FC, useState } from "react";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
+import { FC, useEffect, useState } from "react";
+import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
 
 type Item = {
   id: string;
@@ -40,6 +41,12 @@ const BoardSection: FC<{
     id: props.title,
     data: { type: "droppable" }
   });
+  const sortedItems = props.items.sort((a, b) => {
+    if (a.rank < b.rank) return -1;
+    if (a.rank > b.rank) return 1;
+    return 0;
+  });
+
   return (
     <section
       ref={setNodeRef}
@@ -48,8 +55,8 @@ const BoardSection: FC<{
       <h1 className="text-2xl font-bold text-center">{props.title}</h1>
       <hr />
       <ul className="flex flex-col gap-4">
-        <SortableContext items={props.items}>
-          {props.items.map((item) => (
+        <SortableContext items={sortedItems}>
+          {sortedItems.map((item) => (
             <BoardItem key={item.id} item={item} section={props.title} />
           ))}
         </SortableContext>
@@ -62,16 +69,35 @@ const BoardPage: FC = () => {
   const [items, setItems] = useState<{
     [key: string]: Item[];
   }>({
-    Plan: [
-      { id: Math.random().toString(), title: "Learn React JS", rank: "aaa" },
-      { id: Math.random().toString(), title: "Learn Node JS", rank: "bbb" }
-    ],
-    Done: [
-      { id: Math.random().toString(), title: "Learn Javascript", rank: "ccc" },
-      { id: Math.random().toString(), title: "Learn Node JS", rank: "ddd" }
-    ]
+    Plan: [],
+    Done: []
   });
   const [activeItem, setActiveItem] = useState<Item | null>(null);
+
+  useEffect(() => {
+    setItems((items) => {
+      const newItems = { ...items };
+
+      const planItems = ["Learn React JS", "Learn Node JS", "Learn MongoDB"];
+      const doneItems = ["Learn Javascript", "Learn HTML"];
+
+      for (const item of planItems) {
+        const id = Math.random().toString();
+        const title = item;
+        const rank = genNewRank(newItems["Plan"]);
+        newItems["Plan"].push({ id, title, rank });
+      }
+
+      for (const item of doneItems) {
+        const id = Math.random().toString();
+        const title = item;
+        const rank = genNewRank(newItems["Done"]);
+        newItems["Done"].push({ id, title, rank });
+      }
+
+      return newItems;
+    });
+  }, []);
 
   const dragEndHandler = (e: DragEndEvent) => {
     const selectedItemId = e.active.id as string;
@@ -94,15 +120,26 @@ const BoardPage: FC = () => {
         newItems[initialSection] = items[initialSection].filter(
           (item) => item.id !== selectedItemId
         );
+
+        const newRank =
+          items[targetSection].length > 0
+            ? moveRank(
+                newItems[targetSection],
+                selectedItem.rank,
+                newItems[targetSection].length - 1
+              )
+            : genNewRank(items[targetSection]);
+        selectedItem.rank = newRank;
+
         newItems[targetSection].push(selectedItem);
         return newItems;
       });
     } else if (targetType === "item") {
-      // Drop to different item in different section
       const targetSection = e.over?.data.current?.section as string;
       if (!targetSection) return;
 
       if (initialSection !== targetSection) {
+        // Drop to different item in different section
         setItems((items) => {
           const newItems = { ...items };
           const selectedItem = newItems[initialSection].find(
@@ -113,20 +150,18 @@ const BoardPage: FC = () => {
           newItems[initialSection] = items[initialSection].filter(
             (item) => item.id !== selectedItemId
           );
-          newItems[targetSection].push(selectedItem);
 
-          const oldIndex = newItems[targetSection].findIndex(
-            (item) => item.id === (e.active.id as string)
-          );
           const newIndex = newItems[targetSection].findIndex(
             (item) => item.id === (e.over?.id as string)
           );
-          if (oldIndex < 0 || newIndex < 0) return newItems;
-          newItems[targetSection] = arrayMove(
-            newItems[targetSection],
-            oldIndex,
-            newIndex
-          );
+
+          if (newIndex < 0) return newItems;
+
+          const newRank = transferRank(newItems[targetSection], newIndex);
+
+          selectedItem.rank = newRank;
+          newItems[targetSection].push(selectedItem);
+
           return newItems;
         });
       } else {
@@ -139,13 +174,16 @@ const BoardPage: FC = () => {
           const newIndex = newItems[targetSection].findIndex(
             (item) => item.id === (e.over?.id as string)
           );
-          if (oldIndex < 0 || newIndex < 0) return newItems;
+          if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex)
+            return newItems;
 
-          newItems[initialSection] = arrayMove(
+          const newRank = moveRank(
             newItems[initialSection],
-            oldIndex,
+            newItems[initialSection][oldIndex].rank,
             newIndex
           );
+          newItems[initialSection][oldIndex].rank = newRank;
+
           return newItems;
         });
       }

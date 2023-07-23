@@ -1,33 +1,38 @@
 import { LexoRank } from "lexorank";
-import LexoRankBucket from "lexorank/lib/lexoRank/lexoRankBucket";
-import { Todo } from "../types/todo";
 
-export const generateLexorank = (
-  todos: Todo[],
-  targetRank: string,
-  order: number
-) => {
-  let rank = undefined;
-  if (order === 1) {
-    rank = LexoRank.parse(todos[0].rank).genPrev();
-  } else if (order === todos.length) {
-    rank = LexoRank.parse(todos[todos.length - 1].rank).genNext();
-  } else if (targetRank > todos[order - 1].rank) {
+export const moveRank = (items: any[], targetRank: string, order: number) => {
+  if (order === 0) {
+    // In front
+    return LexoRank.parse(items[0].rank).genPrev().toString();
+  } else if (order === items.length - 1) {
+    // In behind
+    return LexoRank.parse(items[items.length - 1].rank)
+      .genNext()
+      .toString();
+  } else if (targetRank > items[order].rank) {
     // Todo below target
-    const rankTarget = LexoRank.parse(todos[order - 1].rank);
-    const rankBefore = LexoRank.parse(todos[order - 2].rank);
-    rank = LexoRank.from(
-      LexoRankBucket.BUCKET_0,
-      LexoRank.between(rankBefore.getDecimal(), rankTarget.getDecimal())
-    );
-  } else if (targetRank < todos[order - 1].rank) {
-    // Todo above target
-    const rankTarget = LexoRank.parse(todos[order - 1].rank);
-    const rankAfter = LexoRank.parse(todos[order].rank);
-    rank = LexoRank.from(
-      LexoRankBucket.BUCKET_0,
-      LexoRank.between(rankTarget.getDecimal(), rankAfter.getDecimal())
-    );
+    const rankTarget = LexoRank.parse(items[order].rank);
+    const rankBefore = LexoRank.parse(items[order - 1].rank);
+    return rankBefore.between(rankTarget).toString();
+  } else if (targetRank < items[order].rank) {
+    const rankTarget = LexoRank.parse(items[order].rank);
+    const rankAfter = LexoRank.parse(items[order + 1].rank);
+    return rankTarget.between(rankAfter).toString();
   }
-  return rank;
+  return targetRank;
+};
+
+export const transferRank = (items: any[], idx: number) => {
+  if (idx === 0) return LexoRank.parse(items[0].rank).genPrev().toString();
+  const rankBefore = LexoRank.parse(items[idx - 1].rank);
+  const rankAfter = LexoRank.parse(items[idx].rank);
+  return rankBefore.between(rankAfter).toString();
+};
+
+export const genNewRank = (items: any[]) => {
+  if (items.length === 0) {
+    return LexoRank.min().genNext().toString();
+  }
+  const prevRank = items[items.length - 1].rank;
+  return LexoRank.parse(prevRank).genNext().toString();
 };

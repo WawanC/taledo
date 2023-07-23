@@ -7,7 +7,7 @@ import {
   updateTodoApi
 } from "../api/todo";
 import { Todo } from "../types/todo";
-import { generateLexorank } from "../utils/lexorank";
+import { moveRank } from "../utils/lexorank";
 
 export const useGetTodosQuery = () => {
   return useQuery("todos", getTodosApi);
@@ -32,7 +32,7 @@ export const useUpdateTodoMutation = () => {
 
         if (todoIdx < 0) return prev;
 
-        const newRank = generateLexorank(
+        const newRank = moveRank(
           prev,
           todos[todoIdx].rank,
           variables.payload.order
