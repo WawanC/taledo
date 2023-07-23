@@ -1,10 +1,8 @@
 import { LexoRank } from "lexorank";
 
 export const moveRank = (items: any[], targetRank: string, order: number) => {
-  if (order === 0) {
-    // In front
-    return LexoRank.parse(items[0].rank).genPrev().toString();
-  } else if (order === items.length - 1) {
+  console.log("order:", order);
+  if (order === items.length - 1) {
     // In behind
     return LexoRank.parse(items[items.length - 1].rank)
       .genNext()
@@ -15,6 +13,7 @@ export const moveRank = (items: any[], targetRank: string, order: number) => {
     const rankBefore = LexoRank.parse(items[order - 1].rank);
     return rankBefore.between(rankTarget).toString();
   } else if (targetRank < items[order].rank) {
+    // Todo above target
     const rankTarget = LexoRank.parse(items[order].rank);
     const rankAfter = LexoRank.parse(items[order + 1].rank);
     return rankTarget.between(rankAfter).toString();

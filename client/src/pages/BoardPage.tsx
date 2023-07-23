@@ -8,6 +8,7 @@ import {
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { FC, useEffect, useState } from "react";
 import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
+import { motion } from "framer-motion";
 
 type Item = {
   id: string;
@@ -15,21 +16,25 @@ type Item = {
   rank: string;
 };
 
-const BoardItem: FC<{ item: Item; section: string }> = (props) => {
+const BoardItem: FC<{
+  item: Item;
+  section: string;
+}> = (props) => {
   const { setNodeRef, attributes, listeners } = useSortable({
     id: props.item.id,
     data: { type: "item", section: props.section }
   });
 
   return (
-    <li
+    <motion.li
+      layout
       ref={setNodeRef}
       {...attributes}
       {...listeners}
       className="p-4 bg-black rounded text-center shadow"
     >
       {props.item.title}
-    </li>
+    </motion.li>
   );
 };
 
@@ -48,20 +53,31 @@ const BoardSection: FC<{
   });
 
   return (
-    <section
+    <motion.section
       ref={setNodeRef}
       className="flex flex-col gap-4 bg-bold w-1/3 p-4 rounded"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
-      <h1 className="text-2xl font-bold text-center">{props.title}</h1>
+      <motion.h1 className="text-2xl font-bold text-center">
+        {props.title}
+      </motion.h1>
+      <button>Change</button>
       <hr />
-      <ul className="flex flex-col gap-4">
+      <motion.ul
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="flex flex-col gap-4"
+      >
         <SortableContext items={sortedItems}>
           {sortedItems.map((item) => (
             <BoardItem key={item.id} item={item} section={props.title} />
           ))}
         </SortableContext>
-      </ul>
-    </section>
+      </motion.ul>
+    </motion.section>
   );
 };
 
@@ -100,10 +116,13 @@ const BoardPage: FC = () => {
   }, []);
 
   const dragEndHandler = (e: DragEndEvent) => {
-    const selectedItemId = e.active.id as string;
+    // const selectedItemId = e.active.id as string;
     const initialSection = e.active.data.current?.section as string;
 
     const targetType = e.over?.data.current?.type as string;
+
+    const selectedItem = activeItem;
+    if (!selectedItem) return;
 
     if (targetType === "droppable") {
       // Drop to different empty section
@@ -112,14 +131,14 @@ const BoardPage: FC = () => {
 
       setItems((items) => {
         const newItems = { ...items };
-        const selectedItem = newItems[initialSection].find(
-          (item) => item.id === selectedItemId
-        );
-        if (!selectedItem) return newItems;
+        // const selectedItem = newItems[initialSection].find(
+        //   (item) => item.id === selectedItemId
+        // );
+        // if (!selectedItem) return newItems;
 
-        newItems[initialSection] = items[initialSection].filter(
-          (item) => item.id !== selectedItemId
-        );
+        // newItems[initialSection] = items[initialSection].filter(
+        //   (item) => item.id !== selectedItemId
+        // );
 
         const newRank =
           items[targetSection].length > 0
@@ -142,14 +161,14 @@ const BoardPage: FC = () => {
         // Drop to different item in different section
         setItems((items) => {
           const newItems = { ...items };
-          const selectedItem = newItems[initialSection].find(
-            (item) => item.id === selectedItemId
-          );
-          if (!selectedItem) return newItems;
+          // const selectedItem = newItems[initialSection].find(
+          //   (item) => item.id === selectedItemId
+          // );
+          // if (!selectedItem) return newItems;
 
-          newItems[initialSection] = items[initialSection].filter(
-            (item) => item.id !== selectedItemId
-          );
+          // newItems[initialSection] = items[initialSection].filter(
+          //   (item) => item.id !== selectedItemId
+          // );
 
           const newIndex = newItems[targetSection].findIndex(
             (item) => item.id === (e.over?.id as string)
@@ -195,6 +214,12 @@ const BoardPage: FC = () => {
     const item = items[e.active.data.current?.section].find(
       (item) => item.id === e.active.id
     );
+    setItems((items) => {
+      items[e.active.data.current?.section] = items[
+        e.active.data.current?.section
+      ].filter((item) => item.id !== e.active.id);
+      return items;
+    });
     setActiveItem(item || null);
   };
 
