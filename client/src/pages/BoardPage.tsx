@@ -8,7 +8,7 @@ import {
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { FC, useEffect, useState } from "react";
 import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
-import { motion } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 
 type Item = {
   id: string;
@@ -52,31 +52,34 @@ const BoardSection: FC<{
     return 0;
   });
 
+  const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      document.documentElement.style.overflow = "hidden";
+      await animate(scope.current, { opacity: 0 }, { duration: 0 });
+      await animate("li", { opacity: 0, y: 50 }, { duration: 0 });
+      await animate(scope.current, { opacity: 1 }, { duration: 0.4 });
+      await animate("li", { opacity: 1, y: 0 }, { duration: 0.25 });
+      document.documentElement.style.overflow = "auto";
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [animate, scope]);
+
   return (
-    <motion.section
-      ref={setNodeRef}
-      className="flex flex-col gap-4 bg-bold w-1/3 p-4 rounded"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <motion.h1 className="text-2xl font-bold text-center">
-        {props.title}
-      </motion.h1>
-      <button>Change</button>
-      <hr />
-      <motion.ul
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="flex flex-col gap-4"
-      >
-        <SortableContext items={sortedItems}>
-          {sortedItems.map((item) => (
-            <BoardItem key={item.id} item={item} section={props.title} />
-          ))}
-        </SortableContext>
-      </motion.ul>
+    <motion.section layout ref={scope} className="bg-bold w-1/3 rounded">
+      <div ref={setNodeRef} className="flex flex-col gap-4 p-4 pb-40 h-full">
+        <h1 className="text-2xl font-bold text-center">{props.title}</h1>
+        <hr />
+        <motion.ul className="flex flex-col gap-4">
+          <SortableContext items={sortedItems}>
+            {sortedItems.map((item) => (
+              <BoardItem key={item.id} item={item} section={props.title} />
+            ))}
+          </SortableContext>
+        </motion.ul>
+      </div>
     </motion.section>
   );
 };
@@ -94,8 +97,13 @@ const BoardPage: FC = () => {
     setItems((items) => {
       const newItems = { ...items };
 
-      const planItems = ["Learn React JS", "Learn Node JS", "Learn MongoDB"];
-      const doneItems = ["Learn Javascript", "Learn HTML"];
+      const planItems = [
+        "Learn React JS",
+        "Learn Node JS",
+        "Learn MongoDB",
+        "Learn PostgreSQL"
+      ];
+      const doneItems = ["Learn Javascript", "Learn HTML", "Learn CSS"];
 
       for (const item of planItems) {
         const id = Math.random().toString();
@@ -116,7 +124,6 @@ const BoardPage: FC = () => {
   }, []);
 
   const dragEndHandler = (e: DragEndEvent) => {
-    // const selectedItemId = e.active.id as string;
     const initialSection = e.active.data.current?.section as string;
 
     const targetType = e.over?.data.current?.type as string;
@@ -131,14 +138,6 @@ const BoardPage: FC = () => {
 
       setItems((items) => {
         const newItems = { ...items };
-        // const selectedItem = newItems[initialSection].find(
-        //   (item) => item.id === selectedItemId
-        // );
-        // if (!selectedItem) return newItems;
-
-        // newItems[initialSection] = items[initialSection].filter(
-        //   (item) => item.id !== selectedItemId
-        // );
 
         const newRank =
           items[targetSection].length > 0
@@ -161,14 +160,6 @@ const BoardPage: FC = () => {
         // Drop to different item in different section
         setItems((items) => {
           const newItems = { ...items };
-          // const selectedItem = newItems[initialSection].find(
-          //   (item) => item.id === selectedItemId
-          // );
-          // if (!selectedItem) return newItems;
-
-          // newItems[initialSection] = items[initialSection].filter(
-          //   (item) => item.id !== selectedItemId
-          // );
 
           const newIndex = newItems[targetSection].findIndex(
             (item) => item.id === (e.over?.id as string)
@@ -228,7 +219,7 @@ const BoardPage: FC = () => {
       <main
         className="dark:bg-semi_bold flex-1 
         flex justify-center gap-4 
-        p-4 py-8"
+        p-4 py-8 "
       >
         {Object.entries(items).map(([key, value]) => (
           <BoardSection key={key} title={key} items={value} />
