@@ -60,7 +60,7 @@ const BoardSection: React.FC<Props> = (props) => {
   }, [animate, scope]);
 
   return (
-    <motion.section ref={scope} className="bg-bold w-1/3 rounded">
+    <motion.section ref={scope} className="bg-bold w-1/4 rounded">
       <div ref={setNodeRef} className="flex flex-col gap-4 p-4 pb-40 h-full">
         <h1 className="text-2xl font-bold text-center">{props.title}</h1>
         <hr />
@@ -82,7 +82,8 @@ const BoardSection: React.FC<Props> = (props) => {
               <input
                 type="text"
                 autoFocus
-                className="w-full p-4 bg-light rounded text-bold relative z-10"
+                className="w-full p-4 bg-light rounded text-bold 
+                relative z-10 outline-none"
                 value={enteredNewItemTitle}
                 onChange={(e) => setEnteredNewItemTitle(e.target.value)}
               />

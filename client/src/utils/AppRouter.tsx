@@ -1,5 +1,4 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import DashboardPage from "../pages/DashboardPage";
 import PageLayout from "../components/layouts/PageLayout";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
@@ -18,12 +17,11 @@ const AppRouter = createBrowserRouter([
       {
         element: <PrivateRoute />,
         children: [
-          { path: "/dashboard", element: <DashboardPage /> },
+          { path: "/dashboard", element: <BoardPage /> },
           { path: "/account", element: <AccountPage /> },
           { path: "/my-notes", element: <MyNotesPage /> },
           { path: "/new-note", element: <NotesPage /> },
-          { path: "/note/:noteId", element: <NoteDetailPage /> },
-          { path: "/board", element: <BoardPage /> }
+          { path: "/note/:noteId", element: <NoteDetailPage /> }
         ]
       },
       {

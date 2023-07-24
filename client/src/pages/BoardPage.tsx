@@ -14,6 +14,7 @@ const BoardPage: React.FC = () => {
     [key: string]: Item[];
   }>({
     Plan: [],
+    Process: [],
     Done: []
   });
   const [activeItem, setActiveItem] = useState<Item | null>(null);
@@ -32,36 +33,6 @@ const BoardPage: React.FC = () => {
       return newItems;
     });
   };
-
-  // useEffect(() => {
-  //   setItems((items) => {
-  //     const newItems = { ...items };
-
-  //     const planItems = [
-  //       "Learn React JS",
-  //       "Learn Node JS",
-  //       "Learn MongoDB",
-  //       "Learn PostgreSQL"
-  //     ];
-  //     const doneItems = ["Learn Javascript", "Learn HTML", "Learn CSS"];
-
-  //     for (const item of planItems) {
-  //       const id = Math.random().toString();
-  //       const title = item;
-  //       const rank = genNewRank(newItems["Plan"]);
-  //       newItems["Plan"].push({ id, title, rank });
-  //     }
-
-  //     for (const item of doneItems) {
-  //       const id = Math.random().toString();
-  //       const title = item;
-  //       const rank = genNewRank(newItems["Done"]);
-  //       newItems["Done"].push({ id, title, rank });
-  //     }
-
-  //     return newItems;
-  //   });
-  // }, []);
 
   const dragEndHandler = (e: DragEndEvent) => {
     const initialSection = e.active.data.current?.section as string;
@@ -159,7 +130,7 @@ const BoardPage: React.FC = () => {
       <main
         className="dark:bg-semi_bold flex-1 
         flex justify-center gap-4 
-        p-4 py-8 "
+        p-4 py-8"
       >
         {Object.entries(items).map(([key, value]) => (
           <BoardSection

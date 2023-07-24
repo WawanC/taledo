@@ -2,7 +2,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
 import { useGetMeUserQuery } from "../../hooks/auth";
 import Loader from "../Loader";
-import SideMenu from "./SideMenu";
 
 const PageLayout: React.FC = () => {
   const getMeQuery = useGetMeUserQuery();
@@ -16,12 +15,9 @@ const PageLayout: React.FC = () => {
     location.pathname.includes("/register") ? (
     <Outlet />
   ) : (
-    <div className="flex flex-1">
-      <SideMenu />
-      <div className="flex flex-col flex-1">
-        <NavBar />
-        <Outlet />
-      </div>
+    <div className="flex flex-col flex-1">
+      <NavBar />
+      <Outlet />
     </div>
   );
 };
