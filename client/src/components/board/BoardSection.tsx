@@ -1,13 +1,22 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
 import { useAnimate, motion } from "framer-motion";
-import { useEffect } from "react";
+import {
+  Dispatch,
+  FormEventHandler,
+  SetStateAction,
+  useEffect,
+  useState
+} from "react";
 import { Item } from "../../types/item";
 import BoardItem from "./BoardItem";
 
 type Props = {
   title: string;
   items: Item[];
+  activeCreateSection: string | null;
+  setActiveCreateSection: Dispatch<SetStateAction<string | null>>;
+  createNewItem: (sectionName: string, title: string) => void;
 };
 
 const BoardSection: React.FC<Props> = (props) => {
@@ -15,13 +24,27 @@ const BoardSection: React.FC<Props> = (props) => {
     id: props.title,
     data: { type: "droppable" }
   });
+  const [scope, animate] = useAnimate();
+  const [enteredNewItemTitle, setEnteredNewItemTitle] = useState("");
+
+  const createNewItem: FormEventHandler = (e) => {
+    e.preventDefault();
+    const enteredTitle = enteredNewItemTitle.trim();
+    if (enteredTitle.length <= 0) {
+      setEnteredNewItemTitle("");
+      props.setActiveCreateSection(null);
+      return;
+    }
+    props.createNewItem(props.title, enteredTitle);
+    setEnteredNewItemTitle("");
+    props.setActiveCreateSection(null);
+  };
+
   const sortedItems = props.items.sort((a, b) => {
     if (a.rank < b.rank) return -1;
     if (a.rank > b.rank) return 1;
     return 0;
   });
-
-  const [scope, animate] = useAnimate();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
@@ -37,17 +60,46 @@ const BoardSection: React.FC<Props> = (props) => {
   }, [animate, scope]);
 
   return (
-    <motion.section layout ref={scope} className="bg-bold w-1/3 rounded">
+    <motion.section ref={scope} className="bg-bold w-1/3 rounded">
       <div ref={setNodeRef} className="flex flex-col gap-4 p-4 pb-40 h-full">
         <h1 className="text-2xl font-bold text-center">{props.title}</h1>
         <hr />
-        <motion.ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4">
           <SortableContext items={sortedItems}>
             {sortedItems.map((item) => (
               <BoardItem key={item.id} item={item} section={props.title} />
             ))}
           </SortableContext>
-        </motion.ul>
+          {props.activeCreateSection === props.title && (
+            <form onSubmit={createNewItem}>
+              <div
+                className="absolute inset-0 bg-black opacity-0"
+                onClick={() => {
+                  setEnteredNewItemTitle("");
+                  props.setActiveCreateSection(null);
+                }}
+              />
+              <input
+                type="text"
+                autoFocus
+                className="w-full p-4 bg-light rounded text-bold relative z-10"
+                value={enteredNewItemTitle}
+                onChange={(e) => setEnteredNewItemTitle(e.target.value)}
+              />
+            </form>
+          )}
+          {props.activeCreateSection !== props.title && (
+            <motion.button
+              layout="position"
+              initial={{ y: -25 }}
+              animate={{ y: 0 }}
+              className="bg-green-800 p-4 rounded shadow"
+              onClick={() => props.setActiveCreateSection(props.title)}
+            >
+              Create New
+            </motion.button>
+          )}
+        </ul>
       </div>
     </motion.section>
   );

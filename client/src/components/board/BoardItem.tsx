@@ -15,7 +15,7 @@ const BoardItem: React.FC<Props> = (props) => {
 
   return (
     <motion.li
-      layout
+      layout="position"
       ref={setNodeRef}
       {...attributes}
       {...listeners}
