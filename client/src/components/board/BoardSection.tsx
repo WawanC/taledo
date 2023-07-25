@@ -48,11 +48,13 @@ const BoardSection: React.FC<Props> = (props) => {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      document.documentElement.style.overflow = "hidden";
       await animate(scope.current, { opacity: 0 }, { duration: 0 });
       await animate("li", { opacity: 0, y: 50 }, { duration: 0 });
+      await animate("button", { opacity: 0, y: 50 }, { duration: 0 });
       await animate(scope.current, { opacity: 1 }, { duration: 0.4 });
-      await animate("li", { opacity: 1, y: 0 }, { duration: 0.25 });
+      animate("li", { opacity: 1, y: 0 }, { duration: 0.25 });
+      await animate("button", { opacity: 1, y: 0 }, { duration: 0.25 });
+
       document.documentElement.style.overflow = "auto";
     }, 0);
 
@@ -74,36 +76,37 @@ const BoardSection: React.FC<Props> = (props) => {
               <BoardItem key={item.id} item={item} section={props.title} />
             ))}
           </SortableContext>
-          {props.activeCreateSection === props.title && (
-            <form onSubmit={createNewItem}>
-              <div
-                className="absolute inset-0 bg-black opacity-0"
-                onClick={() => {
-                  setEnteredNewItemTitle("");
-                  props.setActiveCreateSection(null);
-                }}
-              />
-              <input
-                type="text"
-                autoFocus
-                className="w-full p-4 bg-light rounded text-bold 
-                relative z-10 outline-none"
-                value={enteredNewItemTitle}
-                onChange={(e) => setEnteredNewItemTitle(e.target.value)}
-              />
-            </form>
-          )}
-          {props.activeCreateSection !== props.title && (
+          <div className="relative">
+            {props.activeCreateSection === props.title && (
+              <form onSubmit={createNewItem} className="absolute inset-0">
+                <div
+                  className="fixed inset-0 bg-black opacity-0 z-10"
+                  onClick={() => {
+                    setEnteredNewItemTitle("");
+                    props.setActiveCreateSection(null);
+                  }}
+                />
+                <input
+                  type="text"
+                  autoFocus
+                  className="w-full p-4 bg-light rounded text-bold 
+                relative z-20 outline-none"
+                  value={enteredNewItemTitle}
+                  onChange={(e) => setEnteredNewItemTitle(e.target.value)}
+                />
+              </form>
+            )}
+            {/* {props.activeCreateSection !== props.title && ( */}
             <motion.button
               layout="position"
-              initial={{ y: -25 }}
-              animate={{ y: 0 }}
-              className="bg-green-800 p-4 rounded shadow text-light"
+              disabled={props.activeCreateSection === props.title}
+              className="bg-green-800 w-full p-4 rounded shadow text-light"
               onClick={() => props.setActiveCreateSection(props.title)}
             >
               Create New
             </motion.button>
-          )}
+            {/* )} */}
+          </div>
         </ul>
       </div>
     </motion.section>

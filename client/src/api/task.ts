@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateTaskPayload } from "../types/task";
+import { CreateTaskPayload, GetTasksResponse } from "../types/task";
 
 const taskApi = axios.create({
   baseURL: `/api/tasks`,
@@ -8,4 +8,9 @@ const taskApi = axios.create({
 
 export const createTaskApi = async (data: { payload: CreateTaskPayload }) => {
   await taskApi.post("/", data.payload);
+};
+
+export const getTasksApi = async () => {
+  const response = await taskApi.get<GetTasksResponse>("/");
+  return response.data.tasks;
 };

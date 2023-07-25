@@ -1,6 +1,13 @@
-import { useMutation } from "react-query";
-import { createTaskApi } from "../api/task";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { createTaskApi, getTasksApi } from "../api/task";
 
 export const useCreateTaskMutation = () => {
-  return useMutation(createTaskApi);
+  const queryClient = useQueryClient();
+  return useMutation(createTaskApi, {
+    onSettled: () => queryClient.invalidateQueries("tasks")
+  });
+};
+
+export const useGetTasksQuery = () => {
+  return useQuery("tasks", getTasksApi);
 };

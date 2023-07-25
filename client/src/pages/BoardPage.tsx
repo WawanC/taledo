@@ -4,11 +4,12 @@ import {
   DragOverlay,
   DragStartEvent
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
 import { Item } from "../types/item";
 import BoardSection from "../components/board/BoardSection";
-import { useCreateTaskMutation } from "../hooks/task";
+import { useCreateTaskMutation, useGetTasksQuery } from "../hooks/task";
+import Loader from "../components/Loader";
 
 const BoardPage: React.FC = () => {
   const [items, setItems] = useState<{
@@ -22,6 +23,7 @@ const BoardPage: React.FC = () => {
   const [activeCreateSection, setActiveCreateSection] = useState<string | null>(
     null
   );
+  const getTasks = useGetTasksQuery();
   const createTask = useCreateTaskMutation();
 
   const createNewItem = (sectionName: string, title: string) => {
@@ -132,6 +134,12 @@ const BoardPage: React.FC = () => {
     setActiveItem(item || null);
   };
 
+  useEffect(() => {
+    if (getTasks.data) {
+      setItems(getTasks.data);
+    }
+  }, [getTasks.data]);
+
   return (
     <DndContext onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
       <main
@@ -139,16 +147,20 @@ const BoardPage: React.FC = () => {
         flex gap-4 flex-1 md:justify-center
         p-4 py-8 overflow-x-auto"
       >
-        {Object.entries(items).map(([key, value]) => (
-          <BoardSection
-            key={key}
-            title={key}
-            items={value}
-            activeCreateSection={activeCreateSection}
-            setActiveCreateSection={setActiveCreateSection}
-            createNewItem={createNewItem}
-          />
-        ))}
+        {getTasks.isLoading ? (
+          <Loader />
+        ) : (
+          Object.entries(items).map(([key, value]) => (
+            <BoardSection
+              key={key}
+              title={key}
+              items={value}
+              activeCreateSection={activeCreateSection}
+              setActiveCreateSection={setActiveCreateSection}
+              createNewItem={createNewItem}
+            />
+          ))
+        )}
       </main>
       <DragOverlay>
         {activeItem && (
