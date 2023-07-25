@@ -13,11 +13,6 @@
   }
 }
 
-html,
-body {
-  min-width: fit-content;
-}
-
 #root {
   display: flex;
   flex-direction: column;

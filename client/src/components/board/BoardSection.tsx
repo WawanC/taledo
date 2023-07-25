@@ -62,7 +62,8 @@ const BoardSection: React.FC<Props> = (props) => {
   return (
     <motion.section
       ref={scope}
-      className="bg-semi_light dark:bg-bold md:w-1/4 w-[90vw] rounded"
+      className="bg-semi_light dark:bg-bold rounded
+      md:w-1/4 w-[90vw] flex-shrink-0"
     >
       <div ref={setNodeRef} className="flex flex-col gap-4 p-4 h-full">
         <h1 className="text-2xl font-bold text-center">{props.title}</h1>

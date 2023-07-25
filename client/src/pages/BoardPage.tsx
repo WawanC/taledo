@@ -128,9 +128,9 @@ const BoardPage: React.FC = () => {
   return (
     <DndContext onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
       <main
-        className="bg-light dark:bg-semi_bold flex-1 w-fit md:w-auto
-        flex justify-center gap-4 
-        p-4 py-8"
+        className="bg-light dark:bg-semi_bold 
+        flex gap-4 flex-1
+        p-4 py-8 overflow-x-scroll"
       >
         {Object.entries(items).map(([key, value]) => (
           <BoardSection

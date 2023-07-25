@@ -19,7 +19,7 @@ const BoardItem: React.FC<Props> = (props) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="p-4 bg-white dark:bg-black rounded text-center shadow"
+      className="p-4 bg-white dark:bg-black rounded text-center shadow touch-none"
     >
       {props.item.title}
     </motion.li>
