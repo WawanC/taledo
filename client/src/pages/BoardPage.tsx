@@ -21,6 +21,7 @@ const BoardPage: React.FC = () => {
   const [activeCreateSection, setActiveCreateSection] = useState<string | null>(
     null
   );
+
   const createNewItem = (sectionName: string, title: string) => {
     const newItem: Item = {
       id: Math.random().toString(),

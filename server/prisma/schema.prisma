@@ -30,12 +30,23 @@ model User {
   google String?
   todos Todo[]
   notes Note[]
+  tasks Task[]
 }
 
 model Note {
   @@map("notes")
   id String @id @default(uuid())
   content String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Task {
+  @@map("tasks")
+  id String @id @default(uuid())
+  title String
+  rank String
+  section String
   userId String
   user User @relation(fields: [userId], references: [id])
 }

@@ -15,6 +15,7 @@ import initializePassport from "./passport/serializer";
 import noteRouter from "./routers/note";
 import RedisStore from "connect-redis";
 import { createClient } from "redis";
+import taskRouter from "./routers/task";
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ const port = process.env.PORT || 8000;
 app.use("/api/todos", todoRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/notes", noteRouter);
+app.use("/api/tasks", taskRouter);
 
 app.use("*", (req, res) =>
   res.sendFile(path.join(__dirname, "..", "..", "client", "dist", "index.html"))
