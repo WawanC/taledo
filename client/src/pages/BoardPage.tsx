@@ -128,7 +128,7 @@ const BoardPage: React.FC = () => {
   return (
     <DndContext onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
       <main
-        className="dark:bg-semi_bold flex-1 
+        className="bg-light dark:bg-semi_bold flex-1 w-fit md:w-auto
         flex justify-center gap-4 
         p-4 py-8"
       >
@@ -145,7 +145,7 @@ const BoardPage: React.FC = () => {
       </main>
       <DragOverlay>
         {activeItem && (
-          <div className="p-4 bg-black rounded text-center shadow cursor-grab">
+          <div className="p-4 bg-white dark:bg-black rounded text-center shadow cursor-grab">
             {activeItem.title}
           </div>
         )}

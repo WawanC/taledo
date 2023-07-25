@@ -60,10 +60,13 @@ const BoardSection: React.FC<Props> = (props) => {
   }, [animate, scope]);
 
   return (
-    <motion.section ref={scope} className="bg-bold w-1/4 rounded">
-      <div ref={setNodeRef} className="flex flex-col gap-4 p-4 pb-40 h-full">
+    <motion.section
+      ref={scope}
+      className="bg-semi_light dark:bg-bold md:w-1/4 w-[90vw] rounded"
+    >
+      <div ref={setNodeRef} className="flex flex-col gap-4 p-4 h-full">
         <h1 className="text-2xl font-bold text-center">{props.title}</h1>
-        <hr />
+        <hr className="border-bold dark:border-light" />
         <ul className="flex flex-col gap-4">
           <SortableContext items={sortedItems}>
             {sortedItems.map((item) => (
@@ -94,7 +97,7 @@ const BoardSection: React.FC<Props> = (props) => {
               layout="position"
               initial={{ y: -25 }}
               animate={{ y: 0 }}
-              className="bg-green-800 p-4 rounded shadow"
+              className="bg-green-800 p-4 rounded shadow text-light"
               onClick={() => props.setActiveCreateSection(props.title)}
             >
               Create New
