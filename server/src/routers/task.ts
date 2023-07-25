@@ -14,4 +14,6 @@ taskRouter.post(
   taskController.createTask
 );
 
+taskRouter.get("/", isAuth, taskController.getTasks);
+
 export default taskRouter;

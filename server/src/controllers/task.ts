@@ -45,3 +45,28 @@ export const createTask: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getTasks: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
+    const tasksData = await prisma.task.findMany({
+      where: {
+        userId: req.user.id
+      }
+    });
+
+    const tasks = {
+      Plan: tasksData.filter((task) => task.section === "Plan"),
+      Process: tasksData.filter((task) => task.section === "Process"),
+      Done: tasksData.filter((task) => task.section === "Done")
+    };
+
+    return res.status(200).json({
+      message: "Create task success",
+      tasks
+    });
+  } catch (error) {
+    next(error);
+  }
+};
