@@ -90,7 +90,7 @@ export const updateTodo: RequestHandler = async (req, res, next) => {
         where: { userId: req.user.id },
         orderBy: { rank: "asc" }
       });
-      if (todos.length > 1) {
+      if (todos.length > 1 && req.body.order <= todos.length) {
         rank = generateLexorank(todos, todo.rank, req.body.order);
       }
     }

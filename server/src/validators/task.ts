@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 export const createTaskValidator = [
   body("title")
@@ -17,4 +17,19 @@ export const createTaskValidator = [
     .trim()
     .isLength({ min: 1 })
     .withMessage("Task section min length is 1")
+];
+
+export const updateTaskValidator = [
+  param("taskId").notEmpty().withMessage("Task id is required"),
+  body("title")
+    .optional()
+    .isString()
+    .withMessage("Task title must be a string")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Task title min length is 1"),
+  body("order")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Task order minimum value is 1")
 ];

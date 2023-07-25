@@ -1,8 +1,7 @@
-import { Todo } from "@prisma/client";
 import { LexoRank } from "lexorank";
 import LexoRankBucket from "lexorank/lib/lexoRank/lexoRankBucket";
 
-export const generateLexorank = (todos: Todo[], targetRank: string, order: number) => {
+export const generateLexorank = (todos: any[], targetRank: string, order: number) => {
   let rank = undefined;
   if (order === 1) {
     rank = LexoRank.parse(todos[0].rank).genPrev();
