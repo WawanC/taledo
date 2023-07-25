@@ -129,7 +129,7 @@ const BoardPage: React.FC = () => {
     <DndContext onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
       <main
         className="bg-light dark:bg-semi_bold 
-        flex gap-4 flex-1 justify-center
+        flex gap-4 flex-1 md:justify-center
         p-4 py-8 overflow-x-auto"
       >
         {Object.entries(items).map(([key, value]) => (
