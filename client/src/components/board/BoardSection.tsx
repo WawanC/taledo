@@ -65,7 +65,7 @@ const BoardSection: React.FC<Props> = (props) => {
       className="bg-semi_light dark:bg-bold rounded
       md:w-1/4 w-[90vw] flex-shrink-0"
     >
-      <div ref={setNodeRef} className="flex flex-col gap-4 p-4 h-full">
+      <div ref={setNodeRef} className="flex flex-col gap-4 p-4 pb-32 h-full">
         <h1 className="text-2xl font-bold text-center">{props.title}</h1>
         <hr className="border-bold dark:border-light" />
         <ul className="flex flex-col gap-4">
