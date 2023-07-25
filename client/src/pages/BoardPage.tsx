@@ -8,6 +8,7 @@ import { useState } from "react";
 import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
 import { Item } from "../types/item";
 import BoardSection from "../components/board/BoardSection";
+import { useCreateTaskMutation } from "../hooks/task";
 
 const BoardPage: React.FC = () => {
   const [items, setItems] = useState<{
@@ -21,6 +22,7 @@ const BoardPage: React.FC = () => {
   const [activeCreateSection, setActiveCreateSection] = useState<string | null>(
     null
   );
+  const createTask = useCreateTaskMutation();
 
   const createNewItem = (sectionName: string, title: string) => {
     const newItem: Item = {
@@ -32,6 +34,10 @@ const BoardPage: React.FC = () => {
       const newItems = { ...items };
       newItems[sectionName].push(newItem);
       return newItems;
+    });
+
+    createTask.mutate({
+      payload: { title: title.trim(), section: sectionName.trim() }
     });
   };
 
