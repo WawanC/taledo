@@ -32,11 +32,7 @@ export const useUpdateTodoMutation = () => {
 
         if (todoIdx < 0) return prev;
 
-        const newRank = moveRank(
-          prev,
-          todos[todoIdx].rank,
-          variables.payload.order
-        );
+        const newRank = moveRank(prev, variables.payload.order);
 
         if (!newRank) return prev;
 

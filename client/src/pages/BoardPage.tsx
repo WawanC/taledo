@@ -2,41 +2,49 @@ import {
   DndContext,
   DragEndEvent,
   DragOverlay,
-  DragStartEvent
+  DragStartEvent,
+  closestCenter
 } from "@dnd-kit/core";
-import { useEffect, useState } from "react";
-import { genNewRank, transferRank, moveRank } from "../utils/lexorank";
-import { Item } from "../types/item";
+import { useState } from "react";
+import { genNewRank, moveRank } from "../utils/lexorank";
 import BoardSection from "../components/board/BoardSection";
-import { useCreateTaskMutation, useGetTasksQuery } from "../hooks/task";
+import {
+  useCreateTaskMutation,
+  useGetTasksQuery,
+  useUpdateTaskMutation
+} from "../hooks/task";
 import Loader from "../components/Loader";
+import { Task, Tasks } from "../types/task";
+import { useQueryClient } from "react-query";
 
 const BoardPage: React.FC = () => {
-  const [items, setItems] = useState<{
-    [key: string]: Item[];
-  }>({
-    Plan: [],
-    Process: [],
-    Done: []
-  });
-  const [activeItem, setActiveItem] = useState<Item | null>(null);
+  // const [items, setItems] = useState<Tasks>({
+  //   Plan: [],
+  //   Process: [],
+  //   Done: []
+  // });
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [activeCreateSection, setActiveCreateSection] = useState<string | null>(
     null
   );
   const getTasks = useGetTasksQuery();
   const createTask = useCreateTaskMutation();
+  const updateTask = useUpdateTaskMutation();
+  const queryClient = useQueryClient();
 
-  const createNewItem = (sectionName: string, title: string) => {
-    const newItem: Item = {
-      id: Math.random().toString(),
-      title: title.trim(),
-      rank: genNewRank(items[sectionName])
-    };
-    setItems((items) => {
-      const newItems = { ...items };
-      newItems[sectionName].push(newItem);
-      return newItems;
-    });
+  const createNewItem = (sectionName: keyof Tasks, title: string) => {
+    if (!getTasks.data) return;
+    // const newItem: Task = {
+    //   id: Math.random().toString(),
+    //   title: title.trim(),
+    //   section: sectionName,
+    //   rank: genNewRank(getTasks.data[sectionName])
+    // };
+    // setItems((items) => {
+    //   const newItems = { ...items };
+    //   newItems[sectionName].push(newItem);
+    //   return newItems;
+    // });
 
     createTask.mutate({
       payload: { title: title.trim(), section: sectionName.trim() }
@@ -44,104 +52,96 @@ const BoardPage: React.FC = () => {
   };
 
   const dragEndHandler = (e: DragEndEvent) => {
-    const initialSection = e.active.data.current?.section as string;
-
     const targetType = e.over?.data.current?.type as string;
 
-    const selectedItem = activeItem;
+    const selectedItem = Object.assign({}, activeTask);
     if (!selectedItem) return;
 
+    const items = getTasks.data;
+
+    if (!items) return;
+
     if (targetType === "droppable") {
-      // Drop to different empty section
+      // Drop to different empty section (droppables)
+      console.log("droppable");
       const targetSection = e.over?.id as string;
       if (!targetSection) return;
 
-      setItems((items) => {
-        const newItems = { ...items };
+      selectedItem.rank = genNewRank(items[targetSection as keyof Tasks]);
 
-        const newRank =
-          items[targetSection].length > 0
-            ? moveRank(
-                newItems[targetSection],
-                selectedItem.rank,
-                newItems[targetSection].length - 1
-              )
-            : genNewRank(items[targetSection]);
-        selectedItem.rank = newRank;
+      items[targetSection as keyof Tasks].push(selectedItem);
+      queryClient.setQueryData<Tasks>("tasks", () => items);
 
-        newItems[targetSection].push(selectedItem);
-        return newItems;
+      updateTask.mutate({
+        taskId: selectedItem.id,
+        payload: {
+          rank: selectedItem.rank,
+          section: targetSection
+        }
       });
     } else if (targetType === "item") {
-      const targetSection = e.over?.data.current?.section as string;
+      // Drop to item
+      console.log("item");
+      const targetSection: string =
+        e.over?.data.current?.section || selectedItem.section;
       if (!targetSection) return;
 
-      if (initialSection !== targetSection) {
-        // Drop to different item in different section
-        setItems((items) => {
-          const newItems = { ...items };
+      const newIndex = items[targetSection as keyof Tasks].findIndex(
+        (task) => task.id === (e.over?.id as string)
+      );
 
-          const newIndex = newItems[targetSection].findIndex(
-            (item) => item.id === (e.over?.id as string)
-          );
+      selectedItem.rank = moveRank(
+        items[targetSection as keyof Tasks],
+        newIndex
+      );
 
-          if (newIndex < 0) return newItems;
+      items[targetSection as keyof Tasks].push(selectedItem);
+      queryClient.setQueryData<Tasks>("tasks", () => items);
 
-          const newRank = transferRank(newItems[targetSection], newIndex);
-
-          selectedItem.rank = newRank;
-          newItems[targetSection].push(selectedItem);
-
-          return newItems;
-        });
-      } else {
-        // Drop to different item on same section
-        setItems((items) => {
-          const newItems = { ...items };
-          const oldIndex = newItems[targetSection].findIndex(
-            (item) => item.id === (e.active.id as string)
-          );
-          const newIndex = newItems[targetSection].findIndex(
-            (item) => item.id === (e.over?.id as string)
-          );
-          if (oldIndex < 0 || newIndex < 0 || oldIndex === newIndex)
-            return newItems;
-
-          const newRank = moveRank(
-            newItems[initialSection],
-            newItems[initialSection][oldIndex].rank,
-            newIndex
-          );
-          newItems[initialSection][oldIndex].rank = newRank;
-
-          return newItems;
-        });
-      }
+      updateTask.mutate({
+        taskId: selectedItem.id,
+        payload: {
+          rank: selectedItem.rank,
+          section: targetSection
+        }
+      });
     }
-    setActiveItem(null);
+
+    setActiveTask(null);
   };
 
   const dragStartHandler = (e: DragStartEvent) => {
-    const item = items[e.active.data.current?.section].find(
-      (item) => item.id === e.active.id
-    );
-    setItems((items) => {
-      items[e.active.data.current?.section] = items[
-        e.active.data.current?.section
-      ].filter((item) => item.id !== e.active.id);
-      return items;
+    if (!getTasks.data) return;
+    const section = e.active.data.current?.section as keyof Tasks;
+    if (!section) return;
+    const task = getTasks.data[section].find((task) => task.id === e.active.id);
+    //   tasks[section] = tasks[section].filter((item) => item.id !== e.active.id);
+    //   return tasks;
+    // });
+
+    queryClient.setQueryData<Tasks>("tasks", (prev) => {
+      const temp = Object.assign({}, prev);
+      temp[section as keyof Tasks] = temp[section as keyof Tasks].filter(
+        (task) => task.id !== e.active.id
+      );
+      return temp;
     });
-    setActiveItem(item || null);
+    setActiveTask(task || null);
   };
 
-  useEffect(() => {
-    if (getTasks.data) {
-      setItems(getTasks.data);
-    }
-  }, [getTasks.data]);
+  // useEffect(() => {
+  //   console.log("data changed");
+  //   if (getTasks.data) {
+  //     setItems(getTasks.data);
+  //   }
+  // }, [getTasks.data]);
 
   return (
-    <DndContext onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
+    <DndContext
+      onDragStart={dragStartHandler}
+      onDragEnd={dragEndHandler}
+      collisionDetection={closestCenter}
+    >
       <main
         className="bg-light dark:bg-semi_bold 
         flex gap-4 flex-1 md:justify-center
@@ -150,7 +150,8 @@ const BoardPage: React.FC = () => {
         {getTasks.isLoading ? (
           <Loader />
         ) : (
-          Object.entries(items).map(([key, value]) => (
+          getTasks.data &&
+          Object.entries(getTasks.data).map(([key, value]) => (
             <BoardSection
               key={key}
               title={key}
@@ -163,9 +164,9 @@ const BoardPage: React.FC = () => {
         )}
       </main>
       <DragOverlay>
-        {activeItem && (
+        {activeTask && (
           <div className="p-4 bg-white dark:bg-black rounded text-center shadow cursor-grab">
-            {activeItem.title}
+            {activeTask.title}
           </div>
         )}
       </DragOverlay>

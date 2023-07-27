@@ -28,8 +28,5 @@ export const updateTaskValidator = [
     .trim()
     .isLength({ min: 1 })
     .withMessage("Task title min length is 1"),
-  body("order")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Task order minimum value is 1")
+  body("rank").optional().isString().withMessage("Task rank must be a string")
 ];

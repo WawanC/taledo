@@ -94,22 +94,23 @@ export const updateTask: RequestHandler = async (req, res, next) => {
       });
     }
 
-    let rank = undefined;
+    // let rank = undefined;
 
-    if (req.body.order) {
-      const tasks = await prisma.task.findMany({
-        where: { userId: req.user.id, section: task.section },
-        orderBy: { rank: "asc" }
-      });
-      if (tasks.length > 1 && req.body.order <= tasks.length) {
-        rank = generateLexorank(tasks, task.rank, req.body.order);
-      }
-    }
+    // if (req.body.order) {
+    //   const tasks = await prisma.task.findMany({
+    //     where: { userId: req.user.id, section: task.section },
+    //     orderBy: { rank: "asc" }
+    //   });
+    //   if (tasks.length > 1 && req.body.order <= tasks.length) {
+    //     rank = generateLexorank(tasks, task.rank, req.body.order);
+    //   }
+    // }
 
     await prisma.task.update({
       data: {
         title: req.body.title,
-        rank: rank?.toString() || undefined
+        rank: req.body.rank,
+        section: req.body.section
       },
       where: { id: task.id }
     });

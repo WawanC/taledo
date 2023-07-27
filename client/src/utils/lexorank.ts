@@ -1,24 +1,22 @@
 import { LexoRank } from "lexorank";
 
-export const moveRank = (items: any[], targetRank: string, order: number) => {
-  console.log("order:", order);
-  if (order === items.length - 1) {
-    // In behind
-    return LexoRank.parse(items[items.length - 1].rank)
-      .genNext()
-      .toString();
-  } else if (targetRank > items[order].rank) {
-    // Todo below target
-    const rankTarget = LexoRank.parse(items[order].rank);
-    const rankBefore = LexoRank.parse(items[order - 1].rank);
-    return rankBefore.between(rankTarget).toString();
-  } else if (targetRank < items[order].rank) {
-    // Todo above target
-    const rankTarget = LexoRank.parse(items[order].rank);
-    const rankAfter = LexoRank.parse(items[order + 1].rank);
-    return rankTarget.between(rankAfter).toString();
+const sortByRank = (tasks: any[]) => {
+  return tasks.sort((a, b) => {
+    if (a.rank < b.rank) return -1;
+    if (a.rank > b.rank) return 1;
+    return 0;
+  });
+};
+
+export const moveRank = (items: any[], idx: number) => {
+  const sortedRank = sortByRank(items);
+  if (idx === 0) {
+    return LexoRank.parse(sortedRank[0].rank).genPrev().toString();
+  } else {
+    const rankBefore = LexoRank.parse(sortedRank[idx - 1].rank);
+    const rankAfter = LexoRank.parse(sortedRank[idx].rank);
+    return rankBefore.between(rankAfter).toString();
   }
-  return targetRank;
 };
 
 export const transferRank = (items: any[], idx: number) => {
@@ -29,9 +27,10 @@ export const transferRank = (items: any[], idx: number) => {
 };
 
 export const genNewRank = (items: any[]) => {
-  if (items.length === 0) {
+  const sortedRank = sortByRank(items);
+  if (sortedRank.length === 0) {
     return LexoRank.min().genNext().toString();
   }
-  const prevRank = items[items.length - 1].rank;
+  const prevRank = sortedRank[sortedRank.length - 1].rank;
   return LexoRank.parse(prevRank).genNext().toString();
 };

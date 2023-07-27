@@ -10,13 +10,14 @@ import {
 } from "react";
 import { Item } from "../../types/item";
 import BoardItem from "./BoardItem";
+import { Tasks } from "../../types/task";
 
 type Props = {
   title: string;
   items: Item[];
   activeCreateSection: string | null;
   setActiveCreateSection: Dispatch<SetStateAction<string | null>>;
-  createNewItem: (sectionName: string, title: string) => void;
+  createNewItem: (sectionName: keyof Tasks, title: string) => void;
 };
 
 const BoardSection: React.FC<Props> = (props) => {
@@ -35,7 +36,7 @@ const BoardSection: React.FC<Props> = (props) => {
       props.setActiveCreateSection(null);
       return;
     }
-    props.createNewItem(props.title, enteredTitle);
+    props.createNewItem(props.title as keyof Tasks, enteredTitle);
     setEnteredNewItemTitle("");
     props.setActiveCreateSection(null);
   };
