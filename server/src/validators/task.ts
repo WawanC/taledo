@@ -30,3 +30,7 @@ export const updateTaskValidator = [
     .withMessage("Task title min length is 1"),
   body("rank").optional().isString().withMessage("Task rank must be a string")
 ];
+
+export const deleteTaskValidator = [
+  param("taskId").notEmpty().withMessage("Task id is required")
+];

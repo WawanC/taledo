@@ -122,3 +122,35 @@ export const updateTask: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteTask: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) throw new Error("UNAUTHORIZED");
+
+    const task = await prisma.task.findUnique({
+      where: { id: req.params.taskId }
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        type: "NOT_FOUND",
+        message: "Task not found"
+      });
+    }
+
+    if (task.userId !== req.user.id) {
+      return res.status(401).json({
+        type: "UNAUTHORIZED",
+        message: "Unauthorized Access"
+      });
+    }
+
+    await prisma.task.delete({ where: { id: task.id } });
+
+    return res.status(200).json({
+      message: "Delete task success"
+    });
+  } catch (error) {
+    next(error);
+  }
+};
