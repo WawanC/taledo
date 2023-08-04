@@ -1,10 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createTaskApi, getTasksApi, updateTaskApi } from "../api/task";
+import {
+  createTaskApi,
+  deleteTaskApi,
+  getTasksApi,
+  updateTaskApi
+} from "../api/task";
 
 export const useCreateTaskMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(createTaskApi, {
-    onSettled: () => queryClient.invalidateQueries("tasks"),
+    onSettled: () => queryClient.invalidateQueries("tasks")
   });
 };
 
@@ -17,6 +22,16 @@ export const useUpdateTaskMutation = () => {
   return useMutation(updateTaskApi, {
     onSettled: () => {
       queryClient.invalidateQueries("tasks");
-    },
+    }
+  });
+};
+
+export const useDeleteTaskMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteTaskApi, {
+    onSettled: () => {
+      queryClient.invalidateQueries("tasks");
+    }
   });
 };

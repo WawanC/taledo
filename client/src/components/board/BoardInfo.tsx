@@ -6,12 +6,12 @@ import { useMediaQuery } from "react-responsive";
 const BoardInfo: FC = () => {
   const setBoardInfoOpen = useAppState((state) => state.setBoardInfoOpen);
   const isDesktop = useMediaQuery({
-    query: "(min-width: 768px)",
+    query: "(min-width: 768px)"
   });
 
   const boardVariants: Variants = {
     after: isDesktop ? { x: 0 } : { y: 0 },
-    before: isDesktop ? { x: "100%" } : { y: "100%" },
+    before: isDesktop ? { x: "100%" } : { y: "100%" }
   };
 
   const closeBoardInfo: MouseEventHandler = useCallback(
@@ -36,7 +36,7 @@ const BoardInfo: FC = () => {
         animate={"after"}
         exit={"before"}
         transition={{
-          bounce: 0,
+          bounce: 0
         }}
       >
         <h1 className={"font-bold text-4xl text-center"}>Task Title</h1>

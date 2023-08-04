@@ -4,6 +4,7 @@ import { Item } from "../../types/item";
 import useAppState from "../../stores/app.ts";
 import { MouseEventHandler, useCallback } from "react";
 import TrashIcon from "../../icons/TrashIcon.tsx";
+import { useDeleteTaskMutation } from "../../hooks/task.tsx";
 
 type Props = {
   item: Item;
@@ -16,16 +17,20 @@ const BoardItem: React.FC<Props> = (props) => {
     data: { type: "item", section: props.section }
   });
   const setBoardInfoOpen = useAppState((state) => state.setBoardInfoOpen);
+  const deleteTask = useDeleteTaskMutation();
 
   const openBoardInfo = useCallback(() => {
     setBoardInfoOpen(true);
   }, [setBoardInfoOpen]);
 
-  const deleteTodoHandler: MouseEventHandler = useCallback((e) => {
-    e.stopPropagation();
+  const deleteTodoHandler: MouseEventHandler = useCallback(
+    (e) => {
+      e.stopPropagation();
 
-    console.log("delete...");
-  }, []);
+      deleteTask.mutate(props.item.id);
+    },
+    [deleteTask, props.item.id]
+  );
 
   return (
     <motion.li

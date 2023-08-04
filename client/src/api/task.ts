@@ -2,12 +2,12 @@ import axios from "axios";
 import {
   CreateTaskPayload,
   GetTasksResponse,
-  UpdateTaskPayload,
+  UpdateTaskPayload
 } from "../types/task";
 
 const taskApi = axios.create({
   baseURL: `/api/tasks`,
-  withCredentials: true,
+  withCredentials: true
 });
 
 export const createTaskApi = async (data: { payload: CreateTaskPayload }) => {
@@ -24,4 +24,8 @@ export const updateTaskApi = async (data: {
   payload: UpdateTaskPayload;
 }) => {
   await taskApi.put(`/${data.taskId}`, data.payload);
+};
+
+export const deleteTaskApi = async (taskId: string) => {
+  await taskApi.delete(`/${taskId}`);
 };
