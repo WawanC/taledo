@@ -2,12 +2,12 @@ import axios from "axios";
 import {
   CreateTaskPayload,
   GetTasksResponse,
-  UpdateTaskPayload
+  UpdateTaskPayload,
 } from "../types/task";
 
 const taskApi = axios.create({
   baseURL: `/api/tasks`,
-  withCredentials: true
+  withCredentials: true,
 });
 
 export const createTaskApi = async (data: { payload: CreateTaskPayload }) => {
@@ -23,7 +23,5 @@ export const updateTaskApi = async (data: {
   taskId: string;
   payload: UpdateTaskPayload;
 }) => {
-  console.log("new section:", data.payload.section);
-  console.log("new rank:", data.payload.rank);
   await taskApi.put(`/${data.taskId}`, data.payload);
 };
