@@ -60,7 +60,7 @@ const BoardInfo: FC = () => {
       />
       <motion.section
         className={`fixed bottom-0 w-screen h-fit md:right-0 md:w-[50vw] md:h-screen 
-          bg-bold z-20 md:py-16 md:px-24 p-8 flex items-center`}
+          bg-light dark:bg-bold z-20 md:py-16 md:px-24 p-8 flex items-center`}
         variants={boardVariants}
         initial={"before"}
         animate={"after"}
@@ -78,7 +78,7 @@ const BoardInfo: FC = () => {
             <input
               type="text"
               className="p-2 w-2/3 bg-transparent 
-              border-b border-b-light outline-none"
+              border-b border-b-bold dark:border-b-light outline-none"
               value={boardTitle}
               onChange={(e) => setBoardTitle(e.target.value)}
             />
