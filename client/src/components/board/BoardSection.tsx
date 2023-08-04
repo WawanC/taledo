@@ -8,13 +8,12 @@ import {
   useEffect,
   useState
 } from "react";
-import { Item } from "../../types/item";
 import BoardItem from "./BoardItem";
-import { Tasks } from "../../types/task";
+import { Task, Tasks } from "../../types/task";
 
 type Props = {
   title: string;
-  items: Item[];
+  items: Task[];
   activeCreateSection: string | null;
   setActiveCreateSection: Dispatch<SetStateAction<string | null>>;
   createNewItem: (sectionName: keyof Tasks, title: string) => void;
@@ -74,7 +73,7 @@ const BoardSection: React.FC<Props> = (props) => {
         <ul className="flex flex-col gap-4">
           <SortableContext items={sortedItems}>
             {sortedItems.map((item) => (
-              <BoardItem key={item.id} item={item} section={props.title} />
+              <BoardItem key={item.id} task={item} />
             ))}
           </SortableContext>
           <div className="relative">

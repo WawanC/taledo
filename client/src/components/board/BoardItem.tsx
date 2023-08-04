@@ -1,35 +1,34 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { motion } from "framer-motion";
-import { Item } from "../../types/item";
 import useAppState from "../../stores/app.ts";
 import { MouseEventHandler, useCallback } from "react";
 import TrashIcon from "../../icons/TrashIcon.tsx";
 import { useDeleteTaskMutation } from "../../hooks/task.tsx";
+import { Task } from "../../types/task.ts";
 
 type Props = {
-  item: Item;
-  section: string;
+  task: Task;
 };
 
 const BoardItem: React.FC<Props> = (props) => {
   const { setNodeRef, attributes, listeners } = useSortable({
-    id: props.item.id,
-    data: { type: "item", section: props.section }
+    id: props.task.id,
+    data: { type: "item", section: props.task.section }
   });
-  const setBoardInfoOpen = useAppState((state) => state.setBoardInfoOpen);
+  const setBoardInfo = useAppState((state) => state.setBoardInfo);
   const deleteTask = useDeleteTaskMutation();
 
   const openBoardInfo = useCallback(() => {
-    setBoardInfoOpen(true);
-  }, [setBoardInfoOpen]);
+    setBoardInfo(props.task);
+  }, [setBoardInfo, props.task]);
 
   const deleteTodoHandler: MouseEventHandler = useCallback(
     (e) => {
       e.stopPropagation();
 
-      deleteTask.mutate(props.item.id);
+      deleteTask.mutate(props.task.id);
     },
-    [deleteTask, props.item.id]
+    [deleteTask, props.task.id]
   );
 
   return (
@@ -42,12 +41,12 @@ const BoardItem: React.FC<Props> = (props) => {
       relative rounded text-center shadow touch-none"
       onClick={openBoardInfo}
     >
-      <span>{props.item.title}</span>
+      <span>{props.task.title}</span>
       <div
         className="absolute top-0 bottom-0 right-0 
       flex items-center px-4"
       >
-        <button onClick={deleteTodoHandler}>
+        <button onClick={deleteTodoHandler} className="p-2 rounded-full">
           <TrashIcon className="w-6 h-6 z-10" />
         </button>
       </div>

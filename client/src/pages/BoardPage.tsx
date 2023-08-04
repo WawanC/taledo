@@ -6,7 +6,7 @@ import {
   DragStartEvent,
   PointerSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from "@dnd-kit/core";
 import { useState } from "react";
 import { genNewRank, moveRank } from "../utils/lexorank";
@@ -14,7 +14,7 @@ import BoardSection from "../components/board/BoardSection";
 import {
   useCreateTaskMutation,
   useGetTasksQuery,
-  useUpdateTaskMutation,
+  useUpdateTaskMutation
 } from "../hooks/task";
 import Loader from "../components/Loader";
 import { Task, Tasks } from "../types/task";
@@ -35,17 +35,17 @@ const BoardPage: React.FC = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 10,
-      },
+        distance: 10
+      }
     })
   );
-  const isInfoOpen = useAppState((state) => state.isBoardInfoOpen);
+  const boardInfo = useAppState((state) => state.boardInfo);
 
   const createNewItem = (sectionName: keyof Tasks, title: string) => {
     if (!getTasks.data) return;
 
     createTask.mutate({
-      payload: { title: title.trim(), section: sectionName.trim() },
+      payload: { title: title.trim(), section: sectionName.trim() }
     });
   };
 
@@ -73,8 +73,8 @@ const BoardPage: React.FC = () => {
         taskId: selectedItem.id,
         payload: {
           rank: selectedItem.rank,
-          section: targetSection,
-        },
+          section: targetSection
+        }
       });
     } else if (targetType === "item") {
       // Drop to item
@@ -98,8 +98,8 @@ const BoardPage: React.FC = () => {
         taskId: selectedItem.id,
         payload: {
           rank: selectedItem.rank,
-          section: targetSection,
-        },
+          section: targetSection
+        }
       });
     }
 
@@ -129,7 +129,7 @@ const BoardPage: React.FC = () => {
       collisionDetection={closestCenter}
       sensors={sensors}
     >
-      <AnimatePresence>{isInfoOpen && <BoardInfo />}</AnimatePresence>
+      <AnimatePresence>{boardInfo && <BoardInfo />}</AnimatePresence>
       <main
         className="bg-light dark:bg-semi_bold
         flex gap-4 flex-1 md:justify-center
