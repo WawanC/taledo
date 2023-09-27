@@ -17,8 +17,10 @@ const NavBar: React.FC = () => {
 
   const todayDate = useMemo(
     () =>
-      new Date().toLocaleDateString("us", {
-        dateStyle: "full"
+      new Date().toLocaleDateString("id", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
       }),
     []
   );

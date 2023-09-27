@@ -1,25 +1,24 @@
 import { motion } from "framer-motion";
 import { useLogoutUserMutation } from "../../hooks/auth";
 import LogoutIcon from "../../icons/LogoutIcon";
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 import DarkModeToggle from "../DarkModeToggle";
 import AppLogo from "../AppLogo";
 import { Link } from "react-router-dom";
 import AccountIcon from "../../icons/AccountIcon";
-import NoteIcon from "../../icons/NoteIcon";
 import TodoIcon from "../../icons/TodoIcon";
 
 interface Props {
   onClose: () => void;
 }
 
-const SideNav: React.FC<Props> = (props) => {
+const SideNav: FC<Props> = (props) => {
   const logoutUser = useLogoutUserMutation();
 
   const todayDate = useMemo(
     () =>
       new Date().toLocaleDateString("us", {
-        dateStyle: "long"
+        dateStyle: "long",
       }),
     []
   );
@@ -54,14 +53,14 @@ const SideNav: React.FC<Props> = (props) => {
             <TodoIcon className="w-8 h-8" />
             <span>My Todos</span>
           </Link>
-          <Link
-            to={"/my-notes"}
-            className="flex text-xl gap-2 items-center"
-            onClick={() => props.onClose()}
-          >
-            <NoteIcon className="w-8 h-8" />
-            <span>My Notes</span>
-          </Link>
+          {/*<Link*/}
+          {/*  to={"/my-notes"}*/}
+          {/*  className="flex text-xl gap-2 items-center"*/}
+          {/*  onClick={() => props.onClose()}*/}
+          {/*>*/}
+          {/*  <NoteIcon className="w-8 h-8" />*/}
+          {/*  <span>My Notes</span>*/}
+          {/*</Link>*/}
           <Link
             to={"/account"}
             className="flex text-xl gap-2 items-center"

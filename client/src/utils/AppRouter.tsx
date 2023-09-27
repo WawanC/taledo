@@ -1,13 +1,10 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import PageLayout from "../components/layouts/PageLayout";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import PrivateRoute from "../guards/PrivateRoute";
 import PublicRoute from "../guards/PublicRoute";
 import AccountPage from "../pages/AccountPage";
-import NotesPage from "../pages/NotesPage";
-import MyNotesPage from "../pages/MyNotesPage";
-import NoteDetailPage from "../pages/NoteDetailPage";
 import BoardPage from "../pages/BoardPage";
 
 const AppRouter = createBrowserRouter([
@@ -19,21 +16,21 @@ const AppRouter = createBrowserRouter([
         children: [
           { path: "/dashboard", element: <BoardPage /> },
           { path: "/account", element: <AccountPage /> },
-          { path: "/my-notes", element: <MyNotesPage /> },
-          { path: "/new-note", element: <NotesPage /> },
-          { path: "/note/:noteId", element: <NoteDetailPage /> }
-        ]
+          // { path: "/my-notes", element: <MyNotesPage /> },
+          // { path: "/new-note", element: <NotesPage /> },
+          // { path: "/note/:noteId", element: <NoteDetailPage /> }
+        ],
       },
       {
         element: <PublicRoute />,
         children: [
           { path: "/", element: <Navigate to={"/dashboard"} /> },
           { path: "/register", element: <RegisterPage /> },
-          { path: "/login", element: <LoginPage /> }
-        ]
-      }
-    ]
-  }
+          { path: "/login", element: <LoginPage /> },
+        ],
+      },
+    ],
+  },
 ]);
 
 export default AppRouter;

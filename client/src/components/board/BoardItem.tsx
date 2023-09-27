@@ -13,7 +13,7 @@ type Props = {
 const BoardItem: React.FC<Props> = (props) => {
   const { setNodeRef, attributes, listeners } = useSortable({
     id: props.task.id,
-    data: { type: "item", section: props.task.section }
+    data: { type: "item", section: props.task.section },
   });
   const setBoardInfo = useAppState((state) => state.setBoardInfo);
   const deleteTask = useDeleteTaskMutation();
@@ -37,7 +37,7 @@ const BoardItem: React.FC<Props> = (props) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="p-4 bg-white dark:bg-black 
+      className="p-4 bg-[#bac9d2] dark:bg-[#1b2636]
       relative rounded text-center shadow touch-none"
       onClick={openBoardInfo}
     >
