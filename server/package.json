@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "packageManager": "npm@10.1.0",
   "scripts": {
     "dev": "prisma db push &&  concurrently \"tsc -w --preserveWatchOutput\" \"nodemon dist/index.js\"",
     "build": "prisma db push --force-reset && tsc",
