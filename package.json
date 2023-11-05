@@ -4,7 +4,8 @@
   },
   "scripts": {
     "dev": "turbo dev",
-    "start": "turbo build && turbo start"
+    "build": "turbo build",
+    "start": "turbo start"
   },
   "private": true,
   "workspaces": [
