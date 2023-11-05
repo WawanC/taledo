@@ -2,7 +2,6 @@
   "dependencies": {
     "turbo": "^1.10.2"
   },
-  "packageManager": "npm@10.1.0",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
